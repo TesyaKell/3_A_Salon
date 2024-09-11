@@ -12,7 +12,13 @@ class MainApp extends StatelessWidget {
     return const MaterialApp(
       home: Scaffold(
         body: Center(
+
           child: Text('Redempta Rista Elvira - 247000675'),
+          child: Text('Gabriella-220711884'),
+          child: Text('Bernadeta-220711678'),
+          child: Text('Tesya-220711896'),
+          child: Text(' Imanuella Daniel  - 220711901'),
+
         ),
       ),
     );
