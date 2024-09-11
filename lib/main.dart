@@ -13,6 +13,9 @@ class MainApp extends StatelessWidget {
       home: Scaffold(
         body: Center(
           child: Text('Gabriella-220711884'),
+          child: Text('Bernadeta-220711678'),
+          child: Text('Tesya-220711896'),
+          child: Text(' Imanuella Daniel  - 220711901'),
         ),
       ),
     );
