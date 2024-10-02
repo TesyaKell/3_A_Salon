@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/component/form_component.dart';
+import 'package:a_3_salon/View/login.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -156,7 +157,12 @@ class _RegisterViewState extends State<RegisterView> {
                       formData['password'] = passwordController.text;
                       formData['noTelp'] = notelpController.text;
 
-                      // Navigasi ke halaman login atau halaman berikutnya
+                      // Navigasi ke halaman login
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginView()),
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(

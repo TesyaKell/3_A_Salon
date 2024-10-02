@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:a_3_salon/View/login.dart';
 
 void main() {
   runApp(const MainApp());
@@ -10,14 +11,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Gabriella-220711884'),
-          child: Text('Bernadeta-220711678'),
-          child: Text('Tesya-220711896'),
-          child: Text(' Imanuella Daniel  - 220711901'),
-        ),
-      ),
+      home: LoginView(),
     );
   }
 }
