@@ -32,7 +32,7 @@ class _LoginViewState extends State<LoginView> {
                 margin: const EdgeInsets.only(top: 3),
                 height: 260,
                 child: Image.asset(
-                  'images/1.png',
+                  'lib/images/1.png',
                   fit: BoxFit.cover,
                 ),
               ),

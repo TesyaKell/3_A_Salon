@@ -30,7 +30,7 @@ class _RegisterViewState extends State<RegisterView> {
                   margin: const EdgeInsets.only(top: 10),
                   height: 200,
                   child: Image.asset(
-                    'images/1.png',
+                    'lib/images/1.png',
                     fit: BoxFit.cover,
                   ),
                 ),

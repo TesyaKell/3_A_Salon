@@ -1,3 +1,4 @@
+import 'package:a_3_salon/View/homepage.dart';
 import 'package:a_3_salon/View/profil.dart';
 import 'package:a_3_salon/View/view_layanan.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +24,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     Map? dataForm = widget.data;
     List<Widget> _widgetOptions = <Widget>[
-      Center(
-          child: Image(image: NetworkImage('https://picsum.photos/200/300'))),
+      Center(child: HomeScreen(data: dataForm)),
       Center(
           child: Image(image: NetworkImage('https://picsum.photos/200/300'))),
       Center(child: ServicesPage()),

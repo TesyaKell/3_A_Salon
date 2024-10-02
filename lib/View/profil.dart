@@ -19,7 +19,7 @@ class ProfileView extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 40,
-                    backgroundImage: AssetImage('images/loli.jpg'),
+                    backgroundImage: AssetImage('lib/images/loli.jpg'),
                   ),
                   const SizedBox(width: 16),
                   Column(
