@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/component/form_component.dart';
 
+
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -9,21 +10,44 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
-      final _formKey = GlobalKey<FormState>();
-      TextEditingController usernameController = TextEditingController();
-      TextEditingController fullnameController = TextEditingController();
-      TextEditingController emailController = TextEditingController();
-      TextEditingController notelpController = TextEditingController();
-      TextEditingController passwordController = TextEditingController();
+  // Untuk validasi harus menggunakan GlobalKey
+  final _formKey = GlobalKey<FormState>();
 
-      @override
-      Widget build(BuildContext context) {
-        return Scaffold(
-          body: SafeArea(
-            child: Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+  // Controllers untuk setiap input field
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController fullnameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController notelpController = TextEditingController();
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF00796B),
+      body: SafeArea(
+        child: Column(
+          children: [
+            const Text(
+              'Register',
+              style: kTextStyle1,
+            ),
+            const Text(
+              'Please Register to Login',
+              style: kTextStyle5,
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white, // Warna latar belakang Container
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(50),
+                  topRight: Radius.circular(50),
+                ),
+              ),
+              child: Form(
+                key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -86,8 +110,7 @@ class _RegisterViewState extends State<RegisterView> {
                           color: Colors.white,
                         ),
                       ),
-                    ),
-                      
+                    ),                      
                     const SizedBox(height: 20),
                   ],
                 ),
