@@ -64,7 +64,6 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                       controller: usernameController,
                       hintTxt: "Username",
-                      helperTxt: "cha_woo",
                     ),
                     const SizedBox(height: 20), // Jarak antar input field
                     // Input form untuk Full Name
@@ -77,7 +76,6 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                       controller: fullnameController,
                       hintTxt: "Full Name",
-                      helperTxt: "Cha Eun Woo",
                     ),
                     const SizedBox(height: 20),
                     // Input form untuk Email
@@ -93,8 +91,87 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                       controller: emailController,
                       hintTxt: "Email",
-                      helperTxt: "eunwoo@gmail.com",
                     ),
+                    inputForm(
+                      (p0) {
+                        if (p0 == null || p0.isEmpty) {
+                          return 'Phone Number cannot be empty';
+                        }
+                        if (p0.length < 5) {
+                          return 'Phone Number minimum 5 digits';
+                        }
+                        return null;
+                      },
+                      controller: notelpController,
+                      hintTxt: "Phone Number",
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Password Input
+                    inputForm(
+                      (p0) {
+                        if (p0 == null || p0.isEmpty) {
+                          return 'Password Tidak Boleh Kosong';
+                        }
+                        if (p0.length < 5) {
+                          return 'Password minimal 5 digit';
+                        }
+                        return null;
+                      },
+                      controller: passwordController,
+                      hintTxt: "Password",
+                      password: true,
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Sign Up Button
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          Map<String, dynamic> formData = {};
+                          formData['username'] = usernameController.text;
+                          formData['password'] = passwordController.text;
+
+                          //  Navigate to login view (add LoginView implementation)
+                          //  Navigator.push(context, MaterialPageRoute(builder: (_) => LoginView(data: formData)));
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 13, 1, 58),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: const Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    // Tautan ke halaman login
+                    // TextButton(
+                    //   onPressed: () {
+                    //     // Navigasi ke halaman login
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => const LoginView(),
+                    //       ),
+                    //     );
+                    //   },
+                    //   child: const Text(
+                    //     'Already Have Account? Sign In',
+                    //     style: TextStyle(
+                    //       color: Colors.deepPurple,
+                    //     ),
+                    //   ),
+                    // ),
+
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
