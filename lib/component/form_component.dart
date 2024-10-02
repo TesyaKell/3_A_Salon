@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-//komponen kedua
-
 Padding inputForm(Function(String?) validasi,
     {required TextEditingController controller,
     required String hintTxt,
@@ -11,17 +9,18 @@ Padding inputForm(Function(String?) validasi,
   return Padding(
     padding: const EdgeInsets.only(left: 20, top: 10),
     child: SizedBox(
-      width: 350,
+      width: 358,
       child: TextFormField(
         validator: (value) => validasi(value),
         autofocus: true,
         controller: controller,
         obscureText: password,
         decoration: InputDecoration(
-            hintText: hintTxt,
-            border: const OutlineInputBorder(),
-            helperText: helperTxt,
-            prefixIcon: Icon(iconData)),
+          hintText: hintTxt,
+          border: const OutlineInputBorder(),
+          helperText: helperTxt,
+          prefixIcon: Icon(iconData),
+        ),
       ),
     ),
   );
