@@ -121,7 +121,7 @@ class _LoginViewState extends State<LoginView> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (_) => const ProfileView()),
+                                          builder: (_) => const HomeView()),
                                     );
                                   } else {
                                     showDialog(
