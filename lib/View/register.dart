@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+// import 'package:a_3_salon/View/login.dart';
 import 'package:a_3_salon/component/form_component.dart';
+import 'package:a_3_salon/utilities/constant.dart';
+
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -9,190 +12,158 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
+
+  // Untuk validasi harus menggunakan GlobalKey
   final _formKey = GlobalKey<FormState>();
+
+  // Controllers untuk setiap input field
   TextEditingController usernameController = TextEditingController();
+  TextEditingController fullnameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController notelpController = TextEditingController();
-  TextEditingController fullNameController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF00796B),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 30),
-                  height: 200,
-                  child: Image.asset(
-                    'images/register.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                // Judul
-                Text(
-                  'Register',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'Please Register to Login',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color.fromRGBO(80, 140, 155, 1),
-                  ),
-                ),
-                const SizedBox(height: 30),
-
-                // Input Username
-                inputForm(
-                  (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Username tidak boleh kosong";
-                    }
-                    if (value.toLowerCase() == "anjing") {
-                      return "Tidak boleh menggunakan kata kasar";
-                    }
-                    return null;
-                  },
-                  controller: usernameController,
-                  hintTxt: "Username",
-                  helperTxt: "Ucup44",
-                  iconData: Icons.person,
-                ),
-                const SizedBox(height: 20),
-
-                // Input Full Name
-                inputForm(
-                  (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Full Name tidak boleh kosong";
-                    }
-                    if (value.toLowerCase() == "anjing") {
-                      return "Tidak boleh menggunakan kata kasar";
-                    }
-                    return null;
-                  },
-                  controller: fullNameController,
-                  hintTxt: "Full Name",
-                  helperTxt: "Ucup Surucup",
-                  iconData: Icons.person,
-                ),
-                const SizedBox(height: 20),
-
-                // Input Email
-                inputForm(
-                  (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Email tidak boleh kosong';
-                    }
-                    if (!value.contains('@')) {
-                      return 'Email harus menggunakan @';
-                    }
-                    return null;
-                  },
-                  controller: emailController,
-                  hintTxt: "Email",
-                  helperTxt: "ucup@gmail.com",
-                  iconData: Icons.email,
-                ),
-                const SizedBox(height: 20),
-
-                // Input Password
-                inputForm(
-                  (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Password tidak boleh kosong';
-                    }
-                    if (value.length < 5) {
-                      return 'Password minimal 5 karakter';
-                    }
-                    return null;
-                  },
-                  controller: passwordController,
-                  hintTxt: "Password",
-                  helperTxt: "xxxxxxx",
-                  iconData: Icons.lock,
-                  password: true,
-                ),
-                const SizedBox(height: 20),
-
-                // Input Nomor Telepon
-                inputForm(
-                  (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Nomor Telepon tidak boleh kosong";
-                    }
-
-                    RegExp regex = RegExp(r'^[0-9]+$');
-                    if (!regex.hasMatch(value)) {
-                      return "Nomor Telepon hanya boleh berisi angka";
-                    }
-                    return null;
-                  },
-                  controller: notelpController,
-                  hintTxt: "No Telp",
-                  helperTxt: "082123456789",
-                  iconData: Icons.phone_android,
-                ),
-                const SizedBox(height: 30),
-
-                // Tombol Register
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      Map<String, dynamic> formData = {};
-                      formData['username'] = usernameController.text;
-                      formData['fullName'] = fullNameController.text;
-                      formData['email'] = emailController.text;
-                      formData['password'] = passwordController.text;
-                      formData['noTelp'] = notelpController.text;
-
-                      // Navigasi ke halaman login atau halaman berikutnya
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
-                    backgroundColor: Color.fromRGBO(80, 140, 155, 1),
-                  ),
-                  child: const Text(
-                    'Sign Up',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // Tautan ke halaman login
-                TextButton(
-                  onPressed: () {
-                    // Navigasi ke halaman login
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginView()),
-                    );
-                  },
-                  child: const Text(
-                    'Already Have Account? Sign In',
-                    style: TextStyle(
-                      color: Colors.deepPurple,
-                    ),
-                  ),
-                ),
-              ],
+        child: Column(
+          children: [
+            const Text(
+              'Register',
+              style: kTextStyle1,
             ),
-          ),
+            const Text(
+              'Please Register to Login',
+              style: kTextStyle5,
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white, // Warna latar belakang Container
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(50),
+                  topRight: Radius.circular(50),
+                ),
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Input form untuk Username
+                    inputForm(
+                      (p0) {
+                        if (p0 == null || p0.isEmpty) {
+                          return "Username tidak boleh kosong";
+                        }
+                        if (p0.toLowerCase() == 'anjing') {
+                          return "Tidak boleh menggunakan kata kasar";
+                        }
+                        return null;
+                      },
+                      controller: usernameController,
+                      hintTxt: "Username",
+                      helperTxt: "cha_woo",
+                    ),
+                    const SizedBox(height: 20), // Jarak antar input field
+                    // Input form untuk Full Name
+                    inputForm(
+                      (p0) {
+                        if (p0 == null || p0.isEmpty) {
+                          return "Full Name tidak boleh kosong";
+                        }
+                        return null;
+                      },
+                      controller: fullnameController,
+                      hintTxt: "Full Name",
+                      helperTxt: "Cha Eun Woo",
+                    ),
+                    const SizedBox(height: 20),
+                    // Input form untuk Email
+                    inputForm(
+                      (p0) {
+                        if (p0 == null || p0.isEmpty) {
+                          return "Email tidak boleh kosong";
+                        }
+                        if (!p0.contains('@')) {
+                          return "Email harus menggunakan @";
+                        }
+                        return null;
+                      },
+                      controller: emailController,
+                      hintTxt: "Email",
+                      helperTxt: "eunwoo@gmail.com",
+                    ),
+                    inputForm(
+                      (p0) {
+                        if (p0 == null || p0.isEmpty) {
+                          return 'Phone Number cannot be empty';
+                        }
+                        if (p0.length < 5) {
+                          return 'Phone Number minimum 5 digits';
+                        }
+                        return null;
+                      },
+                      controller: notelpController,
+                      hintTxt: "Phone Number",
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Password Input
+                    inputForm(
+                      (p0) {
+                        if (p0 == null || p0.isEmpty) {
+                          return 'Password Tidak Boleh Kosong';
+                        }
+                        if (p0.length < 5) {
+                          return 'Password minimal 5 digit';
+                        }
+                        return null;
+                      },
+                      controller: passwordController,
+                      hintTxt: "Password",
+                      password: true,
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Sign Up Button
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          Map<String, dynamic> formData = {};
+                          formData['username'] = usernameController.text;
+                          formData['password'] = passwordController.text;
+
+                           Navigate to login view (add LoginView implementation)
+                           Navigator.push(context, MaterialPageRoute(builder: (_) => LoginView(data: formData)));
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 13, 1, 58),
+                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: const Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                      
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
