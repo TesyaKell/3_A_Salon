@@ -21,7 +21,7 @@ class _LoginViewState extends State<LoginView> {
     Map? dataForm = widget.data;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 72, 148, 175),
+      backgroundColor: const Color.fromRGBO(80, 140, 155, 1),
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -121,7 +121,8 @@ class _LoginViewState extends State<LoginView> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (_) => const HomeView()),
+                                          builder: (context) =>
+                                              HomeView(data: dataForm)),
                                     );
                                   } else {
                                     showDialog(

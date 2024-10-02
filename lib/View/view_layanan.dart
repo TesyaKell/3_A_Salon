@@ -25,7 +25,7 @@ class ServicesPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xFF00796B),
+        backgroundColor: const Color.fromRGBO(80, 140, 155, 1),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -69,33 +69,6 @@ class ServicesPage extends StatelessWidget {
             );
           },
         ),
-      ),
-      
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'Barber',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Service',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Account',
-          ),
-        ],
-        currentIndex: 2, 
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        onTap: (index) {
-          print("Selected Index: $index");
-        },
       ),
     );
   }
