@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:a_3_salon/component/form_component.dart';
 import 'package:a_3_salon/View/login.dart';
+import 'package:a_3_salon/component/form_component.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -28,32 +28,29 @@ class _RegisterViewState extends State<RegisterView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  margin: const EdgeInsets.only(top: 30),
+                  margin: const EdgeInsets.only(top: 10),
                   height: 200,
                   child: Image.asset(
-                    'images/register.png',
+                    'images/1.png',
                     fit: BoxFit.cover,
                   ),
                 ),
-                // Judul
-                Text(
+                const Text(
                   'Register',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 10),
-                Text(
+                const SizedBox(height: 5),
+                const Text(
                   'Please Register to Login',
                   style: TextStyle(
                     fontSize: 16,
                     color: Color.fromRGBO(80, 140, 155, 1),
                   ),
                 ),
-                const SizedBox(height: 30),
-
-                // Input Username
+                const SizedBox(height: 20),
                 inputForm(
                   (value) {
                     if (value == null || value.isEmpty) {
@@ -69,9 +66,7 @@ class _RegisterViewState extends State<RegisterView> {
                   helperTxt: "Ucup44",
                   iconData: Icons.person,
                 ),
-                const SizedBox(height: 20),
-
-                // Input Full Name
+                const SizedBox(height: 15),
                 inputForm(
                   (value) {
                     if (value == null || value.isEmpty) {
@@ -87,9 +82,7 @@ class _RegisterViewState extends State<RegisterView> {
                   helperTxt: "Ucup Surucup",
                   iconData: Icons.person,
                 ),
-                const SizedBox(height: 20),
-
-                // Input Email
+                const SizedBox(height: 15),
                 inputForm(
                   (value) {
                     if (value == null || value.isEmpty) {
@@ -105,9 +98,7 @@ class _RegisterViewState extends State<RegisterView> {
                   helperTxt: "ucup@gmail.com",
                   iconData: Icons.email,
                 ),
-                const SizedBox(height: 20),
-
-                // Input Password
+                const SizedBox(height: 15),
                 inputForm(
                   (value) {
                     if (value == null || value.isEmpty) {
@@ -124,9 +115,7 @@ class _RegisterViewState extends State<RegisterView> {
                   iconData: Icons.lock,
                   password: true,
                 ),
-                const SizedBox(height: 20),
-
-                // Input Nomor Telepon
+                const SizedBox(height: 15),
                 inputForm(
                   (value) {
                     if (value == null || value.isEmpty) {
@@ -144,9 +133,7 @@ class _RegisterViewState extends State<RegisterView> {
                   helperTxt: "082123456789",
                   iconData: Icons.phone_android,
                 ),
-                const SizedBox(height: 30),
-
-                // Tombol Register
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
@@ -157,17 +144,18 @@ class _RegisterViewState extends State<RegisterView> {
                       formData['password'] = passwordController.text;
                       formData['noTelp'] = notelpController.text;
 
-                      // Navigasi ke halaman login
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const LoginView()),
+                          builder: (context) => LoginView(data: formData),
+                        ),
                       );
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
-                    backgroundColor: Color.fromRGBO(80, 140, 155, 1),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 40),
+                    backgroundColor: const Color.fromRGBO(80, 140, 155, 1),
                   ),
                   child: const Text(
                     'Sign Up',
@@ -178,11 +166,8 @@ class _RegisterViewState extends State<RegisterView> {
                   ),
                 ),
                 const SizedBox(height: 20),
-
-                // Tautan ke halaman login
                 TextButton(
                   onPressed: () {
-                    // Navigasi ke halaman login
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -198,6 +183,41 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget inputForm(
+    String? Function(String?)? validator, {
+    TextEditingController? controller,
+    String? hintTxt,
+    String? helperTxt,
+    bool password = false,
+    IconData? iconData,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: TextFormField(
+        controller: controller,
+        obscureText: password,
+        validator: validator,
+        decoration: InputDecoration(
+          hintText: hintTxt,
+          helperText: helperTxt,
+          prefixIcon: iconData != null ? Icon(iconData) : null,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50),
+            borderSide: const BorderSide(color: Colors.grey, width: 2.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50),
+            borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50),
+            borderSide: const BorderSide(color: Colors.grey, width: 2.0),
           ),
         ),
       ),
