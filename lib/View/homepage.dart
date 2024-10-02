@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8), // spacing
+              SizedBox(height: 8),
               Text(
                 'Treatment apa hari ini?',
                 style: TextStyle(
@@ -72,17 +72,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              // Menggunakan ListView untuk menampilkan layanan favorit secara horizontal
               SizedBox(
-                height: 150, // Tinggi ListView
+                height: 150,
                 child: ListView.builder(
-                  scrollDirection: Axis.horizontal, // Scroll ke arah horizontal
-                  itemCount: services.length, // Jumlah item dlm services
+                  scrollDirection: Axis.horizontal,
+                  itemCount: services.length,
                   itemBuilder: (context, index) {
                     return ServiceCard(
-                      imageUrl: services[index]
-                          ['image']!, // Mengambil URL gambar
-                      title: services[index]['name']!, // Mengambil nama layanan
+                      imageUrl: services[index]['image']!,
+                      title: services[index]['name']!,
                     );
                   },
                 ),
@@ -97,12 +95,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 100,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: barbers.length, // Jumlah item dalam barbers
+                  itemCount: barbers.length,
                   itemBuilder: (context, index) {
                     return BarberCard(
-                      name: barbers[index]['name']!, // Mengambil nama barber
-                      imageUrl: barbers[index]
-                          ['image']!, // Mengambil URL gambar
+                      name: barbers[index]['name']!,
+                      imageUrl: barbers[index]['image']!,
                     );
                   },
                 ),
@@ -131,18 +128,18 @@ class ServiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0), // Margin horizontal
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Container(
-        width: 150, // Lebar tetap
+        width: 150,
         child: Column(
           children: [
             Container(
-              height: 100, // Tinggi gambar
+              height: 100,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.0),
                 image: DecorationImage(
                   image: AssetImage(imageUrl),
-                  fit: BoxFit.cover, // Mengisi kontainer
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -170,20 +167,18 @@ class BarberCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          // Menggunakan Container untuk gambar
           Container(
-            width: 60, // Lebar gambar
-            height: 60, // Tinggi gambar
+            width: 60,
+            height: 60,
             decoration: BoxDecoration(
-              borderRadius:
-                  BorderRadius.circular(8.0), // Jika ingin sudut membulat
+              borderRadius: BorderRadius.circular(8.0),
               image: DecorationImage(
-                image: AssetImage(imageUrl), // Menggunakan AssetImage
-                fit: BoxFit.cover, // Memastikan gambar mengisi area
+                image: AssetImage(imageUrl),
+                fit: BoxFit.cover,
               ),
             ),
           ),
-          const SizedBox(width: 10), // Jarak antara gambar dan teks
+          const SizedBox(width: 10),
           Text(
             name,
             style: const TextStyle(fontWeight: FontWeight.bold),

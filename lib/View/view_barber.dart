@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:a_3_salon/data/barber.dart'; // Mengimpor data barber dari file barber.dart
+import 'package:a_3_salon/data/barber.dart';
 
 class BarberPage extends StatefulWidget {
   @override
@@ -7,7 +7,7 @@ class BarberPage extends StatefulWidget {
 }
 
 class _BarberPageState extends State<BarberPage> {
-  List<String> selectedBarbers = []; 
+  List<String> selectedBarbers = [];
 
   final List<String> staticOptions = [
     "Any Staff",
@@ -17,10 +17,9 @@ class _BarberPageState extends State<BarberPage> {
 
   @override
   Widget build(BuildContext context) {
- 
     final combinedList = [
-      ...staticOptions, 
-      ...barberList.map((barber) => barber.name), 
+      ...staticOptions,
+      ...barberList.map((barber) => barber.name),
     ];
 
     return Scaffold(
@@ -34,7 +33,7 @@ class _BarberPageState extends State<BarberPage> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xFF00796B),
+        backgroundColor: const Color.fromRGBO(80, 140, 155, 1),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -46,20 +45,20 @@ class _BarberPageState extends State<BarberPage> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: combinedList.length, 
+                itemCount: combinedList.length,
                 itemBuilder: (context, index) {
-                  final barberName = combinedList[index]; 
+                  final barberName = combinedList[index];
                   return Container(
                     margin: const EdgeInsets.symmetric(vertical: 5.0),
                     decoration: BoxDecoration(
                       color: selectedBarbers.contains(barberName)
-                          ? Colors.teal[100] 
-                          : Colors.grey[200], 
+                          ? Colors.teal[100]
+                          : Colors.grey[200],
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: CheckboxListTile(
                       title: Text(
-                        barberName, 
+                        barberName,
                         style: TextStyle(fontSize: 16),
                       ),
                       value: selectedBarbers.contains(barberName),
@@ -73,7 +72,7 @@ class _BarberPageState extends State<BarberPage> {
                         });
                       },
                       controlAffinity: ListTileControlAffinity.trailing,
-                      activeColor: Colors.teal,
+                      activeColor: Color.fromRGBO(80, 140, 155, 1),
                       secondary: CircleAvatar(
                         child: Text(barberName[0]),
                       ),
@@ -89,7 +88,6 @@ class _BarberPageState extends State<BarberPage> {
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
           onPressed: () {
-            
             print("Selected Barbers: $selectedBarbers");
           },
           child: Text('Next'),
