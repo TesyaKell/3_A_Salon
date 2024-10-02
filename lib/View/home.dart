@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const SalonApp());
+  runApp(const HomeView());
 }
 
-class SalonApp extends StatelessWidget {
-  const SalonApp({super.key});
-
-  // final List<Map<String, String>> services = [
-  //   {"name": "razman", "image": "lib/images/razman.jpg"},
-  //   {"name": "carol", "image": "lib/images/carol.jpg"},
-  // ];
+class HomeView extends StatelessWidget {
+  const HomeView({super.key}); // Tetap menggunakan const
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +14,7 @@ class SalonApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: const HomeScreen(),
+      home: const HomeScreen(), // Tidak perlu mengoper data di sini
     );
   }
 }
@@ -32,6 +27,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final List<Map<String, String>> services = [
+    {"name": "Hair Cut", "image": "lib/images/hair_cut.jpg"},
+    {"name": "Hair Color", "image": "lib/images/hair_color.jpg"},
+    {"name": "Creambath", "image": "lib/images/creambath.jpg"},
+    {"name": "Keratin", "image": "lib/images/hair_ceratin.jpg"},
+  ];
+
+  final List<Map<String, String>> barbers = [
+    {"name": "Razman", "image": "lib/images/razman.jpg"},
+    {"name": "Carol", "image": "lib/images/carol.jpg"},
+  ];
+
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -65,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 8), // spacing
+              SizedBox(height: 8), // spacing
               Text(
                 'Treatment apa hari ini?',
                 style: TextStyle(
@@ -92,26 +99,16 @@ class _HomeScreenState extends State<HomeScreen> {
               // Menggunakan ListView untuk menampilkan layanan favorit secara horizontal
               SizedBox(
                 height: 150, // Tinggi ListView
-                child: ListView(
+                child: ListView.builder(
                   scrollDirection: Axis.horizontal, // Scroll ke arah horizontal
-                  children: [
-                    ServiceCard(
-                      imageUrl: 'https://via.placeholder.com/400x300',
-                      title: 'Hair Cut',
-                    ),
-                    ServiceCard(
-                      imageUrl: 'https://via.placeholder.com/400x301',
-                      title: 'Hair Color',
-                    ),
-                    ServiceCard(
-                      imageUrl: 'https://via.placeholder.com/400x302',
-                      title: 'Creambath',
-                    ),
-                    ServiceCard(
-                      imageUrl: 'https://via.placeholder.com/400x303',
-                      title: 'Keratin',
-                    ),
-                  ],
+                  itemCount: services.length, // Jumlah item dlm services
+                  itemBuilder: (context, index) {
+                    return ServiceCard(
+                      imageUrl: services[index]
+                          ['image']!, // Mengambil URL gambar
+                      title: services[index]['name']!, // Mengambil nama layanan
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 20),
@@ -122,18 +119,16 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 10),
               SizedBox(
                 height: 100,
-                child: ListView(
+                child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  children: const [
-                    BarberCard(
-                      name: 'Razman',
-                      imageUrl: 'lib/images/razman.jpg',
-                    ),
-                    BarberCard(
-                      name: 'Carol',
-                      imageUrl: 'lib/images/carol.jpg',
-                    ),
-                  ],
+                  itemCount: barbers.length, // Jumlah item dalam barbers
+                  itemBuilder: (context, index) {
+                    return BarberCard(
+                      name: barbers[index]['name']!, // Mengambil nama barber
+                      imageUrl: barbers[index]
+                          ['image']!, // Mengambil URL gambar
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 20),
@@ -186,23 +181,27 @@ class ServiceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 8.0), // Margin horizontal
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              height: 100,
-              width: 100, // Lebar tetap
+      child: Container(
+        width: 150, // Lebar tetap
+        child: Column(
+          children: [
+            Container(
+              height: 100, // Tinggi gambar
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                image: DecorationImage(
+                  image: AssetImage(imageUrl),
+                  fit: BoxFit.cover, // Mengisi kontainer
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 5),
-          Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ],
+            const SizedBox(height: 5),
+            Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -218,18 +217,26 @@ class BarberCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
+      child: Row(
         children: [
-          ClipOval(
-            child: Image.asset(
-              imageUrl,
-              width: 60,
-              height: 60,
-              fit: BoxFit.cover,
+          // Menggunakan Container untuk gambar
+          Container(
+            width: 60, // Lebar gambar
+            height: 60, // Tinggi gambar
+            decoration: BoxDecoration(
+              borderRadius:
+                  BorderRadius.circular(8.0), // Jika ingin sudut membulat
+              image: DecorationImage(
+                image: AssetImage(imageUrl), // Menggunakan AssetImage
+                fit: BoxFit.cover, // Memastikan gambar mengisi area
+              ),
             ),
           ),
-          const SizedBox(height: 5),
-          Text(name),
+          const SizedBox(width: 10), // Jarak antara gambar dan teks
+          Text(
+            name,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
         ],
       ),
     );
