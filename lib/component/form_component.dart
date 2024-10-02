@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+//komponen kedua
+
 Padding inputForm(Function(String?) validasi,
     {required TextEditingController controller,
     required String hintTxt,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/home.dart';
 import 'package:a_3_salon/View/register.dart';
 
+//kedua login
+
 class LoginView extends StatefulWidget {
   final Map? data;
 
