@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:a_3_salon/View/profil.dart'; // Mengimpor ProfileView dari file yang sesuai
+import 'package:a_3_salon/View/profil.dart';
 
 void main() {
   runApp(const MainApp());
@@ -11,11 +11,11 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false, // Menyembunyikan banner debug
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ProfileView(), // Memanggil ProfileView sebagai halaman awal
+      home: const ProfileView(),
     );
   }
 }
