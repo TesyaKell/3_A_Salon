@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:a_3_salon/component/form_component.dart';
 import 'package:a_3_salon/utilities/constant.dart';
 
+
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -11,6 +12,7 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
+
   // Untuk validasi harus menggunakan GlobalKey
   final _formKey = GlobalKey<FormState>();
 
@@ -20,6 +22,7 @@ class _RegisterViewState extends State<RegisterView> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController notelpController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +98,67 @@ class _RegisterViewState extends State<RegisterView> {
                       hintTxt: "Email",
                       helperTxt: "eunwoo@gmail.com",
                     ),
+                    inputForm(
+                      (p0) {
+                        if (p0 == null || p0.isEmpty) {
+                          return 'Phone Number cannot be empty';
+                        }
+                        if (p0.length < 5) {
+                          return 'Phone Number minimum 5 digits';
+                        }
+                        return null;
+                      },
+                      controller: notelpController,
+                      hintTxt: "Phone Number",
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Password Input
+                    inputForm(
+                      (p0) {
+                        if (p0 == null || p0.isEmpty) {
+                          return 'Password Tidak Boleh Kosong';
+                        }
+                        if (p0.length < 5) {
+                          return 'Password minimal 5 digit';
+                        }
+                        return null;
+                      },
+                      controller: passwordController,
+                      hintTxt: "Password",
+                      password: true,
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Sign Up Button
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          Map<String, dynamic> formData = {};
+                          formData['username'] = usernameController.text;
+                          formData['password'] = passwordController.text;
+
+                           Navigate to login view (add LoginView implementation)
+                           Navigator.push(context, MaterialPageRoute(builder: (_) => LoginView(data: formData)));
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 13, 1, 58),
+                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: const Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                      
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
