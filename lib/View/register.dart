@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/login.dart';
 import 'package:a_3_salon/component/form_component.dart';
 
-//kedua register
-
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -226,3 +224,5 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 }
+
+//coba
