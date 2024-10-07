@@ -1,7 +1,7 @@
+import 'package:a_3_salon/ContactUs/ContactPage.dart';
 import 'package:a_3_salon/rating_ulasan/rating_ulasan.dart';
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/login.dart';
-
 
 class ProfileView extends StatelessWidget {
   final Map? data;
@@ -61,13 +61,19 @@ class ProfileView extends StatelessWidget {
                       sectionTitle('Akun'),
                       customCard(Icons.star, 'Rating & Reviews', onTap: () {
                         Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (context) => RatingUlasanPage()),
-                          (Route<dynamic> route) => false);}),
+                            MaterialPageRoute(
+                                builder: (context) => RatingUlasanPage()),
+                            (Route<dynamic> route) => false);
+                      }),
                       customCard(Icons.history, 'Order History'),
                       sectionTitle('Info Lainnya'),
                       customCard(Icons.settings, 'Settings'),
-                      customCard(Icons.contact_mail, 'Contact US'),
+                      customCard(Icons.contact_mail, 'Contact US', onTap: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => contactPage()),
+                            (Route<dynamic> route) => false);
+                      }),
                       customCard(Icons.logout, 'Logout', onTap: () {
                         Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
