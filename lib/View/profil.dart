@@ -1,5 +1,7 @@
+import 'package:a_3_salon/rating_ulasan/rating_ulasan.dart';
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/login.dart';
+
 
 class ProfileView extends StatelessWidget {
   final Map? data;
@@ -57,7 +59,11 @@ class ProfileView extends StatelessWidget {
                       customCard(Icons.card_giftcard, 'Promo & Voucher'),
                       customCard(Icons.vibration, 'Shake & Get'),
                       sectionTitle('Akun'),
-                      customCard(Icons.star, 'Rating & Reviews'),
+                      customCard(Icons.star, 'Rating & Reviews', onTap: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => RatingUlasanPage()),
+                          (Route<dynamic> route) => false);}),
                       customCard(Icons.history, 'Order History'),
                       sectionTitle('Info Lainnya'),
                       customCard(Icons.settings, 'Settings'),
