@@ -6,7 +6,7 @@ class SalonContactApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Salon Contact Us',
+      title: 'Salon-Contact Us',
       theme: ThemeData(
         primarySwatch: Colors.pink,
         visualDensity: VisualDensity.adaptivePlatformDensity,
