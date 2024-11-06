@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:a_3_salon/data/barber.dart'; // Mengimpor data barber dari file barber.dart
+import 'package:a_3_salon/data/barber.dart';
+import 'package:a_3_salon/View/reservation.dart';
 
 class BarberPage extends StatefulWidget {
   @override
@@ -7,7 +8,7 @@ class BarberPage extends StatefulWidget {
 }
 
 class _BarberPageState extends State<BarberPage> {
-  List<String> selectedBarbers = []; 
+  String? selectedBarber;
 
   final List<String> staticOptions = [
     "Any Staff",
@@ -17,10 +18,10 @@ class _BarberPageState extends State<BarberPage> {
 
   @override
   Widget build(BuildContext context) {
- 
+    // Gabungkan opsi statis dengan daftar nama barber
     final combinedList = [
-      ...staticOptions, 
-      ...barberList.map((barber) => barber.name), 
+      ...staticOptions,
+      ...barberList.map((barber) => barber.name),
     ];
 
     return Scaffold(
@@ -34,48 +35,57 @@ class _BarberPageState extends State<BarberPage> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xFF00796B),
+        backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Select a barber staff',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Padding(
+              padding: const EdgeInsets.only(
+                  bottom: 5.0, top: 9.0), // Space below the text
+              child: Text(
+                'Select a barber staff',
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.left,
+              ),
             ),
+            Divider(
+              thickness: 1.0, // garis pemisah
+              color: Colors.grey[400],
+            ),
+            SizedBox(height: 10.0), // Space between divider and options
             Expanded(
               child: ListView.builder(
-                itemCount: combinedList.length, 
+                itemCount: combinedList.length,
                 itemBuilder: (context, index) {
-                  final barberName = combinedList[index]; 
+                  final barberName = combinedList[index];
                   return Container(
                     margin: const EdgeInsets.symmetric(vertical: 5.0),
                     decoration: BoxDecoration(
-                      color: selectedBarbers.contains(barberName)
-                          ? Colors.teal[100] 
-                          : Colors.grey[200], 
+                      color: selectedBarber == barberName
+                          ? Colors.teal[100]
+                          : Colors.grey[200],
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: CheckboxListTile(
+                    child: ListTile(
                       title: Text(
-                        barberName, 
+                        barberName,
                         style: TextStyle(fontSize: 16),
                       ),
-                      value: selectedBarbers.contains(barberName),
-                      onChanged: (bool? value) {
-                        setState(() {
-                          if (value == true) {
-                            selectedBarbers.add(barberName);
-                          } else {
-                            selectedBarbers.remove(barberName);
-                          }
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity.trailing,
-                      activeColor: Colors.teal,
-                      secondary: CircleAvatar(
+                      leading: CircleAvatar(
                         child: Text(barberName[0]),
+                      ),
+                      trailing: Radio<String>(
+                        value: barberName,
+                        groupValue: selectedBarber,
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedBarber = value;
+                          });
+                        },
+                        activeColor: Color.fromRGBO(80, 140, 155, 1),
                       ),
                     ),
                   );
@@ -89,8 +99,13 @@ class _BarberPageState extends State<BarberPage> {
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
           onPressed: () {
-            
-            print("Selected Barbers: $selectedBarbers");
+            // Arahkan ke hlmn Reservation dngn nama barber yg dipilih sblmnya
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ReservationPage(),
+              ),
+            );
           },
           child: Text('Next'),
         ),
