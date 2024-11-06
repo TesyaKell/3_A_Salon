@@ -1,10 +1,6 @@
 name: a_3_salon
 description: "A new Flutter project."
-<<<<<<< HEAD
 publish_to: 'none'
-=======
-publish_to: "none"
->>>>>>> 6cf126b628e1c1159be4f5a1e6aed5d9da3bbd08
 version: 1.0.0+1
 
 environment:
@@ -18,20 +14,12 @@ dependencies:
   icons_plus: ^5.0.0
   url_launcher: ^6.0.20
   image_picker: ^0.8.4+8
-<<<<<<< HEAD
-=======
   intl: ^0.17.0
->>>>>>> 6cf126b628e1c1159be4f5a1e6aed5d9da3bbd08
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
-<<<<<<< HEAD
-  
-=======
   qr_flutter: ^4.0.0
->>>>>>> 6cf126b628e1c1159be4f5a1e6aed5d9da3bbd08
 
 flutter:
   uses-material-design: true
