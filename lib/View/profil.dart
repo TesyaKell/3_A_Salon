@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/ProfileDetailPage.dart';
+import 'package:a_3_salon/View/contactBarber.dart';
 import 'dart:io';
 
 class ProfileView extends StatefulWidget {
@@ -122,19 +123,17 @@ class _ProfileViewState extends State<ProfileView> {
                     children: [
                       sectionTitle('Fitur Member'),
                       customCard(Icons.store, 'Contact Salon', onTap: () {
-                        // Navigate to Contact Salon page
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ContactBarbersPage(),
+                          ),
+                        );
                       }),
                       sectionTitle('Akun'),
-                      customCard(Icons.star, 'Rating & Reviews', onTap: () {
-                        // Navigate to Rating & Reviews page
-                      }),
-                      customCard(Icons.history, 'Order History', onTap: () {
-                        // Navigate to Order History page
-                      }),
+                      customCard(Icons.star, 'Rating & Reviews', onTap: () {}),
+                      customCard(Icons.history, 'Order History', onTap: () {}),
                       sectionTitle('Info Lainnya'),
-                      customCard(Icons.logout, 'Logout', onTap: () {
-                        // Navigate to Logout action
-                      }),
+                      customCard(Icons.logout, 'Logout', onTap: () {}),
                     ],
                   ),
                 ),
