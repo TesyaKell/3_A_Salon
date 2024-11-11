@@ -2,17 +2,25 @@ import 'package:flutter/material.dart';
 
 class DetailReservationPage extends StatelessWidget {
   final Map? data;
+  final Map? dataBarber;
+  final Map? dataLayanan;
+  final Map? dataReservasi;
 
-  const DetailReservationPage({Key? key, this.data}) : super(key: key);
+  const DetailReservationPage(
+      {Key? key,
+      this.data,
+      this.dataBarber,
+      this.dataLayanan,
+      this.dataReservasi});
 
   @override
   Widget build(BuildContext context) {
-    String customerName = data?['fullName'] ?? 'N/A';
-    String date = data?['date'] ?? 'N/A';
-    String time = data?['time'] ?? 'N/A';
-    String barberName = data?['barberName'] ?? 'N/A';
-    String serviceName = data?['serviceName'] ?? 'N/A';
-    int servicePrice = data?['servicePrice'] ?? 0;
+    String customerName = dataReservasi?['fullName'] ?? 'N/A';
+    String date = dataReservasi?['date'] ?? 'N/A';
+    String time = dataReservasi?['time'] ?? 'N/A';
+    String barberName = dataBarber?['barberName'] ?? 'N/A';
+    String serviceName = dataLayanan?['layananName'] ?? 'N/A';
+    int servicePrice = int.parse(dataLayanan?['layananPrice']);
     double tax = servicePrice * 0.035;
     double total = servicePrice + tax;
 

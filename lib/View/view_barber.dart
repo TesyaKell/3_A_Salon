@@ -3,6 +3,10 @@ import 'package:a_3_salon/data/barber.dart';
 import 'package:a_3_salon/View/reservation.dart';
 
 class BarberPage extends StatefulWidget {
+  final Map? data;
+  final Map? dataLayanan;
+  const BarberPage({super.key, this.data, this.dataLayanan});
+
   @override
   _BarberPageState createState() => _BarberPageState();
 }
@@ -19,6 +23,10 @@ class _BarberPageState extends State<BarberPage> {
   @override
   Widget build(BuildContext context) {
     // Gabungkan opsi statis dengan daftar nama barber
+    //pakai widget kalau statefull
+    final Map? data = widget.data;
+    final Map? dataLayanan = widget.dataLayanan;
+
     final combinedList = [
       ...staticOptions,
       ...barberList.map((barber) => barber.name),
@@ -99,11 +107,14 @@ class _BarberPageState extends State<BarberPage> {
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
           onPressed: () {
+            Map<String, dynamic> formData = {};
+            formData['barberName'] = selectedBarber;
             // Arahkan ke hlmn Reservation dngn nama barber yg dipilih sblmnya
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ReservationPage(),
+                builder: (context) => ReservationPage(
+                    data: data, dataBarber: formData, dataLayanan: dataLayanan),
               ),
             );
           },
