@@ -13,11 +13,11 @@ class ProfileView extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              color: Color.fromRGBO(80, 140, 155, 1),
+              color: const Color.fromRGBO(80, 140, 155, 1),
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
               child: Row(
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 40,
                     backgroundImage: AssetImage('lib/images/loli.jpg'),
                   ),
@@ -27,7 +27,7 @@ class ProfileView extends StatelessWidget {
                     children: [
                       Text(
                         data?['fullName'],
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -35,11 +35,11 @@ class ProfileView extends StatelessWidget {
                       ),
                       Text(
                         data?['noTelp'],
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                       Text(
                         data?['email'],
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ],
                   ),
@@ -85,7 +85,7 @@ class ProfileView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
@@ -99,7 +99,7 @@ class ProfileView extends StatelessWidget {
       child: ListTile(
         leading: Icon(icon, size: 30, color: Colors.grey[700]),
         title: Text(title),
-        trailing: Icon(Icons.arrow_forward_ios),
+        trailing: const Icon(Icons.arrow_forward_ios),
         onTap: onTap,
       ),
     );

@@ -12,11 +12,13 @@ class ServicesPage extends StatelessWidget {
     {"name": "Hair Styling", "image": "lib/images/hair_styling.jpg"},
   ];
 
+  ServicesPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Services',
           style: TextStyle(
             color: Colors.white,
@@ -30,7 +32,7 @@ class ServicesPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 10.0,
             mainAxisSpacing: 10.0,
@@ -54,7 +56,7 @@ class ServicesPage extends StatelessWidget {
                           services[index]["image"]!,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
-                            return Icon(Icons.error);
+                            return const Icon(Icons.error);
                           },
                         ),
                       ),
