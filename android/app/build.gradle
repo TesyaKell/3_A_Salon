@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.a_3_salon"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = flutter.compileSdkVersion 
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
