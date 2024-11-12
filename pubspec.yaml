@@ -7,20 +7,17 @@ environment:
   sdk: ">=3.5.1 <4.0.0"
 
 dependencies:
-  file_picker: ^8.1.2
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.3.0
   icons_plus: ^5.0.0
-<<<<<<< HEAD
-=======
   cupertino_icons: ^1.0.8
   screenshot: ^3.0.0
   share_plus: ^10.1.2
   path_provider: ^2.1.5
   pdf: ^3.11.1
   permission_handler: ^11.3.1
->>>>>>> 78a22e76e8e25226b71e67bb3d1c9a429784ec45
+  file_picker: ^5.2.0
 
 dev_dependencies:
   flutter_test:
