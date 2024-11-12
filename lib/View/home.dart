@@ -27,7 +27,7 @@ class _HomeViewState extends State<HomeView> {
       Center(child: HomeScreen(data: dataForm)),
       const Center(
           child: Image(image: NetworkImage('https://picsum.photos/200/300'))),
-      Center(child: ServicesPage()),
+      Center(child: ServicesPage(data: dataForm)),
       Center(child: ProfileView(data: dataForm)),
     ];
 
@@ -52,7 +52,7 @@ class _HomeViewState extends State<HomeView> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Colors.pink,
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
       ),

@@ -129,7 +129,7 @@ class ServiceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: SizedBox(
+      child: Container(
         width: 150,
         child: Column(
           children: [
