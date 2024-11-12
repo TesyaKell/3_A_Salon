@@ -69,6 +69,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(210, 0, 98, 1),
         elevation: 0,
@@ -79,53 +80,56 @@ class _EditProfilePageState extends State<EditProfilePage> {
         title: Text("Edit Profile", style: TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          // Profile Picture Section
-          Container(
-            color: Color.fromRGBO(210, 0, 98, 1),
-            child: Center(
-              child: Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  GestureDetector(
-                    onTap: () => _showImageSourceActionSheet(context),
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundColor: Colors.white,
-                      backgroundImage: _profileImage != null
-                          ? FileImage(_profileImage!)
-                          : null,
-                      child: _profileImage == null
-                          ? Icon(
-                              Icons.person,
-                              size: 60,
-                              color: Colors.black54,
-                            )
-                          : null,
-                    ),
-                  ),
-                  Positioned(
-                    right: 5,
-                    bottom: 5,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 16,
-                      child: Icon(
-                        Icons.camera_alt,
-                        size: 16,
-                        color: Colors.grey,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              color: Color.fromRGBO(210, 0, 98, 1),
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Center(
+                child: Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    GestureDetector(
+                      onTap: () => _showImageSourceActionSheet(context),
+                      child: CircleAvatar(
+                        radius: 60,
+                        backgroundColor: Colors.white,
+                        backgroundImage: _profileImage != null
+                            ? FileImage(_profileImage!)
+                            : null,
+                        child: _profileImage == null
+                            ? Icon(
+                                Icons.person,
+                                size: 60,
+                                color: Colors.black,
+                              )
+                            : null,
                       ),
                     ),
-                  ),
-                ],
+                    Positioned(
+                      right: 5,
+                      bottom: 5,
+                      child: GestureDetector(
+                        onTap: () => _showImageSourceActionSheet(context),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 16,
+                          child: Icon(
+                            Icons.camera_alt,
+                            size: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: Container(
+            Container(
               color: Colors.white,
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Column(
                 children: [
                   buildNonEditableField("Username", usernameController),
@@ -135,7 +139,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   buildEditableField("Email", emailController),
                   const SizedBox(height: 10),
                   buildEditableField("Phone Number", phoneController),
-                  const Spacer(),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
                       Map<String, dynamic> updatedData = {
@@ -148,9 +152,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       Navigator.pop(context, updatedData);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black87,
+                      backgroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 100, vertical: 16),
+                          horizontal: 80, vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -160,8 +164,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -170,7 +174,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontSize: 16, color: Colors.black54)),
+        Text(label, style: TextStyle(fontSize: 16, color: Colors.black)),
         const SizedBox(height: 5),
         TextFormField(
           controller: controller,
@@ -196,7 +200,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontSize: 16, color: Colors.black54)),
+        Text(label, style: TextStyle(fontSize: 16, color: Colors.black)),
         const SizedBox(height: 5),
         TextFormField(
           controller: controller,
