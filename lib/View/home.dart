@@ -23,9 +23,9 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     Map? dataForm = widget.data;
-    List<Widget> _widgetOptions = <Widget>[
+    List<Widget> widgetOptions = <Widget>[
       Center(child: HomeScreen(data: dataForm)),
-      Center(
+      const Center(
           child: Image(image: NetworkImage('https://picsum.photos/200/300'))),
       Center(child: ServicesPage()),
       Center(child: ProfileView(data: dataForm)),
@@ -56,7 +56,7 @@ class _HomeViewState extends State<HomeView> {
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
       ),
-      body: _widgetOptions.elementAt(_selectedIndex),
+      body: widgetOptions.elementAt(_selectedIndex),
     );
   }
 }

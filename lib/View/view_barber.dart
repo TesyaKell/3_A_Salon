@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:a_3_salon/data/barber.dart';
 
 class BarberPage extends StatefulWidget {
+  const BarberPage({super.key});
+
   @override
   _BarberPageState createState() => _BarberPageState();
 }
@@ -24,7 +26,7 @@ class _BarberPageState extends State<BarberPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Barbers',
           style: TextStyle(
             color: Colors.white,
@@ -39,7 +41,7 @@ class _BarberPageState extends State<BarberPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text(
+            const Text(
               'Select a barber staff',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -59,7 +61,7 @@ class _BarberPageState extends State<BarberPage> {
                     child: CheckboxListTile(
                       title: Text(
                         barberName,
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                       value: selectedBarbers.contains(barberName),
                       onChanged: (bool? value) {
@@ -72,7 +74,7 @@ class _BarberPageState extends State<BarberPage> {
                         });
                       },
                       controlAffinity: ListTileControlAffinity.trailing,
-                      activeColor: Color.fromRGBO(80, 140, 155, 1),
+                      activeColor: const Color.fromRGBO(80, 140, 155, 1),
                       secondary: CircleAvatar(
                         child: Text(barberName[0]),
                       ),
@@ -90,7 +92,7 @@ class _BarberPageState extends State<BarberPage> {
           onPressed: () {
             print("Selected Barbers: $selectedBarbers");
           },
-          child: Text('Next'),
+          child: const Text('Next'),
         ),
       ),
     );
