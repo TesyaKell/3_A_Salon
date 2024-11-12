@@ -56,7 +56,7 @@ class ServicesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Services',
           style: GoogleFonts.lora(
             color: Colors.white,

@@ -33,7 +33,7 @@ class _BarberPageState extends State<BarberPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Barbers',
           style: GoogleFonts.lora(
             color: Colors.white,
