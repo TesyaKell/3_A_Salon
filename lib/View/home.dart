@@ -72,7 +72,7 @@ class _HomeViewState extends State<HomeView> {
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
       ),
-      body: widgetOptions.elementAt(_selectedIndex),
+      body: _widgetOptions.elementAt(_selectedIndex),
     );
   }
 }

@@ -45,13 +45,15 @@ class ReceiptPage extends StatefulWidget {
   final Map<String, String?>? dataReservasi;
   final Map<String, String?>? dataBarber;
   final Map<String, String?>? dataLayanan;
+  final int? discount;
 
-  const ReceiptPage({
-    Key? key,
-    this.dataReservasi,
-    this.dataBarber,
-    this.dataLayanan,
-  }) : super(key: key);
+  const ReceiptPage(
+      {Key? key,
+      this.dataReservasi,
+      this.dataBarber,
+      this.dataLayanan,
+      this.discount})
+      : super(key: key);
 
   @override
   _ReceiptPageState createState() => _ReceiptPageState();
@@ -120,8 +122,12 @@ class _ReceiptPageState extends State<ReceiptPage> {
     String serviceName = widget.dataLayanan?['layananName'] ?? 'N/A';
     int servicePrice =
         int.tryParse(widget.dataLayanan?['layananPrice'] ?? '0') ?? 0;
+    double discountPrice = servicePrice.toDouble();
+    if (widget.discount! > 0) {
+      discountPrice -= discountPrice * (widget.discount!.toDouble() / 100);
+    }
     double tax = servicePrice * 0.035;
-    double total = servicePrice + tax;
+    double total = discountPrice + tax;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -206,8 +212,6 @@ class _ReceiptPageState extends State<ReceiptPage> {
                       children: [
                         _buildDetailRow('Status', 'Paid off'),
                         _buildDetailRow('Customer Name', customerName),
-                        _buildDetailRow(
-                            'Phone', widget.dataReservasi?['noTelp'] ?? 'N/A'),
                         _buildDetailRow('Booking Date', date),
                         _buildDetailRow('Booking Time', time),
                         _buildDetailRow('Stylist', barberName),
@@ -231,10 +235,18 @@ class _ReceiptPageState extends State<ReceiptPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildDetailRow('Hair Cut', 'IDR150.000,00'),
-                        _buildDetailRow('Tax', 'IDR5.500,00'),
+                        _buildDetailRow('$serviceName',
+                            'IDR ${servicePrice.toStringAsFixed(0)},00'),
+                        widget.discount != 0
+                            ? _buildDetailRow('Discount ${widget.discount}%',
+                                'IDR ${(servicePrice - discountPrice).toStringAsFixed(0)},00')
+                            : Container(),
+                        _buildDetailRow(
+                            'Tax', 'IDR ${tax.toStringAsFixed(0)},00'),
                         Divider(),
-                        _buildDetailRow('Total', 'IDR155.500,00', isBold: true),
+                        _buildDetailRow(
+                            'Total', 'IDR ${total.toStringAsFixed(0)},00',
+                            isBold: true),
                       ],
                     ),
                   ),

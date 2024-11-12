@@ -166,6 +166,7 @@ class DetailReservationPage extends StatelessWidget {
                             (key, value) => MapEntry(key, value.toString())),
                         dataLayanan: dataLayanan?.map(
                             (key, value) => MapEntry(key, value.toString())),
+                        discount: discount ?? 0,
                       ),
                     ),
                   );
