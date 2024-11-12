@@ -22,35 +22,77 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
         useMaterial3: true,
       ),
-      home: ReceiptPage(),
+      home: ReceiptPage(
+        dataReservasi: {
+          'fullName': 'John Doe',
+          'date': '2024-11-12',
+          'time': '14:30',
+          'noTelp': '1234567890',
+        },
+        dataBarber: {
+          'barberName': 'Stylist A',
+        },
+        dataLayanan: {
+          'layananName': 'Hair Cut',
+          'layananPrice': '150000',
+        },
+      ),
     );
   }
 }
 
 class ReceiptPage extends StatefulWidget {
+  final Map<String, String?>? dataReservasi;
+  final Map<String, String?>? dataBarber;
+  final Map<String, String?>? dataLayanan;
+
+  const ReceiptPage({
+    Key? key,
+    this.dataReservasi,
+    this.dataBarber,
+    this.dataLayanan,
+  }) : super(key: key);
+
   @override
-  State<ReceiptPage> createState() => _ReceiptPageState();
+  _ReceiptPageState createState() => _ReceiptPageState();
 }
 
 class _ReceiptPageState extends State<ReceiptPage> {
   final ScreenshotController screenshotController = ScreenshotController();
 
+  @override
   void initState() {
     super.initState();
     _checkPermissions();
   }
 
+  Future<void> requestStoragePermission() async {
+    var status = await Permission.storage.request();
+    if (status.isGranted) {
+      print("Permission granted");
+    } else {
+      print("Permission denied");
+      openAppSettings();
+    }
+  }
+
   Future<void> _checkPermissions() async {
-    if (Platform.isAndroid) {
-      var status = await Permission.storage.request();
+    var status = await Permission.storage.request();
+    if (status.isGranted) {
+      print("Permission granted");
+    } else {
+      print("Permission denied");
+      openAppSettings();
+    }
+
+    if (Platform.isAndroid && await Permission.manageExternalStorage.isDenied) {
+      var status = await Permission.manageExternalStorage.request();
       if (status.isGranted) {
-        print("Permission granted");
-        _getDownloadsFolder();
+        print("Manage External Storage permission granted");
       } else {
         print("Permission denied");
+        openAppSettings();
       }
-    } else if (Platform.isMacOS) {
-      _getDownloadsFolder();
     }
   }
 
@@ -71,6 +113,16 @@ class _ReceiptPageState extends State<ReceiptPage> {
 
   @override
   Widget build(BuildContext context) {
+    String customerName = widget.dataReservasi?['fullName'] ?? 'N/A';
+    String date = widget.dataReservasi?['date'] ?? 'N/A';
+    String time = widget.dataReservasi?['time'] ?? 'N/A';
+    String barberName = widget.dataBarber?['barberName'] ?? 'N/A';
+    String serviceName = widget.dataLayanan?['layananName'] ?? 'N/A';
+    int servicePrice =
+        int.tryParse(widget.dataLayanan?['layananPrice'] ?? '0') ?? 0;
+    double tax = servicePrice * 0.035;
+    double total = servicePrice + tax;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -153,11 +205,12 @@ class _ReceiptPageState extends State<ReceiptPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildDetailRow('Status', 'Paid off'),
-                        _buildDetailRow('Customer Name', 'Loly'),
-                        _buildDetailRow('Phone', '0852-6996-7894'),
-                        _buildDetailRow('Booking Date', 'Oktober 11, 2024'),
-                        _buildDetailRow('Booking Time', '17:45'),
-                        _buildDetailRow('Stylist', 'Abel'),
+                        _buildDetailRow('Customer Name', customerName),
+                        _buildDetailRow(
+                            'Phone', widget.dataReservasi?['noTelp'] ?? 'N/A'),
+                        _buildDetailRow('Booking Date', date),
+                        _buildDetailRow('Booking Time', time),
+                        _buildDetailRow('Stylist', barberName),
                       ],
                     ),
                   ),
@@ -200,7 +253,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
             children: [
               GestureDetector(
                 onTap: () async {
-                  _saveAndSharePDF(context, screenshotController);
+                  _savePDFToDownloads(context, screenshotController);
                 },
                 child: _buildFooterButton(Icons.share, 'SHARE'),
               ),
@@ -254,59 +307,19 @@ class _ReceiptPageState extends State<ReceiptPage> {
       ],
     );
   }
+}
 
-  Future<void> _savePDFToDownloads(
-      BuildContext context, ScreenshotController screenshotController) async {
-    final status = await Permission.storage.request();
-    if (status.isGranted) {
-      try {
-        final image = await screenshotController.capture();
-        if (image == null) return;
-
-        final pdf = pw.Document();
-        pdf.addPage(
-          pw.Page(
-            build: (pw.Context context) {
-              return pw.Center(
-                child: pw.Image(pw.MemoryImage(image)),
-              );
-            },
-          ),
-        );
-
-        final downloadsDir = Directory('/storage/emulated/0/Download');
-        if (!await downloadsDir.exists()) {
-          await downloadsDir.create(recursive: true);
-        }
-        final filePath = '${downloadsDir.path}/receipt.pdf';
-        final file = File(filePath);
-        await file.writeAsBytes(await pdf.save());
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('PDF saved to Downloads folder: $filePath'),
-          ),
-        );
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to save PDF'),
-          ),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Storage permission denied')),
-      );
-    }
-  }
-
-  Future<void> _saveAndSharePDF(
-      BuildContext context, ScreenshotController screenshotController) async {
+Future<void> _savePDFToDownloads(
+    BuildContext context, ScreenshotController screenshotController) async {
+  // Cek izin penyimpanan
+  var status = await Permission.storage.request();
+  if (status.isGranted) {
     try {
+      // Tangkap screenshot
       final image = await screenshotController.capture();
       if (image == null) return;
 
+      // Buat PDF dari screenshot
       final pdf = pw.Document();
       pdf.addPage(
         pw.Page(
@@ -318,18 +331,30 @@ class _ReceiptPageState extends State<ReceiptPage> {
         ),
       );
 
-      final directory = await getTemporaryDirectory();
-      final filePath = '${directory.path}/receipt.pdf';
+      Directory downloadsDir = Directory('/storage/emulated/0/Download');
+      final filePath = '${downloadsDir.path}/receipt.pdf';
       final file = File(filePath);
+
+      // Simpan PDF ke Downloads
       await file.writeAsBytes(await pdf.save());
 
-      Share.shareXFiles([XFile(filePath)], text: 'Receipt');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('PDF berhasil disimpan ke folder Downloads: $filePath'),
+        ),
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Failed to capture screenshot or generate PDF'),
+          content: Text('Gagal menyimpan PDF: $e'),
         ),
       );
     }
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Izin penyimpanan ditolak.'),
+      ),
+    );
   }
 }

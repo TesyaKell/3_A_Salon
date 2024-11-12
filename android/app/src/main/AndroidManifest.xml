@@ -4,6 +4,11 @@
     <!-- Izin untuk internet -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+
+
     <!-- Deklarasi queries di sini -->
     <queries>
         <!-- Untuk meluncurkan URL dengan skema http dan https -->

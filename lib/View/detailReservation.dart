@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:a_3_salon/View/pemesanan_pdf.dart';
 
 class DetailReservationPage extends StatelessWidget {
   final Map? data;
@@ -145,22 +146,27 @@ class DetailReservationPage extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // Handle booking reservation action
-                  print("Reservation confirmed");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ReceiptPage(
+                        dataReservasi: dataReservasi?.map(
+                            (key, value) => MapEntry(key, value.toString())),
+                        dataBarber: dataBarber?.map(
+                            (key, value) => MapEntry(key, value.toString())),
+                        dataLayanan: dataLayanan?.map(
+                            (key, value) => MapEntry(key, value.toString())),
+                      ),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.pinkAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 14.0, horizontal: 40),
-                  child: Text(
-                    'Book Reservation',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                ),
+                child: Text(
+                  'Book Reservation',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
