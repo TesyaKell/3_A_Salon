@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/view_barber.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ServicesPage extends StatelessWidget {
   final List<Map<String, String>> services = [
@@ -57,7 +58,7 @@ class ServicesPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Services',
-          style: TextStyle(
+          style: GoogleFonts.lora(
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -77,7 +78,6 @@ class ServicesPage extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 10.0,
             mainAxisSpacing: 10.0,
-            childAspectRatio: 0.9, // Adjusted for shorter cards
           ),
           itemCount: services.length,
           itemBuilder: (context, index) {
@@ -100,6 +100,7 @@ class ServicesPage extends StatelessWidget {
                 ),
                 elevation: 4,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ClipRRect(
@@ -108,26 +109,29 @@ class ServicesPage extends StatelessWidget {
                       child: Image.asset(
                         services[index]["image"]!,
                         fit: BoxFit.cover,
-                        height: 100, // Reduced height for a more compact look
+                        height: 100,
                         width: double.infinity,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 4.0), // Adjusted padding
+                    SizedBox(height: 10),
+                    Center(
                       child: Text(
                         services[index]["name"]!,
-                        style: TextStyle(
-                          fontSize: 15, // Slightly smaller font
+                        style: GoogleFonts.lora(
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
+                          color: Color(0xFFC2185B),
                         ),
                       ),
                     ),
-                    Text(
-                      services[index]["price"]!,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey[600],
+                    SizedBox(height: 6),
+                    Center(
+                      child: Text(
+                        services[index]["price"]!,
+                        style: GoogleFonts.lora(
+                          fontSize: 13,
+                          color: Colors.grey[600],
+                        ),
                       ),
                     ),
                   ],
