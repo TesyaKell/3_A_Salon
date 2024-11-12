@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import 'package:a_3_salon/View/login.dart';
+>>>>>>> d163e8b56a3db5a5ccd82e1158cd8c796b938fc2
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/ProfileDetailPage.dart';
 import 'package:a_3_salon/View/contactBarber.dart';
@@ -149,7 +153,18 @@ class _ProfileViewState extends State<ProfileView> {
                     customCard(Icons.star, 'Rating & Reviews', onTap: () {}),
                     customCard(Icons.history, 'Order History', onTap: () {}),
                     sectionTitle('Info Lainnya'),
+<<<<<<< HEAD
                     customCard(Icons.logout, 'Logout', onTap: () {}),
+=======
+                    customCard(Icons.logout, 'Logout', onTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginView(
+                                    data: _data,
+                                  )));
+                    }),
+>>>>>>> d163e8b56a3db5a5ccd82e1158cd8c796b938fc2
                   ],
                 ),
               ),

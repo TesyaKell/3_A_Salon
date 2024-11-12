@@ -110,6 +110,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     Positioned(
                       right: 5,
                       bottom: 5,
+<<<<<<< HEAD
                       child: CircleAvatar(
                         backgroundColor: Colors.white,
                         radius: 16,
@@ -117,6 +118,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           Icons.camera_alt,
                           size: 16,
                           color: Colors.grey,
+=======
+                      child: GestureDetector(
+                        onTap: () => _showImageSourceActionSheet(context),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 16,
+                          child: Icon(
+                            Icons.camera_alt,
+                            size: 16,
+                            color: Colors.grey,
+                          ),
+>>>>>>> d163e8b56a3db5a5ccd82e1158cd8c796b938fc2
                         ),
                       ),
                     ),
