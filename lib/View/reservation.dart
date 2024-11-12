@@ -3,9 +3,14 @@ import 'package:intl/intl.dart';
 import 'package:a_3_salon/View/detailReservation.dart';
 
 class ReservationPage extends StatefulWidget {
+  //menerima dan mengambil dari page lain
   final Map? data;
+  final Map? dataBarber;
+  final Map? dataLayanan;
 
-  const ReservationPage({Key? key, this.data}) : super(key: key);
+  const ReservationPage(
+      {Key? key, this.data, this.dataBarber, this.dataLayanan})
+      : super(key: key);
 
   @override
   State<ReservationPage> createState() => _ReservationPageState();
@@ -45,6 +50,10 @@ class _ReservationPageState extends State<ReservationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final Map? dataForm = widget.data;
+    final Map? dataFormBarber = widget.dataBarber;
+    final Map? dataFormLayanan = widget.dataLayanan;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -93,6 +102,8 @@ class _ReservationPageState extends State<ReservationPage> {
                       isNameEditable = value ?? false;
                       if (!isNameEditable) {
                         nameController.text = widget.data?['fullName'] ?? '';
+                      } else {
+                        nameController.text = '';
                       }
                     });
                   },
@@ -166,10 +177,25 @@ class _ReservationPageState extends State<ReservationPage> {
           ),
           child: ElevatedButton(
             onPressed: () {
+              Map<String, dynamic> formData = {};
+              formData['date'] = dateController.text;
+              formData['time'] = selectedTime;
+
+              if (!isNameEditable) {
+                formData['fullName'] = dataForm?['fullName'] ?? "N/A";
+              } else {
+                formData['fullName'] = nameController.text;
+              }
+
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DetailReservationPage(),
+                  builder: (context) => DetailReservationPage(
+                    data: dataForm,
+                    dataBarber: dataFormBarber,
+                    dataLayanan: dataFormLayanan,
+                    dataReservasi: formData,
+                  ),
                 ),
               );
             },

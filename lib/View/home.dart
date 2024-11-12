@@ -27,7 +27,7 @@ class _HomeViewState extends State<HomeView> {
       Center(child: HomeScreen(data: dataForm)),
       Center(
           child: Image(image: NetworkImage('https://picsum.photos/200/300'))),
-      Center(child: ServicesPage()),
+      Center(child: ServicesPage(data: dataForm)),
       Center(child: ProfileView(data: dataForm)),
     ];
 

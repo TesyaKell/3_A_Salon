@@ -6,39 +6,50 @@ class ServicesPage extends StatelessWidget {
     {
       "name": "Hair Color",
       "image": "lib/images/hair_color.jpg",
-      "price": "IDR1.500.000,00"
+      "price": "IDR1.500.000,00",
+      "priceInt": "1500000"
     },
     {
       "name": "Hair Ceratin",
       "image": "lib/images/hair_ceratin.jpg",
-      "price": "IDR200.000,00"
+      "price": "IDR200.000,00",
+      "priceInt": "200000"
     },
     {
       "name": "Hair Cut",
       "image": "lib/images/hair_cut.jpg",
-      "price": "IDR150.000,00"
+      "price": "IDR150.000,00",
+      "priceInt": "150000"
     },
     {
       "name": "Hair Extension",
       "image": "lib/images/hair_extension.jpg",
-      "price": "IDR5.000.000,00"
+      "price": "IDR5.000.000,00",
+      "priceInt": "5000000"
     },
     {
       "name": "Creambath",
       "image": "lib/images/creambath.jpg",
-      "price": "IDR100.000,00"
+      "price": "IDR100.000,00",
+      "priceInt": "100000"
     },
     {
       "name": "Hair Wash + Blow",
       "image": "lib/images/hair_wash_blow.jpg",
-      "price": "IDR70.000,00"
+      "price": "IDR70.000,00",
+      "priceInt": "70000"
     },
     {
       "name": "Hair Styling",
       "image": "lib/images/hair_styling.jpg",
-      "price": "IDR100.000,00"
+      "price": "IDR100.000,00",
+      "priceInt": "100000"
     },
   ];
+
+  final Map? data;
+
+  ServicesPage({Key? key, this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -72,9 +83,15 @@ class ServicesPage extends StatelessWidget {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
+                Map<String, dynamic> formData = {};
+                formData['layananName'] = services[index]["name"]!;
+                formData['layananPrice'] = services[index]["priceInt"]!;
+
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => BarberPage()),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          BarberPage(data: data, dataLayanan: formData)),
                 );
               },
               child: Card(
