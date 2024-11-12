@@ -6,7 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 class BarberPage extends StatefulWidget {
   final Map? data;
   final Map? dataLayanan;
-  const BarberPage({super.key, this.data, this.dataLayanan});
+  final int? discount;
+  const BarberPage({super.key, this.data, this.dataLayanan, this.discount});
 
   @override
   _BarberPageState createState() => _BarberPageState();
@@ -25,6 +26,7 @@ class _BarberPageState extends State<BarberPage> {
   Widget build(BuildContext context) {
     final Map? data = widget.data;
     final Map? dataLayanan = widget.dataLayanan;
+    final int? discount = widget.discount;
 
     final combinedList = [
       ...staticOptions,
@@ -115,7 +117,8 @@ class _BarberPageState extends State<BarberPage> {
                         builder: (context) => ReservationPage(
                             data: data,
                             dataBarber: formData,
-                            dataLayanan: dataLayanan),
+                            dataLayanan: dataLayanan,
+                            discount: discount),
                       ),
                     );
                   },

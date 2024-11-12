@@ -7,9 +7,10 @@ class ReservationPage extends StatefulWidget {
   final Map? data;
   final Map? dataBarber;
   final Map? dataLayanan;
+  final int? discount;
 
   const ReservationPage(
-      {Key? key, this.data, this.dataBarber, this.dataLayanan})
+      {Key? key, this.data, this.dataBarber, this.dataLayanan, this.discount})
       : super(key: key);
 
   @override
@@ -53,6 +54,7 @@ class _ReservationPageState extends State<ReservationPage> {
     final Map? dataForm = widget.data;
     final Map? dataFormBarber = widget.dataBarber;
     final Map? dataFormLayanan = widget.dataLayanan;
+    final int? discount = widget.discount;
 
     return Scaffold(
       appBar: AppBar(
@@ -195,6 +197,7 @@ class _ReservationPageState extends State<ReservationPage> {
                     dataBarber: dataFormBarber,
                     dataLayanan: dataFormLayanan,
                     dataReservasi: formData,
+                    discount: discount ?? 0,
                   ),
                 ),
               );

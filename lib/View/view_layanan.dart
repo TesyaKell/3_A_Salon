@@ -49,13 +49,15 @@ class ServicesPage extends StatelessWidget {
   ];
 
   final Map? data;
+  final int? discount;
 
-  ServicesPage({Key? key, this.data});
+  ServicesPage({Key? key, this.data, this.discount});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Services',
           style: GoogleFonts.lora(
@@ -66,10 +68,6 @@ class ServicesPage extends StatelessWidget {
         ),
         centerTitle: true,
         backgroundColor: Colors.pinkAccent,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -90,8 +88,10 @@ class ServicesPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          BarberPage(data: data, dataLayanan: formData)),
+                      builder: (context) => BarberPage(
+                          data: data,
+                          dataLayanan: formData,
+                          discount: discount)),
                 );
               },
               child: Card(

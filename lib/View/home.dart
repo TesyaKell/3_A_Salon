@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
   final Map? data;
-  const HomeView({super.key, this.data});
+  final int? discount;
+  final int? targetIndex;
+
+  const HomeView({super.key, this.data, this.discount, this.targetIndex});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -21,13 +24,26 @@ class _HomeViewState extends State<HomeView> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    if (widget.targetIndex != null) {
+      _onItemTapped(widget.targetIndex!);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     Map? dataForm = widget.data;
     List<Widget> _widgetOptions = <Widget>[
-      Center(child: HomeScreen(data: dataForm)),
+      Center(child: HomeScreen(data: dataForm, discount: widget.discount)),
       Center(
           child: Image(image: NetworkImage('https://picsum.photos/200/300'))),
-      Center(child: ServicesPage(data: dataForm)),
+      Center(
+          child: ServicesPage(
+        data: dataForm,
+        discount: widget.discount,
+      )),
       Center(child: ProfileView(data: dataForm)),
     ];
 

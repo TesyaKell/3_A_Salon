@@ -1,8 +1,13 @@
+import 'dart:math';
+
+import 'package:a_3_salon/View/home.dart';
 import 'package:flutter/material.dart';
+import 'package:shake_gesture/shake_gesture.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map? data;
-  const HomeScreen({super.key, this.data});
+  final int? discount;
+  const HomeScreen({super.key, this.data, this.discount});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -20,6 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
     {"name": "Razman", "image": "lib/images/razman.jpg"},
     {"name": "Carol", "image": "lib/images/carol.jpg"},
   ];
+
+  bool isDialogOpen = false;
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +112,98 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 20),
+              ShakeGesture(
+                onShake: () {
+                  if (!isDialogOpen) {
+                    return;
+                  }
+
+                  setState(() {
+                    isDialogOpen = false;
+                  });
+
+                  var discountArray = [5, 10, 15];
+                  var randomIndex = Random().nextInt(3); // 0 - 2
+                  var discount = discountArray[randomIndex];
+
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => Dialog(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text('You got $discount% discount!'),
+                            const SizedBox(height: 15),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.popUntil(
+                                  context,
+                                  (route) => route.isFirst,
+                                );
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => HomeView(
+                                              data: dataForm,
+                                              discount: discount,
+                                              targetIndex: 2,
+                                            )));
+                              },
+                              child: const Text('Go to transaction'), //test dl
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: Center(
+                  child: OutlinedButton(
+                      onPressed: () {
+                        if (widget.discount != null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      "You already claimed the discount!")));
+                          return;
+                        }
+
+                        setState(() {
+                          isDialogOpen = true;
+                        });
+
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => Dialog(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  const Text('Shake now to get your discount!'),
+                                  const SizedBox(height: 15),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      setState(() {
+                                        isDialogOpen = false;
+                                      });
+                                    },
+                                    child: const Text('Back to home'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text("Shake")),
+                ),
+              ),
               const ReviewCard(
                 name: 'Tesya Rakhel',
                 review:
