@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:a_3_salon/View/login.dart';
+import 'package:a_3_salon/View/profiledetailpage.dart';
 
 void main() {
   runApp(const MainApp());
@@ -15,7 +15,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginView(),
+      home: const EditProfilePage(),
     );
   }
 }
