@@ -6,13 +6,15 @@ class DetailReservationPage extends StatelessWidget {
   final Map? dataBarber;
   final Map? dataLayanan;
   final Map? dataReservasi;
+  final int? discount;
 
   const DetailReservationPage(
       {Key? key,
       this.data,
       this.dataBarber,
       this.dataLayanan,
-      this.dataReservasi});
+      this.dataReservasi,
+      this.discount});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +24,12 @@ class DetailReservationPage extends StatelessWidget {
     String barberName = dataBarber?['barberName'] ?? 'N/A';
     String serviceName = dataLayanan?['layananName'] ?? 'N/A';
     int servicePrice = int.parse(dataLayanan?['layananPrice']);
+    double discountPrice = servicePrice.toDouble();
+    if (discount! > 0) {
+      discountPrice -= discountPrice * (discount!.toDouble() / 100);
+    }
     double tax = servicePrice * 0.035;
-    double total = servicePrice + tax;
+    double total = discountPrice + tax;
 
     return Scaffold(
       appBar: AppBar(
@@ -124,6 +130,10 @@ class DetailReservationPage extends StatelessWidget {
             Divider(),
             _buildDetailRow(
                 "Subtotal", "IDR${servicePrice.toStringAsFixed(0)},00"),
+            discount != 0
+                ? _buildDetailRow("Discount $discount%",
+                    "IDR${servicePrice - discountPrice},00")
+                : Container(),
             _buildDetailRow("Tax", "IDR${tax.toStringAsFixed(0)},00"),
             SizedBox(height: 10),
             Padding(
