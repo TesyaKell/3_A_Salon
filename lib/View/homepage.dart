@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map? data;
@@ -21,6 +22,15 @@ class _HomeScreenState extends State<HomeScreen> {
     {"name": "Carol", "image": "lib/images/carol.jpg"},
   ];
 
+  // Variabel untuk animasi shake
+  bool isShaking = false;
+
+  void _triggerShake() {
+    setState(() {
+      isShaking = !isShaking;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Map? dataForm = widget.data;
@@ -31,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: const BoxDecoration(
-            color: Color(0xFF508C9B),
+            color: Color.fromRGBO(255, 64, 129, 1),
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(30),
               bottomRight: Radius.circular(30),
@@ -40,12 +50,47 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Hai, ${dataForm?['fullName']} !',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Hai, ${dataForm?['fullName']} !',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 222, 93, 136)
+                            .withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: IconButton(
+                        icon: Row(
+                          children: [
+                            Icon(
+                              isShaking
+                                  ? Icons.screen_rotation
+                                  : Icons.screen_rotation_rounded,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              'Shake',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ],
+                        ),
+                        onPressed: _triggerShake,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 8),

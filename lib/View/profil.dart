@@ -1,6 +1,8 @@
+import 'package:a_3_salon/View/historyReview.dart';
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/ProfileDetailPage.dart';
 import 'package:a_3_salon/View/contactBarber.dart';
+import 'package:a_3_salon/View/history.dart';
 import 'dart:io';
 
 class ProfileView extends StatefulWidget {
@@ -130,8 +132,20 @@ class _ProfileViewState extends State<ProfileView> {
                         );
                       }),
                       sectionTitle('Akun'),
-                      customCard(Icons.star, 'Rating & Reviews', onTap: () {}),
-                      customCard(Icons.history, 'Order History', onTap: () {}),
+                      customCard(Icons.star, 'Rating & Reviews', onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => HistoryReviewPage(),
+                          ),
+                        );
+                      }),
+                      customCard(Icons.history, 'Order History', onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => HistoryScreen(),
+                          ),
+                        );
+                      }),
                       sectionTitle('Info Lainnya'),
                       customCard(Icons.logout, 'Logout', onTap: () {}),
                     ],
