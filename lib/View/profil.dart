@@ -143,7 +143,7 @@ class _ProfileViewState extends State<ProfileView> {
                     customCard(Icons.store, 'Contact Salon', onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => ContactSalonPage(),
+                          builder: (context) => contactSalonPage(),
                         ),
                       );
                     }),
