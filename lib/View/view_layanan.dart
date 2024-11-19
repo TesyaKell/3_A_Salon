@@ -67,7 +67,7 @@ class ServicesPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.pinkAccent,
+        backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
