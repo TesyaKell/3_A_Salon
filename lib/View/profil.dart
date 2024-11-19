@@ -3,7 +3,7 @@ import 'package:a_3_salon/View/historyReview.dart';
 import 'package:a_3_salon/View/login.dart';
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/ProfileDetailPage.dart';
-import 'package:a_3_salon/View/contactBarber.dart';
+import 'package:a_3_salon/View/contactSalon.dart';
 import 'dart:io';
 
 class ProfileView extends StatefulWidget {
@@ -29,7 +29,6 @@ class _ProfileViewState extends State<ProfileView> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          // Wrap the entire body with SingleChildScrollView
           child: Column(
             children: [
               Container(
@@ -144,7 +143,7 @@ class _ProfileViewState extends State<ProfileView> {
                     customCard(Icons.store, 'Contact Salon', onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => ContactBarbersPage(),
+                          builder: (context) => contactSalonPage(),
                         ),
                       );
                     }),

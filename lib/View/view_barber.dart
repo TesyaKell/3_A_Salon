@@ -108,24 +108,27 @@ class _BarberPageState extends State<BarberPage> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Map<String, dynamic> formData = {};
-                    formData['barberName'] = selectedBarber;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ReservationPage(
-                            data: data,
-                            dataBarber: formData,
-                            dataLayanan: dataLayanan,
-                            discount: discount),
-                      ),
-                    );
-                  },
+                  onPressed: selectedBarber == null
+                      ? null // Nonaktifkan tombol jika belum memilih barber
+                      : () {
+                          Map<String, dynamic> formData = {};
+                          formData['barberName'] = selectedBarber;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReservationPage(
+                                data: data,
+                                dataBarber: formData,
+                                dataLayanan: dataLayanan,
+                                discount: discount,
+                              ),
+                            ),
+                          );
+                        },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         vertical: 15, horizontal: 40),
-                    backgroundColor: const Color.fromRGBO(209, 164, 196, 1),
+                    backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -135,6 +138,7 @@ class _BarberPageState extends State<BarberPage> {
                     style: GoogleFonts.lora(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
                 ),

@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:a_3_salon/View/home.dart';
 import 'package:flutter/material.dart';
 import 'package:shake_gesture/shake_gesture.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map? data;
@@ -235,53 +234,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 rating: 4,
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class TRoundedImage extends StatelessWidget {
-  const TRoundedImage({
-    super.key,
-    required this.services,
-    this.onPressed,
-    this.width,
-    this.height,
-    // required this.applyImageRadius,
-    this.border,
-    // required this.backgroundColor,
-    this.padding,
-  });
-
-  final List<Map<String, String>> services;
-  final double? width, height;
-  // final String imageURL;
-  // final bool applyImageRadius;
-  final BoxBorder? border;
-  // final Color backgroundColor;
-  final EdgeInsetsGeometry? padding;
-  // final bool isNetWorkImage;
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        width: width,
-        height: height,
-        padding: padding,
-        decoration: BoxDecoration(
-            border: border,
-            // color: backgroundColor,
-            borderRadius: BorderRadius.circular(8.0)),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: Image.asset(
-            services[0]['image']!,
-            fit: BoxFit.cover,
           ),
         ),
       ),

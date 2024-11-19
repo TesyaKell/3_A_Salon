@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/pemesanan_pdf.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DetailReservationPage extends StatelessWidget {
   final Map? data;
@@ -35,14 +36,14 @@ class DetailReservationPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Reservation Details',
-          style: TextStyle(
+          style: GoogleFonts.lora(
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.pinkAccent,
+        backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
@@ -53,20 +54,77 @@ class DetailReservationPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow("Customer Name", customerName),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.zero,
+                border: Border.all(
+                  color: const Color.fromARGB(255, 0, 0, 0),
+                  width: 1.0,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Customer Name",
+                    style: GoogleFonts.lora(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    "$customerName",
+                    style: GoogleFonts.lora(fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
             SizedBox(height: 10),
-            _buildDetailRow("Date & Time", "$time | $date"),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.zero,
+                border: Border.all(
+                  color: const Color.fromARGB(255, 0, 0, 0),
+                  width: 1.0,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Date & Time",
+                    style: GoogleFonts.lora(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    "$date | $time",
+                    style: GoogleFonts.lora(fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
             SizedBox(height: 20),
             Text(
               "1 service",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style:
+                  GoogleFonts.lora(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(12),
+                color: const Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.zero,
+                border: Border.all(
+                  color: const Color.fromARGB(255, 0, 0, 0),
+                  width: 1.0,
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,8 +134,10 @@ class DetailReservationPage extends StatelessWidget {
                       CircleAvatar(
                         child: Text(
                           barberName[0],
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                          style: GoogleFonts.lora(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       SizedBox(width: 10),
@@ -86,17 +146,19 @@ class DetailReservationPage extends StatelessWidget {
                         children: [
                           Text(
                             barberName,
-                            style: TextStyle(
+                            style: GoogleFonts.lora(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                          Text(serviceName, style: TextStyle(fontSize: 14)),
+                          Text(serviceName,
+                              style: GoogleFonts.lora(fontSize: 14)),
                           Text("60 Mins",
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.grey)),
+                              style: GoogleFonts.lora(
+                                  fontSize: 12, color: Colors.grey)),
                         ],
                       ),
                       Spacer(),
-                      Text("IDR${servicePrice.toStringAsFixed(0)},00"),
+                      Text("IDR${servicePrice.toStringAsFixed(0)},00",
+                          style: GoogleFonts.lora(fontSize: 14)),
                     ],
                   ),
                 ],
@@ -120,7 +182,8 @@ class DetailReservationPage extends StatelessWidget {
                   SizedBox(height: 10),
                   Text(
                     'Scan this qr to payment',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.lora(
+                        fontSize: 14, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -137,17 +200,19 @@ class DetailReservationPage extends StatelessWidget {
             _buildDetailRow("Tax", "IDR${tax.toStringAsFixed(0)},00"),
             SizedBox(height: 10),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 0.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Total",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.lora(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     "IDR${total.toStringAsFixed(0)},00",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.lora(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -172,12 +237,16 @@ class DetailReservationPage extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
                   padding: const EdgeInsets.symmetric(
                       vertical: 14.0, horizontal: 40),
                 ),
                 child: Text(
                   'Book Reservation',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: GoogleFonts.lora(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
               ),
             ),
@@ -195,11 +264,11 @@ class DetailReservationPage extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            style: GoogleFonts.lora(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           Text(
             value,
-            style: TextStyle(fontSize: 14),
+            style: GoogleFonts.lora(fontSize: 16),
           ),
         ],
       ),

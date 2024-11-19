@@ -1,6 +1,7 @@
 import 'package:a_3_salon/View/homepage.dart';
 import 'package:a_3_salon/View/profil.dart';
 import 'package:a_3_salon/View/view_layanan.dart';
+import 'package:a_3_salon/View/contactBarber.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
@@ -37,8 +38,7 @@ class _HomeViewState extends State<HomeView> {
     Map? dataForm = widget.data;
     List<Widget> _widgetOptions = <Widget>[
       Center(child: HomeScreen(data: dataForm, discount: widget.discount)),
-      Center(
-          child: Image(image: NetworkImage('https://picsum.photos/200/300'))),
+      Center(child: ContactBarbersPage()),
       Center(
           child: ServicesPage(
         data: dataForm,
@@ -56,11 +56,11 @@ class _HomeViewState extends State<HomeView> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
-            label: 'Barber',
+            label: 'Barbers',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
-            label: 'Service',
+            label: 'Services',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -68,8 +68,17 @@ class _HomeViewState extends State<HomeView> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.pink,
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
+        type: BottomNavigationBarType.fixed,
+        selectedLabelStyle: const TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.bold,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontSize: 12,
+        ),
         onTap: _onItemTapped,
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
