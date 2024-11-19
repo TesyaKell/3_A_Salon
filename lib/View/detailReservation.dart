@@ -42,7 +42,7 @@ class DetailReservationPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.pinkAccent,
+        backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
