@@ -234,6 +234,7 @@ class _RegisterViewState extends State<RegisterView> {
     String? helperTxt,
     bool password = false,
     IconData? iconData,
+    TextInputType keyboardType = TextInputType.text,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -241,11 +242,12 @@ class _RegisterViewState extends State<RegisterView> {
         controller: controller,
         obscureText: password,
         validator: validator,
+        keyboardType: keyboardType,
         decoration: InputDecoration(
           hintText: hintTxt,
-          hintStyle: GoogleFonts.lora(), // Lora font for hint text
+          hintStyle: GoogleFonts.lora(),
           helperText: helperTxt,
-          helperStyle: GoogleFonts.lora(), // Lora font for helper text
+          helperStyle: GoogleFonts.lora(),
           prefixIcon: iconData != null ? Icon(iconData) : null,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50),

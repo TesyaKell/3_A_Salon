@@ -22,28 +22,27 @@ class _LoginViewState extends State<LoginView> {
     Map? dataForm = widget.data;
 
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
-      resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _buildImage(),
-              _buildLoginText(),
-              _buildLoginForm(dataForm),
-            ],
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'lib/images/1.png',
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildImage() {
-    return Container(
-      height: 350,
-      child: Image.asset(
-        'lib/images/1.png',
-        fit: BoxFit.cover,
+          SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _buildLoginText(),
+                    _buildLoginForm(dataForm),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -90,11 +89,11 @@ class _LoginViewState extends State<LoginView> {
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildTextField('Username', usernameController, false),
-              const SizedBox(height: 15), // Reduced spacing
+              const SizedBox(height: 15),
               _buildTextField('Password', passwordController, true),
               const SizedBox(height: 20),
               _buildSignInButton(dataForm),
-              const SizedBox(height: 15),
+              const SizedBox(height: 10),
               _buildSignUpButton(),
             ],
           ),
