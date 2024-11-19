@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:pdf/pdf.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 void main() {
   runApp(const MyApp());
@@ -65,17 +67,6 @@ class _ReceiptPageState extends State<ReceiptPage> {
   @override
   void initState() {
     super.initState();
-    _checkPermissions();
-  }
-
-  Future<void> requestStoragePermission() async {
-    var status = await Permission.storage.request();
-    if (status.isGranted) {
-      print("Permission granted");
-    } else {
-      print("Permission denied");
-      openAppSettings();
-    }
   }
 
   Future<void> _checkPermissions() async {
@@ -265,14 +256,14 @@ class _ReceiptPageState extends State<ReceiptPage> {
             children: [
               GestureDetector(
                 onTap: () async {
-                  _savePDFToDownloads(context, screenshotController);
+                  _saveAndSharePDF(context, screenshotController);
                 },
                 child: _buildFooterButton(Icons.share, 'SHARE'),
               ),
               VerticalDivider(),
               GestureDetector(
                 onTap: () async {
-                  _savePDFToDownloads(context, screenshotController);
+                  _printPDF(context, screenshotController);
                 },
                 child: _buildFooterButton(Icons.download, 'DOWNLOAD'),
               ),
@@ -321,51 +312,66 @@ class _ReceiptPageState extends State<ReceiptPage> {
   }
 }
 
-Future<void> _savePDFToDownloads(
+Future<void> _printPDF(
     BuildContext context, ScreenshotController screenshotController) async {
-  // Cek izin penyimpanan
-  var status = await Permission.storage.request();
-  if (status.isGranted) {
-    try {
-      // Tangkap screenshot
-      final image = await screenshotController.capture();
-      if (image == null) return;
+  try {
+    final image = await screenshotController.capture();
+    if (image == null) return;
 
-      // Buat PDF dari screenshot
-      final pdf = pw.Document();
-      pdf.addPage(
-        pw.Page(
-          build: (pw.Context context) {
-            return pw.Center(
-              child: pw.Image(pw.MemoryImage(image)),
-            );
-          },
-        ),
-      );
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.Center(
+            child: pw.Image(pw.MemoryImage(image)),
+          );
+        },
+      ),
+    );
 
-      Directory downloadsDir = Directory('/storage/emulated/0/Download');
-      final filePath = '${downloadsDir.path}/receipt.pdf';
-      final file = File(filePath);
+    await Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async {
+        return await pdf.save();
+      },
+    );
 
-      // Simpan PDF ke Downloads
-      await file.writeAsBytes(await pdf.save());
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Print initiated!')),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to print PDF')),
+    );
+  }
+}
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('PDF berhasil disimpan ke folder Downloads: $filePath'),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Gagal menyimpan PDF: $e'),
-        ),
-      );
-    }
-  } else {
+Future<void> _saveAndSharePDF(
+    BuildContext context, ScreenshotController screenshotController) async {
+  try {
+    final image = await screenshotController.capture();
+    if (image == null) return;
+
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.Center(
+            child: pw.Image(pw.MemoryImage(image)),
+          );
+        },
+      ),
+    );
+
+    final directory = await getTemporaryDirectory();
+    final filePath = '${directory.path}/receipt.pdf';
+    final file = File(filePath);
+    await file.writeAsBytes(await pdf.save());
+
+    Share.shareXFiles([XFile(filePath)], text: 'Receipt');
+  } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Izin penyimpanan ditolak.'),
+        content: Text('Failed to capture screenshot or generate PDF'),
       ),
     );
   }

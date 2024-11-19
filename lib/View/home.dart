@@ -1,6 +1,7 @@
 import 'package:a_3_salon/View/homepage.dart';
 import 'package:a_3_salon/View/profil.dart';
 import 'package:a_3_salon/View/view_layanan.dart';
+import 'package:a_3_salon/View/contactBarber.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
@@ -37,8 +38,7 @@ class _HomeViewState extends State<HomeView> {
     Map? dataForm = widget.data;
     List<Widget> _widgetOptions = <Widget>[
       Center(child: HomeScreen(data: dataForm, discount: widget.discount)),
-      Center(
-          child: Image(image: NetworkImage('https://picsum.photos/200/300'))),
+      Center(child: ContactBarbersPage()),
       Center(
           child: ServicesPage(
         data: dataForm,
