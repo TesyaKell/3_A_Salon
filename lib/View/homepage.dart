@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(130),
+        preferredSize: const Size.fromHeight(140),
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: const BoxDecoration(
@@ -69,16 +69,109 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: IconButton(
                         icon: Row(
                           children: [
-                            Icon(
-                              Icons.screen_rotation,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              'Shake',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
+                            const SizedBox(width: 2),
+                            ShakeGesture(
+                              onShake: () {
+                                if (!isDialogOpen) {
+                                  return;
+                                }
+
+                                setState(() {
+                                  isDialogOpen = false;
+                                });
+
+                                var discountArray = [5, 10, 15];
+                                var randomIndex = Random().nextInt(3); // 0 - 2
+                                var discount = discountArray[randomIndex];
+
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) => Dialog(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text('You got $discount% discount!'),
+                                          const SizedBox(height: 15),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.popUntil(
+                                                context,
+                                                (route) => route.isFirst,
+                                              );
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          HomeView(
+                                                            data: dataForm,
+                                                            discount: discount,
+                                                            targetIndex: 2,
+                                                          )));
+                                            },
+                                            child: const Text(
+                                                'Go to transaction'), //test dl
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Center(
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    if (widget.discount != null) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                              content: Text(
+                                                  "You already claimed the discount!")));
+                                      return;
+                                    }
+
+                                    setState(() {
+                                      isDialogOpen = true;
+                                    });
+
+                                    showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) => Dialog(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              const Text(
+                                                  'Shake now to get your discount!'),
+                                              const SizedBox(height: 15),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  setState(() {
+                                                    isDialogOpen = false;
+                                                  });
+                                                },
+                                                child:
+                                                    const Text('Back to home'),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Icon(
+                                    Icons.screen_rotation,
+                                    color: Colors.white,
+                                    size: 25,
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -111,19 +204,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 'Service Favorites:',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 150,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: services.length,
-                  itemBuilder: (context, index) {
-                    return ServiceCard(
-                      imageUrl: services[index]['image']!,
-                      title: services[index]['name']!,
-                    );
-                  },
-                ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: StoryViewCarousel(items: services),
               ),
               const SizedBox(height: 20),
               const Text(
@@ -142,99 +225,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       imageUrl: barbers[index]['image']!,
                     );
                   },
-                ),
-              ),
-              const SizedBox(height: 20),
-              ShakeGesture(
-                onShake: () {
-                  if (!isDialogOpen) {
-                    return;
-                  }
-
-                  setState(() {
-                    isDialogOpen = false;
-                  });
-
-                  var discountArray = [5, 10, 15];
-                  var randomIndex = Random().nextInt(3); // 0 - 2
-                  var discount = discountArray[randomIndex];
-
-                  showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) => Dialog(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text('You got $discount% discount!'),
-                            const SizedBox(height: 15),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.popUntil(
-                                  context,
-                                  (route) => route.isFirst,
-                                );
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => HomeView(
-                                              data: dataForm,
-                                              discount: discount,
-                                              targetIndex: 2,
-                                            )));
-                              },
-                              child: const Text('Go to transaction'), //test dl
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                child: Center(
-                  child: OutlinedButton(
-                      onPressed: () {
-                        if (widget.discount != null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text(
-                                      "You already claimed the discount!")));
-                          return;
-                        }
-
-                        setState(() {
-                          isDialogOpen = true;
-                        });
-
-                        showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => Dialog(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  const Text('Shake now to get your discount!'),
-                                  const SizedBox(height: 15),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      setState(() {
-                                        isDialogOpen = false;
-                                      });
-                                    },
-                                    child: const Text('Back to home'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                      child: Text("Shake")),
                 ),
               ),
               const ReviewCard(
@@ -262,18 +252,42 @@ class ServiceCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Container(
-        width: 150,
+        width: 50,
         child: Column(
           children: [
-            Container(
-              height: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                image: DecorationImage(
-                  image: AssetImage(imageUrl),
-                  fit: BoxFit.cover,
+            Stack(
+              children: [
+                Container(
+                  height: 150,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    image: DecorationImage(
+                      image: AssetImage(imageUrl),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-              ),
+                Positioned(
+                  top: 8,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      color: Colors.black
+                          .withOpacity(0.5), // background warna transparan
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 5),
             Text(
@@ -283,6 +297,117 @@ class ServiceCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class StoryViewCarousel extends StatefulWidget {
+  final List<Map<String, String>> items;
+
+  const StoryViewCarousel({super.key, required this.items});
+
+  @override
+  _StoryViewCarouselState createState() => _StoryViewCarouselState();
+}
+
+class _StoryViewCarouselState extends State<StoryViewCarousel> {
+  late PageController _pageController;
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: 0);
+    _startAutoPlay();
+  }
+
+  void _startAutoPlay() {
+    Future.delayed(const Duration(seconds: 3), () {
+      if (_pageController.hasClients) {
+        if (_currentPage < widget.items.length - 1) {
+          _currentPage++;
+        } else {
+          _currentPage = 0;
+        }
+
+        _pageController.animateToPage(
+          _currentPage,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+
+        _startAutoPlay();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 200,
+          child: PageView.builder(
+            controller: _pageController,
+            itemCount: widget.items.length,
+            onPageChanged: (index) {
+              setState(() {
+                _currentPage = index;
+              });
+            },
+            itemBuilder: (context, index) {
+              final item = widget.items[index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset(
+                        item['image']!,
+                        fit: BoxFit.cover,
+                        height: 150,
+                        width: double.infinity,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      item['name']!,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(
+            widget.items.length,
+            (index) => AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              margin: const EdgeInsets.symmetric(horizontal: 5),
+              width: _currentPage == index ? 12 : 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: _currentPage == index ? Colors.pink : Colors.grey,
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -303,6 +428,7 @@ class BarberCard extends StatelessWidget {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
+              color: Colors.grey[300],
               borderRadius: BorderRadius.circular(8.0),
               image: DecorationImage(
                 image: AssetImage(imageUrl),
