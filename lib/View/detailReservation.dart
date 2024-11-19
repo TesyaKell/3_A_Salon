@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:a_3_salon/View/pemesanan_pdf.dart';
 
 class DetailReservationPage extends StatelessWidget {
   final Map? data;
   final Map? dataBarber;
   final Map? dataLayanan;
   final Map? dataReservasi;
+  final int? discount;
 
   const DetailReservationPage(
       {Key? key,
       this.data,
       this.dataBarber,
       this.dataLayanan,
-      this.dataReservasi});
+      this.dataReservasi,
+      this.discount});
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +24,12 @@ class DetailReservationPage extends StatelessWidget {
     String barberName = dataBarber?['barberName'] ?? 'N/A';
     String serviceName = dataLayanan?['layananName'] ?? 'N/A';
     int servicePrice = int.parse(dataLayanan?['layananPrice']);
+    double discountPrice = servicePrice.toDouble();
+    if (discount! > 0) {
+      discountPrice -= discountPrice * (discount!.toDouble() / 100);
+    }
     double tax = servicePrice * 0.035;
-    double total = servicePrice + tax;
+    double total = discountPrice + tax;
 
     return Scaffold(
       appBar: AppBar(
@@ -123,6 +130,10 @@ class DetailReservationPage extends StatelessWidget {
             Divider(),
             _buildDetailRow(
                 "Subtotal", "IDR${servicePrice.toStringAsFixed(0)},00"),
+            discount != 0
+                ? _buildDetailRow("Discount $discount%",
+                    "IDR${servicePrice - discountPrice},00")
+                : Container(),
             _buildDetailRow("Tax", "IDR${tax.toStringAsFixed(0)},00"),
             SizedBox(height: 10),
             Padding(
@@ -145,22 +156,28 @@ class DetailReservationPage extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // Handle booking reservation action
-                  print("Reservation confirmed");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ReceiptPage(
+                        dataReservasi: dataReservasi?.map(
+                            (key, value) => MapEntry(key, value.toString())),
+                        dataBarber: dataBarber?.map(
+                            (key, value) => MapEntry(key, value.toString())),
+                        dataLayanan: dataLayanan?.map(
+                            (key, value) => MapEntry(key, value.toString())),
+                        discount: discount ?? 0,
+                      ),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.pinkAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 14.0, horizontal: 40),
-                  child: Text(
-                    'Book Reservation',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                ),
+                child: Text(
+                  'Book Reservation',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/login.dart';
-import 'package:google_fonts/google_fonts.dart'; // Import the google_fonts package
+import 'package:google_fonts/google_fonts.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});

@@ -7,8 +7,38 @@ class ContactBarbersPage extends StatelessWidget {
     {
       'name': 'Abel',
       'specialty': 'Hair Extension',
-      'image': 'assets/carol.jpg',
-      'phone': '6282325196651'
+      'image': 'lib/images/carol.jpg',
+      'phone': '6282278313058'
+    },
+    {
+      'name': 'Luivuitong',
+      'specialty': 'Hair Color',
+      'image': 'lib/images/carol.jpg',
+      'phone': '6282278313058'
+    },
+    {
+      'name': 'Vadel',
+      'specialty': 'Hair Treatment',
+      'image': 'lib/images/carol.jpg',
+      'phone': '6282278313058'
+    },
+    {
+      'name': 'Razman',
+      'specialty': 'Hair Stylist',
+      'image': 'lib/images/carol.jpg',
+      'phone': '6282278313058'
+    },
+    {
+      'name': 'Carol',
+      'specialty': 'Hair Treatment',
+      'image': 'lib/images/carol.jpg',
+      'phone': '6282278313058'
+    },
+    {
+      'name': 'Kak Gem',
+      'specialty': 'Hair Color',
+      'image': 'lib/images/carol.jpg',
+      'phone': '6282278313058'
     },
   ];
 

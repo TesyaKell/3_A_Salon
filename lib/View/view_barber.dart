@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/data/barber.dart';
 import 'package:a_3_salon/View/reservation.dart';
-<<<<<<< HEAD
 import 'package:google_fonts/google_fonts.dart';
-=======
->>>>>>> 470a5fe51057050aa180c3eb481491a3cf4c8886
 
 class BarberPage extends StatefulWidget {
   final Map? data;
   final Map? dataLayanan;
-  const BarberPage({super.key, this.data, this.dataLayanan});
+  final int? discount;
+  const BarberPage({super.key, this.data, this.dataLayanan, this.discount});
 
   @override
   _BarberPageState createState() => _BarberPageState();
@@ -26,13 +24,9 @@ class _BarberPageState extends State<BarberPage> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-=======
-    // Gabungkan opsi statis dengan daftar nama barber
-    //pakai widget kalau statefull
->>>>>>> 470a5fe51057050aa180c3eb481491a3cf4c8886
     final Map? data = widget.data;
     final Map? dataLayanan = widget.dataLayanan;
+    final int? discount = widget.discount;
 
     final combinedList = [
       ...staticOptions,
@@ -79,11 +73,7 @@ class _BarberPageState extends State<BarberPage> {
                     margin: const EdgeInsets.symmetric(vertical: 5.0),
                     decoration: BoxDecoration(
                       color: selectedBarber == barberName
-<<<<<<< HEAD
                           ? const Color.fromRGBO(209, 164, 196, 1)
-=======
-                          ? Colors.teal[100]
->>>>>>> 470a5fe51057050aa180c3eb481491a3cf4c8886
                           : Colors.grey[200],
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -113,7 +103,6 @@ class _BarberPageState extends State<BarberPage> {
                 },
               ),
             ),
-<<<<<<< HEAD
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: SizedBox(
@@ -128,7 +117,8 @@ class _BarberPageState extends State<BarberPage> {
                         builder: (context) => ReservationPage(
                             data: data,
                             dataBarber: formData,
-                            dataLayanan: dataLayanan),
+                            dataLayanan: dataLayanan,
+                            discount: discount),
                       ),
                     );
                   },
@@ -151,27 +141,6 @@ class _BarberPageState extends State<BarberPage> {
               ),
             ),
           ],
-=======
-          ],
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          onPressed: () {
-            Map<String, dynamic> formData = {};
-            formData['barberName'] = selectedBarber;
-            // Arahkan ke hlmn Reservation dngn nama barber yg dipilih sblmnya
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ReservationPage(
-                    data: data, dataBarber: formData, dataLayanan: dataLayanan),
-              ),
-            );
-          },
-          child: Text('Next'),
->>>>>>> 470a5fe51057050aa180c3eb481491a3cf4c8886
         ),
       ),
     );
