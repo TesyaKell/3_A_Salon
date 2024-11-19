@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
+        textTheme: GoogleFonts.loraTextTheme(),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
         useMaterial3: true,
       ),
@@ -123,7 +125,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.pink,
+        backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -131,7 +133,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
         ),
         title: Text(
           'Receipt',
-          style: TextStyle(
+          style: GoogleFonts.lora(
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -150,7 +152,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                       children: [
                         Text(
                           'ATMA SALON',
-                          style: TextStyle(
+                          style: GoogleFonts.lora(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 8),
@@ -163,7 +165,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                         Text(
                           'Scan this QR code at the salon for quick check-in.',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: GoogleFonts.lora(
                               fontSize: 14,
                               color: Colors.grey[900],
                               fontWeight: FontWeight.w700),
@@ -175,7 +177,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
                             Text(
                               'Jl. Babarsari NO 105, Kledokan, Kec. Depok,\nKab. Sleman, Daerah Istimewa Yogyakarta',
                               textAlign: TextAlign.end,
-                              style: TextStyle(
+                              style: GoogleFonts.lora(
                                   fontSize: 12, color: Colors.grey[500]),
                             ),
                           ],
@@ -248,7 +250,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.pink,
+        color: const Color.fromRGBO(210, 0, 98, 1),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Row(
@@ -281,13 +283,13 @@ class _ReceiptPageState extends State<ReceiptPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label,
-              style: TextStyle(
+              style: GoogleFonts.lora(
                   fontSize: 14,
                   color: Colors.grey[900],
                   fontWeight: FontWeight.w600)),
           Text(
             value,
-            style: TextStyle(
+            style: GoogleFonts.lora(
               fontSize: 14,
               color: Colors.grey,
             ),
@@ -305,7 +307,8 @@ class _ReceiptPageState extends State<ReceiptPage> {
         SizedBox(width: 4),
         Text(
           label,
-          style: TextStyle(color: Colors.white, fontSize: 14),
+          style: GoogleFonts.lora(
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ],
     );
