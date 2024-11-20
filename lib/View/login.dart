@@ -90,7 +90,7 @@ class _LoginViewState extends State<LoginView> {
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildTextField('Username', usernameController, false),
-              const SizedBox(height: 15), // Reduced spacing
+              const SizedBox(height: 15),
               _buildTextField('Password', passwordController, true),
               const SizedBox(height: 20),
               _buildSignInButton(dataForm),
