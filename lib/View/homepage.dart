@@ -4,6 +4,7 @@ import 'package:a_3_salon/View/home.dart';
 import 'package:flutter/material.dart';
 import 'package:shake_gesture/shake_gesture.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map? data;
@@ -39,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: const BoxDecoration(
-            color: Color(0xFFFF4081),
+            color: const Color.fromRGBO(210, 0, 98, 1),
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(30),
               bottomRight: Radius.circular(30),
@@ -166,10 +167,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     );
                                   },
-                                  child: Icon(
-                                    Icons.screen_rotation,
-                                    color: Colors.white,
-                                    size: 25,
+                                  style: OutlinedButton.styleFrom(
+                                    side: const BorderSide(
+                                        color: Colors.white, width: 2.0),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.screen_rotation,
+                                        color: Colors.white,
+                                        size: 25,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      const Text(
+                                        "Shake",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -448,7 +469,9 @@ class _StoryViewCarouselState extends State<StoryViewCarousel> {
               width: _currentPage == index ? 12 : 8,
               height: 8,
               decoration: BoxDecoration(
-                color: _currentPage == index ? Colors.pink : Colors.grey,
+                color: _currentPage == index
+                    ? const Color.fromRGBO(210, 0, 98, 1)
+                    : Colors.grey,
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
