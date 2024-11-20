@@ -23,24 +23,26 @@ class _LoginViewState extends State<LoginView> {
 
     return Scaffold(
       backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false, // Disable resizing
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _buildImage(),
-              _buildLoginText(),
-              _buildLoginForm(dataForm),
-            ],
-          ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Column(
+              children: [
+                _buildImage(constraints),
+                _buildLoginText(),
+                _buildLoginForm(constraints, dataForm),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _buildImage() {
-    return Container(
-      height: 350,
+  Widget _buildImage(BoxConstraints constraints) {
+    return SizedBox(
+      height: constraints.maxHeight * 0.35, // 35% of the screen height
       child: Image.asset(
         'lib/images/1.png',
         fit: BoxFit.cover,
@@ -72,31 +74,33 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  Widget _buildLoginForm(Map? dataForm) {
-    return Container(
-      width: double.infinity,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(50),
-          topRight: Radius.circular(50),
+  Widget _buildLoginForm(BoxConstraints constraints, Map? dataForm) {
+    return Expanded(
+      child: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(50),
+            topRight: Radius.circular(50),
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 35.0, vertical: 20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildTextField('Username', usernameController, false),
-              const SizedBox(height: 15),
-              _buildTextField('Password', passwordController, true),
-              const SizedBox(height: 20),
-              _buildSignInButton(dataForm),
-              const SizedBox(height: 15),
-              _buildSignUpButton(),
-            ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 35.0, vertical: 20.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildTextField('Username', usernameController, false),
+                const SizedBox(height: 15),
+                _buildTextField('Password', passwordController, true),
+                const SizedBox(height: 20),
+                _buildSignInButton(dataForm),
+                const Spacer(),
+                _buildSignUpButton(),
+              ],
+            ),
           ),
         ),
       ),
