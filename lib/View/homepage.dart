@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shake_gesture/shake_gesture.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map? data;
@@ -29,6 +30,11 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   bool isDialogOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
