@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/data/barber.dart';
+import 'package:a_3_salon/View/reservation.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BarberPage extends StatefulWidget {
+  final Map? data;
+  final Map? dataLayanan;
+  final int? discount;
+  const BarberPage({super.key, this.data, this.dataLayanan, this.discount});
+
   @override
   _BarberPageState createState() => _BarberPageState();
 }
 
 class _BarberPageState extends State<BarberPage> {
-  List<String> selectedBarbers = [];
+  String? selectedBarber;
 
   final List<String> staticOptions = [
     "Any Staff",
@@ -17,6 +24,10 @@ class _BarberPageState extends State<BarberPage> {
 
   @override
   Widget build(BuildContext context) {
+    final Map? data = widget.data;
+    final Map? dataLayanan = widget.dataLayanan;
+    final int? discount = widget.discount;
+
     final combinedList = [
       ...staticOptions,
       ...barberList.map((barber) => barber.name),
@@ -26,23 +37,33 @@ class _BarberPageState extends State<BarberPage> {
       appBar: AppBar(
         title: Text(
           'Barbers',
-          style: TextStyle(
+          style: GoogleFonts.lora(
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color.fromRGBO(80, 140, 155, 1),
+        backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Select a barber staff',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5.0, top: 9.0),
+              child: Text(
+                'Select a barber staff',
+                style: GoogleFonts.lora(fontSize: 18),
+                textAlign: TextAlign.left,
+              ),
             ),
+            Divider(
+              thickness: 1.0,
+              color: Colors.grey[400],
+            ),
+            SizedBox(height: 10.0),
             Expanded(
               child: ListView.builder(
                 itemCount: combinedList.length,
@@ -51,46 +72,79 @@ class _BarberPageState extends State<BarberPage> {
                   return Container(
                     margin: const EdgeInsets.symmetric(vertical: 5.0),
                     decoration: BoxDecoration(
-                      color: selectedBarbers.contains(barberName)
-                          ? Colors.teal[100]
+                      color: selectedBarber == barberName
+                          ? const Color.fromRGBO(209, 164, 196, 1)
                           : Colors.grey[200],
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: CheckboxListTile(
+                    child: ListTile(
                       title: Text(
                         barberName,
-                        style: TextStyle(fontSize: 16),
+                        style: GoogleFonts.lora(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
                       ),
-                      value: selectedBarbers.contains(barberName),
-                      onChanged: (bool? value) {
-                        setState(() {
-                          if (value == true) {
-                            selectedBarbers.add(barberName);
-                          } else {
-                            selectedBarbers.remove(barberName);
-                          }
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity.trailing,
-                      activeColor: Color.fromRGBO(80, 140, 155, 1),
-                      secondary: CircleAvatar(
+                      leading: CircleAvatar(
                         child: Text(barberName[0]),
+                      ),
+                      trailing: Radio<String>(
+                        value: barberName,
+                        groupValue: selectedBarber,
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedBarber = value;
+                          });
+                        },
+                        activeColor: Color.fromRGBO(212, 79, 168, 1),
                       ),
                     ),
                   );
                 },
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: selectedBarber == null
+                      ? null // Nonaktifkan tombol jika belum memilih barber
+                      : () {
+                          Map<String, dynamic> formData = {};
+                          formData['barberName'] = selectedBarber;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReservationPage(
+                                data: data,
+                                dataBarber: formData,
+                                dataLayanan: dataLayanan,
+                                discount: discount,
+                              ),
+                            ),
+                          );
+                        },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 40),
+                    backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    'Next',
+                    style: GoogleFonts.lora(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          onPressed: () {
-            print("Selected Barbers: $selectedBarbers");
-          },
-          child: Text('Next'),
         ),
       ),
     );

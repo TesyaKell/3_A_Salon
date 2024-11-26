@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/home.dart';
 import 'package:a_3_salon/View/register.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginView extends StatefulWidget {
   final Map? data;
@@ -21,154 +22,183 @@ class _LoginViewState extends State<LoginView> {
     Map? dataForm = widget.data;
 
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(80, 140, 155, 1),
-      resizeToAvoidBottomInset: true,
+      backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
+      resizeToAvoidBottomInset: false, // Disable resizing
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              Container(
-                margin: const EdgeInsets.only(top: 3),
-                height: 260,
-                child: Image.asset(
-                  'lib/images/1.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const Text(
-                'Login',
-                style: TextStyle(
-                  fontSize: 39,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Card(
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50),
-                    bottomLeft: Radius.circular(50),
-                    bottomRight: Radius.circular(50),
-                  ),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.all(35),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Username',
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 15.0,
-                            ),
-                          ),
-                        ),
-                        inputForm(
-                          (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Username tidak boleh kosong";
-                            }
-                            return null;
-                          },
-                          controller: usernameController,
-                          helperTxt: "Inputkan User yang telah didaftar",
-                        ),
-                        const SizedBox(height: 20),
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Password',
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 15.0,
-                            ),
-                          ),
-                        ),
-                        inputForm(
-                          (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Password kosong";
-                            }
-                            return null;
-                          },
-                          password: true,
-                          controller: passwordController,
-                          helperTxt: "Inputkan Password",
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  String usernameInput =
-                                      usernameController.text;
-                                  String passwordInput =
-                                      passwordController.text;
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Column(
+              children: [
+                _buildImage(constraints),
+                _buildLoginText(),
+                _buildLoginForm(constraints, dataForm),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
 
-                                  if (dataForm != null &&
-                                      dataForm['username'] == usernameInput &&
-                                      dataForm['password'] == passwordInput) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              HomeView(data: dataForm)),
-                                    );
-                                  } else {
-                                    showDialog(
-                                      context: context,
-                                      builder: (_) => AlertDialog(
-                                        title: const Text(
-                                          'Username atau Password Salah',
-                                          style: TextStyle(fontSize: 16),
-                                        ),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () => Navigator.pop(
-                                                context, 'Cancel'),
-                                            child: const Text('Cancel',
-                                                style: TextStyle(fontSize: 14)),
-                                          ),
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context, 'OK'),
-                                            child: const Text('OK',
-                                                style: TextStyle(fontSize: 14)),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }
-                                }
-                              },
-                              child: const Text('Login'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                pushRegister(context);
-                              },
-                              child: const Text('Belum punya akun?'),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+  Widget _buildImage(BoxConstraints constraints) {
+    return SizedBox(
+      height: constraints.maxHeight * 0.35, // 35% of the screen height
+      child: Image.asset(
+        'lib/images/1.png',
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+
+  Widget _buildLoginText() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Login',
+              style: AppTextStyle.heading,
+            ),
+            const SizedBox(height: 5),
+            Text(
+              'Please Login to continue',
+              style: AppTextStyle.subheading,
+            ),
+            const SizedBox(height: 30),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginForm(BoxConstraints constraints, Map? dataForm) {
+    return Expanded(
+      child: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(50),
+            topRight: Radius.circular(50),
           ),
         ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 35.0, vertical: 20.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildTextField('Username', usernameController, false),
+                const SizedBox(height: 15),
+                _buildTextField('Password', passwordController, true),
+                const SizedBox(height: 20),
+                _buildSignInButton(dataForm),
+                const Spacer(),
+                _buildSignUpButton(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(
+      String label, TextEditingController controller, bool isPassword) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: AppTextStyle.label),
+        inputForm(
+          (value) {
+            if (value == null || value.isEmpty) {
+              return "$label cannot be empty";
+            }
+            return null;
+          },
+          controller: controller,
+          helperTxt: "Enter $label",
+          password: isPassword,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSignInButton(Map? dataForm) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              String usernameInput = usernameController.text;
+              String passwordInput = passwordController.text;
+
+              if (dataForm != null &&
+                  dataForm['username'] == usernameInput &&
+                  dataForm['password'] == passwordInput) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomeView(data: dataForm),
+                  ),
+                );
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text(
+                      'Username or Password is incorrect',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                        child: const Text('Cancel',
+                            style: TextStyle(fontSize: 14)),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'OK'),
+                        child: const Text('OK', style: TextStyle(fontSize: 14)),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          child: Text(
+            'Sign In',
+            style: GoogleFonts.lora(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSignUpButton() {
+    return TextButton(
+      onPressed: () {
+        pushRegister(context);
+      },
+      child: Text(
+        'Don’t Have an Account? Sign Up',
+        style: GoogleFonts.lora(),
       ),
     );
   }
@@ -218,4 +248,18 @@ class _LoginViewState extends State<LoginView> {
   }
 }
 
-//coba
+class AppTextStyle {
+  static TextStyle heading = GoogleFonts.lora(
+    fontSize: 36,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
+  static TextStyle subheading = GoogleFonts.lora(
+    fontSize: 18,
+    color: Colors.white,
+  );
+  static TextStyle label = GoogleFonts.lora(
+    fontWeight: FontWeight.normal,
+    fontSize: 15.0,
+  );
+}

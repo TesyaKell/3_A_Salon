@@ -1,11 +1,15 @@
 import 'package:a_3_salon/View/homepage.dart';
 import 'package:a_3_salon/View/profil.dart';
 import 'package:a_3_salon/View/view_layanan.dart';
+import 'package:a_3_salon/View/contactBarber.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
   final Map? data;
-  const HomeView({super.key, this.data});
+  final int? discount;
+  final int? targetIndex;
+
+  const HomeView({super.key, this.data, this.discount, this.targetIndex});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -21,13 +25,25 @@ class _HomeViewState extends State<HomeView> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    if (widget.targetIndex != null) {
+      _onItemTapped(widget.targetIndex!);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     Map? dataForm = widget.data;
     List<Widget> _widgetOptions = <Widget>[
-      Center(child: HomeScreen(data: dataForm)),
+      Center(child: HomeScreen(data: dataForm, discount: widget.discount)),
+      Center(child: ContactBarbersPage()),
       Center(
-          child: Image(image: NetworkImage('https://picsum.photos/200/300'))),
-      Center(child: ServicesPage()),
+          child: ServicesPage(
+        data: dataForm,
+        discount: widget.discount,
+      )),
       Center(child: ProfileView(data: dataForm)),
     ];
 
@@ -40,11 +56,11 @@ class _HomeViewState extends State<HomeView> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
-            label: 'Barber',
+            label: 'Barbers',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
-            label: 'Service',
+            label: 'Services',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -52,8 +68,17 @@ class _HomeViewState extends State<HomeView> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
+        type: BottomNavigationBarType.fixed,
+        selectedLabelStyle: const TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.bold,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontSize: 12,
+        ),
         onTap: _onItemTapped,
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
