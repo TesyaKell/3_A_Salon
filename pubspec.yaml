@@ -1,6 +1,6 @@
 name: a_3_salon
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.3.0
+  google_fonts: ^5.0.0
 
 dev_dependencies:
   flutter_test:
