@@ -27,6 +27,7 @@ dependencies:
   printing: ^5.6.0
   responsive_sizer: ^3.3.1
   carousel_slider: ^5.0.0
+  fluttertoast: ^8.0.9
 
 dev_dependencies:
   flutter_test:
