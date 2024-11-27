@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/ProfileDetailPage.dart';
 import 'package:a_3_salon/View/contactSalon.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'dart:io'; // INI COBA DOANG
+import 'dart:io';
 
+// INI coba perbaiki github
 class ProfileView extends StatefulWidget {
   final Map? data;
   const ProfileView({super.key, this.data});
