@@ -4,7 +4,7 @@ import 'package:a_3_salon/View/login.dart';
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/ProfileDetailPage.dart';
 import 'package:a_3_salon/View/contactSalon.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart'; // coba
 import 'dart:io';
 
 class ProfileView extends StatefulWidget {
