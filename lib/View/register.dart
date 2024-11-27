@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/login.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -11,11 +13,51 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController notelpController = TextEditingController();
-  TextEditingController fullNameController = TextEditingController();
+  Map<String, TextEditingController> controllers = {
+    'username': TextEditingController(),
+    'nama_customer': TextEditingController(),
+    'email': TextEditingController(),
+    'password': TextEditingController(),
+    'nomor_telpon': TextEditingController(),
+  };
+  bool isLoading = false;
+
+  Future<void> registerUser() async {
+    final String url = 'http://192.168.1.129:8000/api/customers';
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    final body = json.encode({
+      "username": controllers['username']!.text,
+      "nama_customer": controllers['nama_customer']!.text,
+      "email": controllers['email']!.text,
+      "password": controllers['password']!.text,
+      "nomor_telpon": controllers['nomor_telpon']!.text,
+    });
+
+    try {
+      final response =
+          await http.post(Uri.parse(url), headers: headers, body: body);
+
+      if (response.headers['content-type']?.contains('text/html') ?? false) {
+        print('Server mengembalikan halaman HTML, bukan JSON.');
+        print(response.body);
+      } else if (response.statusCode == 201) {
+        print("Registrasi berhasil");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginView()),
+        );
+      } else {
+        print("Registrasi gagal: ${response.body}");
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,12 +132,11 @@ class _RegisterViewState extends State<RegisterView> {
                             }
                             return null;
                           },
-                          controller: usernameController,
+                          controller: controllers['username'],
                           hintTxt: "Username",
                           helperTxt: "Bernadeta",
                           iconData: Icons.person,
                         ),
-                        const SizedBox(height: 5),
                         inputForm(
                           (value) {
                             if (value == null || value.isEmpty) {
@@ -106,7 +147,7 @@ class _RegisterViewState extends State<RegisterView> {
                             }
                             return null;
                           },
-                          controller: fullNameController,
+                          controller: controllers['nama_customer'],
                           hintTxt: "Full Name",
                           helperTxt: "Bernadeta Ind",
                           iconData: Icons.person,
@@ -122,7 +163,7 @@ class _RegisterViewState extends State<RegisterView> {
                             }
                             return null;
                           },
-                          controller: emailController,
+                          controller: controllers['email'],
                           hintTxt: "Email",
                           helperTxt: "bernadeta@gmail.com",
                           iconData: Icons.email,
@@ -140,7 +181,7 @@ class _RegisterViewState extends State<RegisterView> {
                             }
                             return null;
                           },
-                          controller: notelpController,
+                          controller: controllers['nomor_telpon'],
                           hintTxt: "Phone Number",
                           helperTxt: "082123456789",
                           iconData: Icons.phone_android,
@@ -157,7 +198,7 @@ class _RegisterViewState extends State<RegisterView> {
                             }
                             return null;
                           },
-                          controller: passwordController,
+                          controller: controllers['password'],
                           hintTxt: "Password",
                           helperTxt: "xxxxxxx",
                           iconData: Icons.lock,
@@ -169,20 +210,7 @@ class _RegisterViewState extends State<RegisterView> {
                           child: ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                Map<String, dynamic> formData = {};
-                                formData['username'] = usernameController.text;
-                                formData['fullName'] = fullNameController.text;
-                                formData['email'] = emailController.text;
-                                formData['password'] = passwordController.text;
-                                formData['noTelp'] = notelpController.text;
-
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        LoginView(data: formData),
-                                  ),
-                                );
+                                registerUser();
                               }
                             },
                             style: ElevatedButton.styleFrom(
@@ -206,7 +234,13 @@ class _RegisterViewState extends State<RegisterView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const LoginView()),
+                                builder: (context) => LoginView(
+                                  data: {
+                                    'username': controllers['username']?.text,
+                                    'password': controllers['password']?.text,
+                                  },
+                                ),
+                              ),
                             );
                           },
                           child: Text(
