@@ -18,10 +18,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final List<Map<String, String>> services = [
-    {"name": "Hair Cut", "image": "lib/images/hair_cut.jpg"},
-    {"name": "Hair Color", "image": "lib/images/hair_color.jpg"},
-    {"name": "Creambath", "image": "lib/images/creambath.jpg"},
-    {"name": "Keratin", "image": "lib/images/hair_ceratin.jpg"},
+    {"name": "Discount", "image": "lib/images/gambar1.png"},
+    {"name": "Shake", "image": "lib/images/gambar2.png"},
+    {"name": "Color", "image": "lib/images/gambar4.png"},
+    {"name": "Hair Color", "image": "lib/images/gambar5.png"},
   ];
 
   final List<Map<String, String>> barbers = [
