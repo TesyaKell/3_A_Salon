@@ -3,6 +3,9 @@ import 'package:a_3_salon/View/home.dart';
 import 'package:a_3_salon/View/register.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginView extends StatefulWidget {
   final Map? data;
@@ -17,6 +20,74 @@ class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  Future<bool> loginUser() async {
+    final String url = 'http://192.168.1.17:8000/api/login';
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    final body = json.encode({
+      "username": usernameController.text,
+      "password": passwordController.text,
+    });
+
+    try {
+      final response =
+          await http.post(Uri.parse(url), headers: headers, body: body);
+
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        if (data['message'] == 'Login successful') {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setInt('id_customer', data['data']['id_customer']);
+          prefs.setString('username', data['data']['username']);
+          prefs.setString('nama_customer', data['data']['nama_customer']);
+          prefs.setString('email', data['data']['email']);
+          prefs.setString('nomor_telpon', data['data']['nomor_telpon']);
+
+          Fluttertoast.showToast(
+            msg: "Login Successfully",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 1,
+            backgroundColor: const Color.fromARGB(255, 51, 122, 54),
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeView()),
+          );
+
+          return true;
+        } else {
+          Fluttertoast.showToast(msg: "Kredensial tidak valid");
+          return false;
+        }
+      } else {
+        Fluttertoast.showToast(
+          msg: "Username or Password is incorrect",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.TOP,
+          backgroundColor: const Color.fromARGB(255, 163, 29, 5),
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+        return false;
+      }
+    } catch (e) {
+      print('Error: $e');
+      Fluttertoast.showToast(msg: "Error: $e");
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,39 +206,9 @@ class _LoginViewState extends State<LoginView> {
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             if (_formKey.currentState!.validate()) {
-              String usernameInput = usernameController.text;
-              String passwordInput = passwordController.text;
-
-              if (dataForm != null &&
-                  dataForm['username'] == usernameInput &&
-                  dataForm['password'] == passwordInput) {
-                Fluttertoast.showToast(
-                  msg: "Login Successfully",
-                  toastLength: Toast.LENGTH_LONG,
-                  gravity: ToastGravity.TOP,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: const Color.fromARGB(255, 51, 122, 54),
-                  textColor: Colors.white,
-                  fontSize: 16.0,
-                );
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomeView(data: dataForm),
-                  ),
-                );
-              } else {
-                Fluttertoast.showToast(
-                  msg: "Username or Password is incorrect",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.TOP,
-                  backgroundColor: const Color.fromARGB(255, 163, 29, 5),
-                  textColor: Colors.white,
-                  fontSize: 16.0,
-                );
-              }
+              loginUser();
             }
           },
           style: ElevatedButton.styleFrom(
@@ -192,11 +233,14 @@ class _LoginViewState extends State<LoginView> {
   Widget _buildSignUpButton() {
     return TextButton(
       onPressed: () {
-        pushRegister(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RegisterView()),
+        );
       },
       child: Text(
-        'Don’t Have an Account? Sign Up',
-        style: GoogleFonts.lora(),
+        'Don’t have an account? Sign Up',
+        style: GoogleFonts.lora(color: Colors.deepPurple),
       ),
     );
   }
