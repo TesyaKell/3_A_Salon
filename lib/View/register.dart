@@ -23,7 +23,9 @@ class _RegisterViewState extends State<RegisterView> {
   bool isLoading = false;
 
   Future<void> registerUser() async {
-    final String url = 'http://192.168.1.129:8000/api/customers';
+    print('Username: ${controllers['username']!.text}');
+    print('Password: ${controllers['password']!.text}');
+    final String url = 'http://192.168.1.17:8000/api/customers';
 
     final headers = {
       'Content-Type': 'application/json',
@@ -46,7 +48,9 @@ class _RegisterViewState extends State<RegisterView> {
         print('Server mengembalikan halaman HTML, bukan JSON.');
         print(response.body);
       } else if (response.statusCode == 201) {
-        print("Registrasi berhasil");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Registrasi berhasil!')),
+        );
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const LoginView()),
@@ -209,6 +213,10 @@ class _RegisterViewState extends State<RegisterView> {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
+                              print(
+                                  'Username: ${controllers['username']!.text}');
+                              print(
+                                  'Password: ${controllers['password']!.text}');
                               if (_formKey.currentState!.validate()) {
                                 registerUser();
                               }
