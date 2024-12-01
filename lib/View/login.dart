@@ -10,7 +10,7 @@ import 'dart:convert';
 class LoginView extends StatefulWidget {
   final Map? data;
 
-  const LoginView({super.key, this.data});
+  const LoginView({Key? key, this.data}) : super(key: key);
 
   @override
   State<LoginView> createState() => _LoginViewState();
