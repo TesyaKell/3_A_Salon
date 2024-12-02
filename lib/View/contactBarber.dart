@@ -16,10 +16,10 @@ class _ContactBarbersPageState extends State<ContactBarbersPage> {
   @override
   void initState() {
     super.initState();
-    rampilBarber();
+    tampilBarber();
   }
 
-  Future<void> rampilBarber() async {
+  Future<void> tampilBarber() async {
     try {
       final response =
           await http.get(Uri.parse('http://192.168.1.17:8000/api/barbers'));
