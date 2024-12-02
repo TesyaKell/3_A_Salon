@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(MaterialApp(
@@ -12,7 +14,40 @@ void main() {
   ));
 }
 
-class HistoryReviewPage extends StatelessWidget {
+class HistoryReviewPage extends StatefulWidget {
+  @override
+  _HistoryReviewPageState createState() => _HistoryReviewPageState();
+}
+
+class _HistoryReviewPageState extends State<HistoryReviewPage> {
+  List<dynamic> _reviews = [];
+
+  Future<void> fetchReviews() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:8000/api/ulasans'),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _reviews = jsonDecode(response.body);
+        });
+      } else {
+        throw Exception('Failed to load reviews');
+      }
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error loading reviews: $error')),
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchReviews();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,11 +65,14 @@ class HistoryReviewPage extends StatelessWidget {
           },
         ),
       ),
-      body: Padding(
+      body: ListView.builder(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Container(
+        itemCount: _reviews.length,
+        itemBuilder: (context, index) {
+          final review = _reviews[index];
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -54,7 +92,7 @@ class HistoryReviewPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Hair Cut',
+                        review['nama_layanan'] ?? 'Service Name',
                         style: GoogleFonts.lora(
                           color: Colors.grey,
                           fontSize: 16,
@@ -62,7 +100,7 @@ class HistoryReviewPage extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Rate: 5 / 5',
+                        'Rate: ${review['rating']} / 5',
                         style: GoogleFonts.lora(
                           color: Colors.black,
                           fontSize: 16,
@@ -73,7 +111,7 @@ class HistoryReviewPage extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'Pelayanannya baik sekali, pegawai nya ramah, di kasih minum dan snack juga. Hasil nya juga ga kalah mantap, rambutku jadi super lembut, stylish dan wangi! bakal jadi langganan <3',
+                    review['komentar'] ?? 'No Comment',
                     style: GoogleFonts.lora(
                       color: Colors.black,
                       fontSize: 14,
@@ -83,7 +121,7 @@ class HistoryReviewPage extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Text(
-                      '11-10-2024',
+                      review['tanggal_ulasan'] ?? '',
                       style: GoogleFonts.lora(
                         color: Colors.black,
                         fontSize: 12,
@@ -93,8 +131,8 @@ class HistoryReviewPage extends StatelessWidget {
                 ],
               ),
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

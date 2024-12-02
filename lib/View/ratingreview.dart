@@ -1,27 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:a_3_salon/View/profil.dart';
-
-void main() {
-  runApp(RatingReviewApp());
-}
-
-class RatingReviewApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        textTheme: GoogleFonts.loraTextTheme(
-          Theme.of(context).textTheme,
-        ),
-      ),
-      home: RatingReviewPage(),
-      routes: {
-        '/profile': (context) => ProfileView(),
-      },
-    );
-  }
-}
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RatingReviewPage extends StatefulWidget {
   @override
@@ -31,6 +13,38 @@ class RatingReviewPage extends StatefulWidget {
 class _RatingReviewPageState extends State<RatingReviewPage> {
   double _rating = 0;
   TextEditingController _reviewController = TextEditingController();
+
+  Future<void> postReview() async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:8000/api/ulasans'),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: jsonEncode({
+          'id_customer': '1',
+          'id_pemesanan': '1',
+          'rating': _rating,
+          'komentar': _reviewController.text,
+          'tanggal_ulasan': DateTime.now().toIso8601String(),
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Review posted successfully!')),
+        );
+        _reviewController.clear();
+        setState(() {
+          _rating = 0;
+        });
+      } else {
+        throw Exception('Failed to post review');
+      }
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error posting review: $error')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,10 +158,7 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    print('Rating: $_rating');
-                    print('Review: ${_reviewController.text}');
-                  },
+                  onPressed: postReview,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFFF4081),
                     shape: RoundedRectangleBorder(
