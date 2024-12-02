@@ -2,6 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/view_barber.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+Future<void> sendDataToApi(Map<String, dynamic> layanan) async {
+  final String url = 'http://10.0.2.2:8000';
+  final String endpoint = '/api/layanan';
+
+  final headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  };
+
+  try {
+    final response = await http.post(
+      Uri.parse('$url$endpoint'),
+      headers: headers,
+      body: json.encode({
+        'nama_layanan': layanan['layananName'],
+        'harga': layanan['layananPrice'].toString(),
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      print('Data berhasil disimpan: ${response.body}');
+    } else {
+      print('Gagal menyimpan data: ${response.body}');
+    }
+  } catch (e) {
+    print('Terjadi kesalahan: $e');
+  }
+}
+
 class ServicesPage extends StatelessWidget {
   final List<Map<String, String>> services = [
     {
@@ -84,6 +116,8 @@ class ServicesPage extends StatelessWidget {
                 Map<String, dynamic> formData = {};
                 formData['layananName'] = services[index]["name"]!;
                 formData['layananPrice'] = services[index]["priceInt"]!;
+
+                sendDataToApi(formData);
 
                 Navigator.push(
                   context,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
 class EditProfilePage extends StatefulWidget {
@@ -11,20 +12,37 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  File? _profileImage;
-  final picker = ImagePicker();
-  final TextEditingController usernameController = TextEditingController();
+  Map? _data;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final ImagePicker picker = ImagePicker();
+  File? _profileImage;
 
   @override
   void initState() {
     super.initState();
-    nameController.text = widget.data?['fullName'] ?? '';
-    emailController.text = widget.data?['email'] ?? '';
-    phoneController.text = widget.data?['noTelp'] ?? '';
-    usernameController.text = widget.data?['username'] ?? '';
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _data = {
+        'fullName': prefs.getString('nama_customer') ?? 'Nama Tidak Ditemukan',
+        'email': prefs.getString('email') ?? 'Email Tidak Ditemukan',
+        'nomor_telpon':
+            prefs.getString('nomor_telpon') ?? 'No Telp Tidak Ditemukan',
+        'username': prefs.getString('username') ?? 'username Tidak Ditemukan',
+        'profileImagePath': prefs.getString('profileImagePath'),
+      };
+
+      nameController.text = _data?['fullName'] ?? '';
+      emailController.text = _data?['email'] ?? '';
+      phoneController.text = _data?['nomor_telpon'] ?? '';
+      usernameController.text = _data?['username'] ?? '';
+    });
   }
 
   Future<void> _showImageSourceActionSheet(BuildContext context) async {
@@ -77,7 +95,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text("Edit Profile", style: TextStyle(color: Colors.white)),
+        title: Text("Edit Profile",
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: "Lora",
+            )),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -145,10 +167,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       Map<String, dynamic> updatedData = {
                         'fullName': nameController.text,
                         'email': emailController.text,
-                        'noTelp': phoneController.text,
+                        'nomor_telpon': phoneController.text,
                         'profileImagePath': _profileImage?.path,
                       };
-
                       Navigator.pop(context, updatedData);
                     },
                     style: ElevatedButton.styleFrom(

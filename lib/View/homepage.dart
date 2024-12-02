@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shake_gesture/shake_gesture.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map? data;
@@ -16,11 +18,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String _fullName = '';
   final List<Map<String, String>> services = [
-    {"name": "Hair Cut", "image": "lib/images/hair_cut.jpg"},
-    {"name": "Hair Color", "image": "lib/images/hair_color.jpg"},
-    {"name": "Creambath", "image": "lib/images/creambath.jpg"},
-    {"name": "Keratin", "image": "lib/images/hair_ceratin.jpg"},
+    {"name": "Discount", "image": "lib/images/gambar1.png"},
+    {"name": "Shake", "image": "lib/images/gambar2.png"},
+    {"name": "Color", "image": "lib/images/gambar4.png"},
+    {"name": "Hair Color", "image": "lib/images/gambar5.png"},
   ];
 
   final List<Map<String, String>> barbers = [
@@ -29,6 +32,19 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   bool isDialogOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  _loadUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _fullName = prefs.getString('nama_customer') ?? 'Nama Tidak Ditemukan';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Hai, ${dataForm?['fullName']} !',
+                      'Hai, $_fullName !',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 28,
@@ -270,20 +286,14 @@ class TRoundedImage extends StatelessWidget {
     this.onPressed,
     this.width,
     this.height,
-    // required this.applyImageRadius,
     this.border,
-    // required this.backgroundColor,
     this.padding,
   });
 
   final List<Map<String, String>> services;
   final double? width, height;
-  // final String imageURL;
-  // final bool applyImageRadius;
   final BoxBorder? border;
-  // final Color backgroundColor;
   final EdgeInsetsGeometry? padding;
-  // final bool isNetWorkImage;
   final VoidCallback? onPressed;
 
   @override

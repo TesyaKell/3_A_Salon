@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
+import 'package:a_3_salon/View/homepage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
@@ -8,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   runApp(const MyApp());
@@ -69,6 +71,14 @@ class _ReceiptPageState extends State<ReceiptPage> {
   @override
   void initState() {
     super.initState();
+
+    Fluttertoast.showToast(
+        msg: "Successfully Made Reservation",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        backgroundColor: const Color.fromARGB(255, 51, 122, 54),
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 
   Future<void> _checkPermissions() async {
@@ -129,7 +139,9 @@ class _ReceiptPageState extends State<ReceiptPage> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            _showExitConfirmationDialog(context);
+          },
         ),
         title: Text(
           'Receipt',
@@ -312,6 +324,41 @@ class _ReceiptPageState extends State<ReceiptPage> {
         ),
       ],
     );
+  }
+
+  Future<void> _showExitConfirmationDialog(BuildContext context) async {
+    bool? shouldExit = await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Confirm'),
+          content: Text('Do you want to go back to the home page?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text('Yes'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldExit == true) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(),
+        ),
+      );
+    }
   }
 }
 
