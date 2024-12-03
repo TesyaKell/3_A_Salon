@@ -3,17 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-void main() {
-  runApp(MaterialApp(
-    theme: ThemeData(
-      textTheme: GoogleFonts.loraTextTheme(
-        ThemeData.light().textTheme,
-      ),
-    ),
-    home: HistoryReviewPage(),
-  ));
-}
-
 class HistoryReviewPage extends StatefulWidget {
   @override
   _HistoryReviewPageState createState() => _HistoryReviewPageState();
@@ -54,7 +43,7 @@ class _HistoryReviewPageState extends State<HistoryReviewPage> {
       appBar: AppBar(
         backgroundColor: Color(0xFFFF4081),
         title: Text(
-          'Rating & Review',
+          'History of Reviews',
           style: GoogleFonts.lora(color: Colors.white),
         ),
         centerTitle: true,

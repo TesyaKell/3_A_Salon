@@ -7,6 +7,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class HomeScreen extends StatefulWidget {
   final Map? data;
@@ -19,6 +21,25 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String _fullName = '';
+
+  List<dynamic> _reviews = [];
+
+  Future<List<dynamic>> fetchReviews() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://192.168.1.6:8000/api/ulasans'),
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to load reviews');
+      }
+    } catch (error) {
+      throw Exception('Error loading reviews: $error');
+    }
+  }
+
   final List<Map<String, String>> services = [
     {"name": "Discount", "image": "lib/images/gambar1.png"},
     {"name": "Shake", "image": "lib/images/gambar2.png"},
@@ -265,12 +286,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
-              const ReviewCard(
-                name: 'Tesya Rakhel',
-                review:
-                    'Potongan rambutnya sangat rapi dan bagus sekali, sesuai dengan permintaan saya. Terima kasih...',
-                rating: 4,
-              ),
+              const SizedBox(height: 10),
+              ReviewCard(reviewsFuture: fetchReviews()),
             ],
           ),
         ),
@@ -528,40 +545,88 @@ class BarberCard extends StatelessWidget {
 }
 
 class ReviewCard extends StatelessWidget {
-  final String name;
-  final String review;
-  final int rating;
+  final Future<List<dynamic>> reviewsFuture;
 
-  const ReviewCard({
-    super.key,
-    required this.name,
-    required this.review,
-    required this.rating,
-  });
+  ReviewCard({super.key, required this.reviewsFuture});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  name,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+    return FutureBuilder<List<dynamic>>(
+      future: reviewsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('Error loading reviews: ${snapshot.error}'),
+          );
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(
+            child: Text('No reviews available'),
+          );
+        }
+
+        final reviews = snapshot.data!;
+
+        // Ubah ke horizontal scrolling
+        return SizedBox(
+          height: 150, // Atur tinggi container agar pas dengan kartu
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal, // Scroll horizontal
+            itemCount: reviews.length,
+            itemBuilder: (context, index) {
+              final review = reviews[index];
+              return Card(
+                margin: const EdgeInsets.symmetric(
+                    horizontal: 8.0), // Spasi antar kartu
+                child: Container(
+                  width: 250, // Atur lebar kartu
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            review['nama_layanan'] ?? 'Service Name',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Text(
+                            'Rate: ${review['rating']} / 5',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        review['komentar'] ?? 'No Comment',
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      const SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Text(
+                          review['tanggal_ulasan'] ?? '',
+                          style:
+                              const TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                Text('Rate: $rating/5'),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(review),
-          ],
-        ),
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

@@ -3,66 +3,34 @@ import 'package:http/http.dart' as http;
 import 'package:a_3_salon/models/Ulasan.dart';
 
 class UlasanClient {
-  static Future<List<Ulasan>> fetchAll() async {
-    try {
-      final response =
-          await http.get(Uri.http('192.168.1.6:8000', '/api/ulasans'));
-      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+  static const String baseUrl = 'http://192.168.1.6:8000/api/ulasans';
+  static Future<void> store(Ulasan ulasan) async {
+    final url = Uri.parse(baseUrl);
+    final headers = {'Content-Type': 'application/json'};
+    final body = json.encode(ulasan.toJson());
 
-      Iterable list = json.decode(response.body);
-      return list.map((json) => Ulasan.fromJson(json)).toList();
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+      if (response.statusCode == 200) {
+        print('Review posted successfully');
+      } else {
+        throw Exception('Failed to post review');
+      }
     } catch (e) {
-      return Future.error(e.toString());
+      throw Exception('Error posting review: $e');
     }
   }
 
-  static Future<Ulasan> fetchById(int id) async {
-    try {
-      final response =
-          await http.get(Uri.http('192.168.1.6:8000', '/api/ulasans/$id'));
-      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+  // Mengambil semua ulasan dari server
+  static Future<List<Ulasan>> getAllUlasan() async {
+    final url = Uri.parse(baseUrl);
+    final response = await http.get(url);
 
-      return Ulasan.fromJson(json.decode(response.body));
-    } catch (e) {
-      return Future.error(e.toString());
-    }
-  }
-
-  static Future<void> create(Ulasan ulasan) async {
-    try {
-      final response = await http.post(
-        Uri.http('192.168.1.4:8000', '/api/ulasans/'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(ulasan.toJson()),
-      );
-
-      if (response.statusCode != 201) throw Exception(response.reasonPhrase);
-    } catch (e) {
-      return Future.error(e.toString());
-    }
-  }
-
-  static Future<void> update(Ulasan ulasan) async {
-    try {
-      final response = await http.put(
-        Uri.http('192.168.1.6:8000', '/api/ulasans/${ulasan.id}'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(ulasan.toJson()),
-      );
-
-      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
-    } catch (e) {
-      return Future.error(e.toString());
-    }
-  }
-
-  static Future<void> delete(int id) async {
-    try {
-      final response =
-          await http.delete(Uri.http('192.168.1.6:8000', '/api/ulasans/$id'));
-      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
-    } catch (e) {
-      return Future.error(e.toString());
+    if (response.statusCode == 200) {
+      List jsonData = json.decode(response.body);
+      return jsonData.map((json) => Ulasan.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load reviews');
     }
   }
 }

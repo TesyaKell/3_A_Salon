@@ -21,6 +21,8 @@ class DetailReservationPage extends StatelessWidget {
     String time = dataReservasi?['time'] ?? 'N/A';
     String barberName = dataBarber?['barberName'] ?? 'N/A';
     String serviceName = dataLayanan?['layananName'] ?? 'N/A';
+    String serviceImage =
+        dataLayanan?['layananImage'] ?? 'lib/images/default_image.png';
     int servicePrice = int.parse(dataLayanan?['layananPrice'] ?? '0');
     double tax = servicePrice * 0.08;
     double total = servicePrice + tax;
@@ -106,7 +108,10 @@ class DetailReservationPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => RatingReviewPage(),
+                        builder: (context) => RatingReviewPage(
+                          serviceName: serviceName,
+                          serviceImage: serviceImage,
+                        ),
                       ),
                     );
                   },

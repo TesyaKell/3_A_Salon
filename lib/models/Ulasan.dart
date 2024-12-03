@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class Ulasan {
-  final int id;
+  final int? id;
   final int idCustomer;
   final int idPemesanan;
   final int rating;
@@ -10,7 +10,7 @@ class Ulasan {
   final String? fotoUlasan;
 
   Ulasan({
-    required this.id,
+    this.id,
     required this.idCustomer,
     required this.idPemesanan,
     required this.rating,
@@ -21,13 +21,13 @@ class Ulasan {
 
   factory Ulasan.fromJson(Map<String, dynamic> json) {
     return Ulasan(
-      id: json['id_ulasan'],
-      idCustomer: json['id_customer'],
-      idPemesanan: json['id_pemesanan'],
-      rating: json['rating'],
+      id: json['id_ulasan'] as int?,
+      idCustomer: json['id_customer'] as int,
+      idPemesanan: json['id_pemesanan'] as int,
+      rating: json['rating'] as int,
       komentar: json['komentar'] ?? '',
-      tanggalUlasan: json['tanggal_ulasan'],
-      fotoUlasan: json['foto_ulasan'],
+      tanggalUlasan: json['tanggal_ulasan'] as String,
+      fotoUlasan: json['foto_ulasan'] as String?,
     );
   }
 
@@ -39,7 +39,8 @@ class Ulasan {
       'rating': rating,
       'komentar': komentar,
       'tanggal_ulasan': tanggalUlasan,
-      'foto_ulasan': fotoUlasan,
+      'foto_ulasan':
+          fotoUlasan ?? '', // jika fotoUlasan null, kirimkan string kosong
     };
   }
 }

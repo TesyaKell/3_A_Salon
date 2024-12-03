@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:a_3_salon/View/profil.dart';
 import 'package:a_3_salon/models/Ulasan.dart';
 import 'package:a_3_salon/services/UlasanClient.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:a_3_salon/View/historyReview.dart';
 
 class RatingReviewPage extends StatefulWidget {
+  final String serviceName;
+  final String serviceImage;
+
+  RatingReviewPage({required this.serviceName, required this.serviceImage});
+
   @override
   _RatingReviewPageState createState() => _RatingReviewPageState();
 }
@@ -19,16 +21,16 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
   Future<void> postReview() async {
     try {
       final ulasan = Ulasan(
-        id: 0,
-        idCustomer: 1,
-        idPemesanan: 1,
+        id: 0, // ID biasanya dikendalikan oleh server, tidak perlu manual.
+        idCustomer: 1, // Ganti dengan ID customer yang sesuai
+        idPemesanan: 2002, // Ganti dengan ID pemesanan yang sesuai
         rating: _rating.toInt(),
         komentar: _reviewController.text,
         tanggalUlasan: DateTime.now().toIso8601String(),
-        fotoUlasan: null,
+        fotoUlasan: null, // Bisa menambahkan foto jika perlu
       );
 
-      await UlasanClient.create(ulasan);
+      await UlasanClient.store(ulasan);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Review posted successfully!')),
@@ -38,44 +40,16 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
       setState(() {
         _rating = 0;
       });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HistoryReviewPage()),
+      );
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error posting review: $error')),
       );
     }
   }
-
-  // Future<void> postReview() async {
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse('http://localhost:8000/api/ulasans'),
-  //       headers: {'Content-Type': 'application/json; charset=UTF-8'},
-  //       body: jsonEncode({
-  //         'id_customer': '1',
-  //         'id_pemesanan': '1',
-  //         'rating': _rating,
-  //         'komentar': _reviewController.text,
-  //         'tanggal_ulasan': DateTime.now().toIso8601String(),
-  //       }),
-  //     );
-
-  //     if (response.statusCode == 201) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text('Review posted successfully!')),
-  //       );
-  //       _reviewController.clear();
-  //       setState(() {
-  //         _rating = 0;
-  //       });
-  //     } else {
-  //       throw Exception('Failed to post review');
-  //     }
-  //   } catch (error) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Error posting review: $error')),
-  //     );
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +88,7 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
                         child: Image.asset(
-                          'lib/images/hair_cut.jpg',
+                          widget.serviceImage,
                           width: 120,
                           height: 120,
                           fit: BoxFit.cover,
@@ -124,7 +98,7 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
                     SizedBox(width: 16),
                     Expanded(
                       child: Text(
-                        'Hair Cut',
+                        widget.serviceName,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -146,6 +120,7 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
                 ),
               ),
               SizedBox(height: 8),
+              // Rating
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
