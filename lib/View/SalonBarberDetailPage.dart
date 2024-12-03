@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:a_3_salon/models/DetailLayananBarber.dart';
 
 class SalonBarberDetailPage extends StatelessWidget {
-  final DetailLayananBarber barber;
+  final dynamic barber;
 
   const SalonBarberDetailPage({Key? key, required this.barber})
       : super(key: key);
@@ -43,14 +42,16 @@ class SalonBarberDetailPage extends StatelessWidget {
                       SizedBox(height: 30),
                       CircleAvatar(
                         radius: 70,
-                        backgroundImage: barber.foto != null
-                            ? NetworkImage(barber.foto)
+                        backgroundImage: barber['foto'] != null
+                            ? NetworkImage(
+                                'http://192.168.1.17:8000/storage/${barber['foto']}',
+                              )
                             : AssetImage('assets/default_image.png')
                                 as ImageProvider,
                       ),
                       SizedBox(height: 10),
                       Text(
-                        barber.namaBarber ?? 'Nama tidak tersedia',
+                        barber['nama_barber'] ?? 'Nama tidak tersedia',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -59,7 +60,7 @@ class SalonBarberDetailPage extends StatelessWidget {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        'Kontak: ${barber.kontak ?? 'Tidak tersedia'}',
+                        'Kontak: ${barber['kontak'] ?? 'Tidak tersedia'}',
                         style: TextStyle(color: Colors.white),
                       ),
                     ],
@@ -83,9 +84,9 @@ class SalonBarberDetailPage extends StatelessWidget {
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                itemCount: barber.layanans.length,
+                itemCount: barber['layanans']?.length ?? 0,
                 itemBuilder: (context, index) {
-                  final layanan = barber.layanans[index];
+                  final layanan = barber['layanans'][index];
                   return Card(
                     elevation: 3,
                     margin: const EdgeInsets.symmetric(vertical: 8),
@@ -97,8 +98,8 @@ class SalonBarberDetailPage extends StatelessWidget {
                         backgroundColor: Color(0xFFFF4081),
                         child: Icon(Icons.cut, color: Colors.white),
                       ),
-                      title: Text(layanan.namaLayanan),
-                      subtitle: Text('Harga: ${layanan.harga}'),
+                      title: Text(layanan['nama_layanan']),
+                      subtitle: Text('Harga: ${layanan['harga']}'),
                     ),
                   );
                 },
@@ -107,7 +108,7 @@ class SalonBarberDetailPage extends StatelessWidget {
             SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: barber.kontak != null
+              child: barber['kontak'] != null
                   ? Align(
                       alignment: Alignment.topRight,
                       child: IconButton(
@@ -116,7 +117,7 @@ class SalonBarberDetailPage extends StatelessWidget {
                           color: Colors.green,
                           size: 50,
                         ),
-                        onPressed: () => _launchWhatsApp(barber.kontak),
+                        onPressed: () => _launchWhatsApp(barber['kontak']),
                       ),
                     )
                   : Center(
