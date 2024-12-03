@@ -21,6 +21,7 @@ Future<void> sendDataToApi(Map<String, dynamic> layanan) async {
       body: json.encode({
         'nama_layanan': layanan['layananName'],
         'harga': layanan['layananPrice'].toString(),
+        'waktu': layanan['layananTime'],
       }),
     );
 
@@ -40,43 +41,50 @@ class ServicesPage extends StatelessWidget {
       "name": "Hair Color",
       "image": "lib/images/hair_color.jpg",
       "price": "IDR1.500.000,00",
-      "priceInt": "1500000"
+      "priceInt": "1500000",
+      "time": "120"
     },
     {
       "name": "Hair Ceratin",
       "image": "lib/images/hair_ceratin.jpg",
       "price": "IDR200.000,00",
-      "priceInt": "200000"
+      "priceInt": "200000",
+      "time": "90"
     },
     {
       "name": "Hair Cut",
       "image": "lib/images/hair_cut.jpg",
       "price": "IDR150.000,00",
-      "priceInt": "150000"
+      "priceInt": "150000",
+      "time": "60"
     },
     {
       "name": "Hair Extension",
       "image": "lib/images/hair_extension.jpg",
       "price": "IDR5.000.000,00",
-      "priceInt": "5000000"
+      "priceInt": "5000000",
+      "time": "120"
     },
     {
       "name": "Creambath",
       "image": "lib/images/creambath.jpg",
       "price": "IDR100.000,00",
-      "priceInt": "100000"
+      "priceInt": "100000",
+      "time": "130"
     },
     {
       "name": "Hair Wash + Blow",
       "image": "lib/images/hair_wash_blow.jpg",
       "price": "IDR70.000,00",
-      "priceInt": "70000"
+      "priceInt": "70000",
+      "time": "40"
     },
     {
       "name": "Hair Styling",
       "image": "lib/images/hair_styling.jpg",
       "price": "IDR100.000,00",
-      "priceInt": "100000"
+      "priceInt": "100000",
+      "time": "30"
     },
   ];
 
@@ -116,6 +124,7 @@ class ServicesPage extends StatelessWidget {
                 Map<String, dynamic> formData = {};
                 formData['layananName'] = services[index]["name"]!;
                 formData['layananPrice'] = services[index]["priceInt"]!;
+                formData['layananTime'] = services[index]["time"]!;
 
                 sendDataToApi(formData);
 
