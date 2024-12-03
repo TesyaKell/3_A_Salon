@@ -21,8 +21,8 @@ class _ContactBarbersPageState extends State<ContactBarbersPage> {
 
   Future<void> tampilBarber() async {
     try {
-      final response = await http
-          .get(Uri.parse('http://192.168.1.4:8000/api/detail_layanans'));
+      final response =
+          await http.get(Uri.parse('http://192.168.1.7/api/detail_layanans'));
       if (response.statusCode == 200) {
         setState(() {
           barbers = json.decode(response.body);
@@ -63,7 +63,7 @@ class _ContactBarbersPageState extends State<ContactBarbersPage> {
                 return ListTile(
                   leading: CircleAvatar(
                     backgroundImage: NetworkImage(
-                      'http://192.168.1.4:8000/storage/${barber['foto']}',
+                      'http://192.168.1.7/storage/${barber['foto']}',
                     ),
                   ),
                   title: Text(barber['nama_barber'] ?? 'Nama tidak ditemukan'),

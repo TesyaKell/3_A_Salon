@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 Future<void> sendDataToApi(Map<String, dynamic> layanan) async {
-  final String url = 'http://10.0.2.2:8000';
+  final String url = 'http://192.168.1.7:8000';
   final String endpoint = '/api/layanan';
 
   final headers = {
