@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:a_3_salon/View/profil.dart';
+import 'package:a_3_salon/models/Ulasan.dart';
+import 'package:a_3_salon/services/UlasanClient.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -16,35 +18,64 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
 
   Future<void> postReview() async {
     try {
-      final response = await http.post(
-        Uri.parse('http://localhost:8000/api/ulasans'),
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
-        body: jsonEncode({
-          'id_customer': '1',
-          'id_pemesanan': '1',
-          'rating': _rating,
-          'komentar': _reviewController.text,
-          'tanggal_ulasan': DateTime.now().toIso8601String(),
-        }),
+      final ulasan = Ulasan(
+        id: 0,
+        idCustomer: 1,
+        idPemesanan: 1,
+        rating: _rating.toInt(),
+        komentar: _reviewController.text,
+        tanggalUlasan: DateTime.now().toIso8601String(),
+        fotoUlasan: null,
       );
 
-      if (response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Review posted successfully!')),
-        );
-        _reviewController.clear();
-        setState(() {
-          _rating = 0;
-        });
-      } else {
-        throw Exception('Failed to post review');
-      }
+      await UlasanClient.create(ulasan);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Review posted successfully!')),
+      );
+
+      _reviewController.clear();
+      setState(() {
+        _rating = 0;
+      });
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error posting review: $error')),
       );
     }
   }
+
+  // Future<void> postReview() async {
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse('http://localhost:8000/api/ulasans'),
+  //       headers: {'Content-Type': 'application/json; charset=UTF-8'},
+  //       body: jsonEncode({
+  //         'id_customer': '1',
+  //         'id_pemesanan': '1',
+  //         'rating': _rating,
+  //         'komentar': _reviewController.text,
+  //         'tanggal_ulasan': DateTime.now().toIso8601String(),
+  //       }),
+  //     );
+
+  //     if (response.statusCode == 201) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text('Review posted successfully!')),
+  //       );
+  //       _reviewController.clear();
+  //       setState(() {
+  //         _rating = 0;
+  //       });
+  //     } else {
+  //       throw Exception('Failed to post review');
+  //     }
+  //   } catch (error) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Error posting review: $error')),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

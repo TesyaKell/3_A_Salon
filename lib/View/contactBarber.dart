@@ -10,29 +10,29 @@ class ContactBarbersPage extends StatefulWidget {
 }
 
 class _ContactBarbersPageState extends State<ContactBarbersPage> {
-  List<dynamic> barbersWithDetails = [];
+  List<dynamic> barbers = [];
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    fetchBarbersWithDetails();
+    tampilBarber();
   }
 
-  Future<void> fetchBarbersWithDetails() async {
+  Future<void> tampilBarber() async {
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.1.17:8000/api/detail_layanans'));
+          .get(Uri.parse('http://192.168.1.4:8000/api/detail_layanans'));
       if (response.statusCode == 200) {
         setState(() {
-          barbersWithDetails = json.decode(response.body);
+          barbers = json.decode(response.body);
           isLoading = false;
         });
       } else {
-        throw Exception('Failed to load barbers with details');
+        throw Exception('Failed to load barbers');
       }
     } catch (e) {
-      print(e);
+      print('Error: $e');
       setState(() {
         isLoading = false;
       });
@@ -57,32 +57,23 @@ class _ContactBarbersPageState extends State<ContactBarbersPage> {
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : ListView.builder(
-              itemCount: barbersWithDetails.length,
+              itemCount: barbers.length,
               itemBuilder: (context, index) {
-                final barber = barbersWithDetails[index];
+                final barber = barbers[index];
                 return ListTile(
                   leading: CircleAvatar(
                     backgroundImage: NetworkImage(
-                      'http://192.168.1.17:8000/storage/${barber['barber']['foto']}',
+                      'http://192.168.1.4:8000/storage/${barber['foto']}',
                     ),
                   ),
-                  title: Text(barber['barber']['nama_barber']),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Kontak: ${barber['barber']['kontak']}'),
-                      SizedBox(height: 4),
-                      Text('Layanan:'),
-                      ...barber['layanans'].map<Widget>((layanan) {
-                        return Text(
-                            '• ${layanan['nama_layanan']} - Rp${layanan['harga']}');
-                      }).toList(),
-                    ],
+                  title: Text(barber['nama_barber'] ?? 'Nama tidak ditemukan'),
+                  subtitle: Text(
+                    barber['nama_layanan'] ?? 'Layanan tidak ditemukan',
                   ),
                   trailing:
                       Icon(FontAwesomeIcons.whatsapp, color: Colors.green),
                   onTap: () {
-                    _launchWhatsApp(barber['barber']['kontak']);
+                    _launchWhatsApp(barber['kontak']);
                   },
                 );
               },
