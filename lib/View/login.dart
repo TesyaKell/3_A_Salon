@@ -22,7 +22,7 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController passwordController = TextEditingController();
 
   Future<bool> loginUser() async {
-    final String url = 'http://10.0.2.2:8000/api/login';
+    final String url = 'http://10.53.8.26:8000/api/login';
 
     final headers = {
       'Content-Type': 'application/json',

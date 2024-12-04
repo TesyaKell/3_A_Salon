@@ -21,7 +21,7 @@ class _ContactBarbersPageState extends State<ContactBarbersPage> {
   Future<void> fetchBarbersWithDetails() async {
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.1.6:8000/api/detail_layanans'));
+          .get(Uri.parse('http://10.53.8.26:8000/api/detail_layanans'));
       if (response.statusCode == 200) {
         setState(() {
           barbersWithDetails = json.decode(response.body);
@@ -81,7 +81,7 @@ class _ContactBarbersPageState extends State<ContactBarbersPage> {
                           borderRadius: BorderRadius.circular(12),
                           child: barber['foto'] != null
                               ? Image.network(
-                                  'http://192.168.1.6:8000/storage/${barber['foto']}',
+                                  'http://10.53.8.26:8000/storage/${barber['foto']}',
                                   height: 100,
                                   width: 100,
                                   fit: BoxFit.cover,

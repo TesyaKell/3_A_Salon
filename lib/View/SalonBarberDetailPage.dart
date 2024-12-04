@@ -44,7 +44,7 @@ class SalonBarberDetailPage extends StatelessWidget {
                         radius: 70,
                         backgroundImage: barber['foto'] != null
                             ? NetworkImage(
-                                'http://192.168.1.17:8000/storage/${barber['foto']}',
+                                'http://10.53.8.26:8000/storage/${barber['foto']}',
                               )
                             : AssetImage('assets/default_image.png')
                                 as ImageProvider,

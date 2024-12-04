@@ -39,8 +39,7 @@ class Ulasan {
       'rating': rating,
       'komentar': komentar,
       'tanggal_ulasan': tanggalUlasan,
-      'foto_ulasan':
-          fotoUlasan ?? '', // jika fotoUlasan null, kirimkan string kosong
+      'foto_ulasan': fotoUlasan ?? '',
     };
   }
 }
