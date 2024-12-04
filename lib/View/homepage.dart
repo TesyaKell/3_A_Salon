@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<List<dynamic>> fetchReviews() async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.6:8000/api/ulasans'),
+        Uri.parse('http://10.53.8.26:8000/api/ulasans'),
       );
 
       if (response.statusCode == 200) {

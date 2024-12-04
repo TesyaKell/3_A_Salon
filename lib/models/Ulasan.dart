@@ -33,7 +33,7 @@ class Ulasan {
 
   Map<String, dynamic> toJson() {
     return {
-      'id_ulasan': id,
+      'id': id,
       'id_customer': idCustomer,
       'id_pemesanan': idPemesanan,
       'rating': rating,
