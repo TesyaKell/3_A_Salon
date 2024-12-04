@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 Future<void> sendDataToApi(Map<String, dynamic> layanan) async {
-  final String url = 'http://192.168.1.7:8000';
+  final String url = 'http://10.0.2.2:8000';
   final String endpoint = '/api/layanan';
 
   final headers = {
@@ -21,6 +21,7 @@ Future<void> sendDataToApi(Map<String, dynamic> layanan) async {
       body: json.encode({
         'nama_layanan': layanan['layananName'],
         'harga': layanan['layananPrice'].toString(),
+        'waktu': layanan['layananTime'],
       }),
     );
 
@@ -35,48 +36,62 @@ Future<void> sendDataToApi(Map<String, dynamic> layanan) async {
 }
 
 class ServicesPage extends StatelessWidget {
-  final List<Map<String, String>> services = [
+  final List<Map<String, dynamic>> services = [
     {
+      "id": 1,
       "name": "Hair Color",
       "image": "lib/images/hair_color.jpg",
       "price": "IDR1.500.000,00",
-      "priceInt": "1500000"
+      "priceInt": "1500000",
+      "time": "120"
     },
     {
+      "id": 2,
       "name": "Hair Ceratin",
       "image": "lib/images/hair_ceratin.jpg",
       "price": "IDR200.000,00",
-      "priceInt": "200000"
+      "priceInt": "200000",
+      "time": "90"
     },
     {
+      "id": 3,
       "name": "Hair Cut",
       "image": "lib/images/hair_cut.jpg",
       "price": "IDR150.000,00",
-      "priceInt": "150000"
+      "priceInt": "150000",
+      "time": "60"
     },
     {
+      "id": 4,
       "name": "Hair Extension",
       "image": "lib/images/hair_extension.jpg",
       "price": "IDR5.000.000,00",
-      "priceInt": "5000000"
+      "priceInt": "5000000",
+      "time": "120"
     },
     {
+      "id": 5,
       "name": "Creambath",
       "image": "lib/images/creambath.jpg",
       "price": "IDR100.000,00",
-      "priceInt": "100000"
+      "priceInt": "100000",
+      "time": "130"
     },
     {
+      "id": 6,
       "name": "Hair Wash + Blow",
       "image": "lib/images/hair_wash_blow.jpg",
       "price": "IDR70.000,00",
-      "priceInt": "70000"
+      "priceInt": "70000",
+      "time": "40"
     },
     {
+      "id": 7,
       "name": "Hair Styling",
       "image": "lib/images/hair_styling.jpg",
       "price": "IDR100.000,00",
-      "priceInt": "100000"
+      "priceInt": "100000",
+      "time": "30"
     },
   ];
 
@@ -113,19 +128,27 @@ class ServicesPage extends StatelessWidget {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                Map<String, dynamic> formData = {};
-                formData['layananName'] = services[index]["name"]!;
-                formData['layananPrice'] = services[index]["priceInt"]!;
+                // Get the service ID
+                int layananId = services[index]["id"];
 
-                sendDataToApi(formData);
+                // Send data to the API (only if needed)
+                // Example: sendDataToApi(formData); // Use this only if you need to store data in DB
 
+                // Pass the selected service ID to the next page (BarberPage)
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => BarberPage(
-                          data: data,
-                          dataLayanan: formData,
-                          discount: discount)),
+                    builder: (context) => BarberPage(
+                      data: data,
+                      dataLayanan: {
+                        'layananId': layananId,
+                        'layananName': services[index]["name"]!,
+                        'layananPrice': services[index]["priceInt"]!,
+                        'layananTime': services[index]["time"]!,
+                      },
+                      discount: discount,
+                    ),
+                  ),
                 );
               },
               child: Card(

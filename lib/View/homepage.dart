@@ -568,19 +568,17 @@ class ReviewCard extends StatelessWidget {
 
         final reviews = snapshot.data!;
 
-        // Ubah ke horizontal scrolling
         return SizedBox(
-          height: 150, // Atur tinggi container agar pas dengan kartu
+          height: 150,
           child: ListView.builder(
-            scrollDirection: Axis.horizontal, // Scroll horizontal
+            scrollDirection: Axis.horizontal,
             itemCount: reviews.length,
             itemBuilder: (context, index) {
               final review = reviews[index];
               return Card(
-                margin: const EdgeInsets.symmetric(
-                    horizontal: 8.0), // Spasi antar kartu
+                margin: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Container(
-                  width: 250, // Atur lebar kartu
+                  width: 250,
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
