@@ -5,7 +5,10 @@ class Person {
   const Person(this.name, this.phone);
 }
 
-final List<Person> barberList = _barberData.map((e) => Person(e['name'] as String, e['phone'] as String)).toList(growable: false);
+final List<Person> barberList = _barberData
+    .map((e) => Person(e['name'] as String, e['phone'] as String))
+    .toList(growable: false);
+
 final List<Map<String, Object>> _barberData = [
   {
     "_id": "66fc082b01c29b23d5371439",

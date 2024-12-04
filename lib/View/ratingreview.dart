@@ -1,29 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:a_3_salon/View/profil.dart';
-
-void main() {
-  runApp(RatingReviewApp());
-}
-
-class RatingReviewApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        textTheme: GoogleFonts.loraTextTheme(
-          Theme.of(context).textTheme,
-        ),
-      ),
-      home: RatingReviewPage(),
-      routes: {
-        '/profile': (context) => ProfileView(),
-      },
-    );
-  }
-}
+import 'package:a_3_salon/models/Ulasan.dart';
+import 'package:a_3_salon/services/UlasanClient.dart';
+import 'package:a_3_salon/View/historyReview.dart';
 
 class RatingReviewPage extends StatefulWidget {
+  final String serviceName;
+  final String serviceImage;
+
+  RatingReviewPage({required this.serviceName, required this.serviceImage});
+
   @override
   _RatingReviewPageState createState() => _RatingReviewPageState();
 }
@@ -31,6 +17,39 @@ class RatingReviewPage extends StatefulWidget {
 class _RatingReviewPageState extends State<RatingReviewPage> {
   double _rating = 0;
   TextEditingController _reviewController = TextEditingController();
+
+  Future<void> postReview() async {
+    try {
+      final ulasan = Ulasan(
+        id: 0, // ID biasanya dikendalikan oleh server, tidak perlu manual.
+        idCustomer: 1, // Ganti dengan ID customer yang sesuai
+        idPemesanan: 2002, // Ganti dengan ID pemesanan yang sesuai
+        rating: _rating.toInt(),
+        komentar: _reviewController.text,
+        tanggalUlasan: DateTime.now().toIso8601String(),
+        fotoUlasan: null, // Bisa menambahkan foto jika perlu
+      );
+
+      await UlasanClient.store(ulasan);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Review posted successfully!')),
+      );
+
+      _reviewController.clear();
+      setState(() {
+        _rating = 0;
+      });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HistoryReviewPage()),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error posting review: $error')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +88,7 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
                         child: Image.asset(
-                          'lib/images/hair_cut.jpg',
+                          widget.serviceImage,
                           width: 120,
                           height: 120,
                           fit: BoxFit.cover,
@@ -79,7 +98,7 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
                     SizedBox(width: 16),
                     Expanded(
                       child: Text(
-                        'Hair Cut',
+                        widget.serviceName,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -101,6 +120,7 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
                 ),
               ),
               SizedBox(height: 8),
+              // Rating
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -144,10 +164,7 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    print('Rating: $_rating');
-                    print('Review: ${_reviewController.text}');
-                  },
+                  onPressed: postReview,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFFF4081),
                     shape: RoundedRectangleBorder(

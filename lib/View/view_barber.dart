@@ -105,43 +105,81 @@ class _BarberPageState extends State<BarberPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: selectedBarber == null
-                      ? null // Nonaktifkan tombol jika belum memilih barber
-                      : () {
-                          Map<String, dynamic> formData = {};
-                          formData['barberName'] = selectedBarber;
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ReservationPage(
-                                data: data,
-                                dataBarber: formData,
-                                dataLayanan: dataLayanan,
-                                discount: discount,
-                              ),
-                            ),
-                          );
-                        },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 40),
-                    backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+              child: Row(
+                children: [
+                  // "Add More" Button on the left
+                  Expanded(
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: selectedBarber == null
+                            ? null // Disable Add More if no barber is selected
+                            : () {
+                                Navigator.pop(
+                                    context); // Go back to Layanan page
+                              },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 40),
+                          backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          'Add More',
+                          style: GoogleFonts.lora(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  child: Text(
-                    'Next',
-                    style: GoogleFonts.lora(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                  SizedBox(width: 10), // Space between buttons
+                  // "Next" Button on the right
+                  Expanded(
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: selectedBarber == null
+                            ? null // Disable Next if no barber is selected
+                            : () {
+                                Map<String, dynamic> formData = {};
+                                formData['barberName'] = selectedBarber;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ReservationPage(
+                                      data: data,
+                                      dataBarber: formData,
+                                      dataLayanan: dataLayanan,
+                                      discount: discount,
+                                    ),
+                                  ),
+                                );
+                              },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 40),
+                          backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          'Next',
+                          style: GoogleFonts.lora(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ],

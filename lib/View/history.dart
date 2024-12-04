@@ -88,7 +88,7 @@ class HistoryScreen extends StatelessWidget {
                                   style: GoogleFonts.lora(fontSize: 14),
                                 ),
                                 Text(
-                                  'Barbers: Abel',
+                                  'Barbers: Abell',
                                   style: GoogleFonts.lora(fontSize: 14),
                                 ),
                               ],
