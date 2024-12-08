@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:a_3_salon/View/home.dart';
+import 'package:a_3_salon/models/Barbers.dart';
+import 'package:a_3_salon/models/Layanan.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:a_3_salon/View/homepage.dart';
@@ -28,36 +31,23 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
         useMaterial3: true,
       ),
-      home: ReceiptPage(
-        dataReservasi: {
-          'fullName': 'John Doe',
-          'date': '2024-11-12',
-          'time': '14:30',
-          'noTelp': '1234567890',
-        },
-        dataBarber: {
-          'barberName': 'Stylist A',
-        },
-        dataLayanan: {
-          'layananName': 'Hair Cut',
-          'layananPrice': '150000',
-        },
-      ),
     );
   }
 }
 
 class ReceiptPage extends StatefulWidget {
+  final Map data;
   final Map<String, String?>? dataReservasi;
-  final Map<String, String?>? dataBarber;
-  final Map<String, String?>? dataLayanan;
+  final List<Barbers> dataBarber;
+  final List<Layanan> dataLayanan;
   final int? discount;
 
   const ReceiptPage(
       {Key? key,
+      required this.data,
       this.dataReservasi,
-      this.dataBarber,
-      this.dataLayanan,
+      required this.dataBarber,
+      required this.dataLayanan,
       this.discount})
       : super(key: key);
 
@@ -121,10 +111,18 @@ class _ReceiptPageState extends State<ReceiptPage> {
     String customerName = widget.dataReservasi?['fullName'] ?? 'N/A';
     String date = widget.dataReservasi?['date'] ?? 'N/A';
     String time = widget.dataReservasi?['time'] ?? 'N/A';
-    String barberName = widget.dataBarber?['barberName'] ?? 'N/A';
-    String serviceName = widget.dataLayanan?['layananName'] ?? 'N/A';
-    int servicePrice =
-        int.tryParse(widget.dataLayanan?['layananPrice'] ?? '0') ?? 0;
+
+    int servicePrice = 0;
+
+    List<Layanan> dataLayanan = widget.dataLayanan;
+    List<Barbers> dataBarber = widget.dataBarber;
+
+    for (var i = 0; i < dataLayanan.length; i++) {
+      final layanan = dataLayanan[i];
+
+      servicePrice += layanan.harga;
+    }
+
     double discountPrice = servicePrice.toDouble();
     if (widget.discount! > 0) {
       discountPrice -= discountPrice * (widget.discount!.toDouble() / 100);
@@ -219,7 +217,6 @@ class _ReceiptPageState extends State<ReceiptPage> {
                         _buildDetailRow('Customer Name', customerName),
                         _buildDetailRow('Booking Date', date),
                         _buildDetailRow('Booking Time', time),
-                        _buildDetailRow('Stylist', barberName),
                       ],
                     ),
                   ),
@@ -240,8 +237,17 @@ class _ReceiptPageState extends State<ReceiptPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildDetailRow('$serviceName',
-                            'IDR ${servicePrice.toStringAsFixed(0)},00'),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: dataLayanan.map((layanan) {
+                            final barber =
+                                dataBarber[dataLayanan.indexOf(layanan)];
+                            return _buildDetailRow(
+                              '${layanan.nama_layanan} - ${barber.nama_barber}',
+                              'IDR ${layanan.harga.toStringAsFixed(0)},00',
+                            );
+                          }).toList(),
+                        ),
                         widget.discount != 0
                             ? _buildDetailRow('Discount ${widget.discount}%',
                                 'IDR ${(servicePrice - discountPrice).toStringAsFixed(0)},00')
@@ -352,10 +358,17 @@ class _ReceiptPageState extends State<ReceiptPage> {
     );
 
     if (shouldExit == true) {
+      Navigator.popUntil(
+        context,
+        (route) => route.isFirst,
+      );
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => HomeScreen(),
+          builder: (context) => HomeView(
+            data: widget.data,
+            targetIndex: 0,
+          ),
         ),
       );
     }

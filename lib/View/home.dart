@@ -42,6 +42,8 @@ class _HomeViewState extends State<HomeView> {
       Center(
           child: ServicesPage(
         data: dataForm,
+        listBarbers: [],
+        listLayanan: [],
         discount: widget.discount,
       )),
       Center(child: ProfileView(data: dataForm)),
