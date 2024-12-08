@@ -1,110 +1,74 @@
+import 'package:a_3_salon/models/Barbers.dart';
 import 'package:flutter/material.dart';
 import 'package:a_3_salon/View/view_barber.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-Future<void> sendDataToApi(Map<String, dynamic> layanan) async {
-  final String url = 'http://10.0.2.2:8000';
-  final String endpoint = '/api/layanan';
+import '../models/Layanan.dart';
 
-  final headers = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  };
-
-  try {
-    final response = await http.post(
-      Uri.parse('$url$endpoint'),
-      headers: headers,
-      body: json.encode({
-        'nama_layanan': layanan['layananName'],
-        'harga': layanan['layananPrice'].toString(),
-        'waktu': layanan['layananTime'],
-      }),
-    );
-
-    if (response.statusCode == 201) {
-      print('Data berhasil disimpan: ${response.body}');
-    } else {
-      print('Gagal menyimpan data: ${response.body}');
-    }
-  } catch (e) {
-    print('Terjadi kesalahan: $e');
-  }
-}
-
-class ServicesPage extends StatelessWidget {
-  final List<Map<String, dynamic>> services = [
-    {
-      "id": 1,
-      "name": "Hair Color",
-      "image": "lib/images/hair_color.jpg",
-      "price": "IDR1.500.000,00",
-      "priceInt": "1500000",
-      "time": "120"
-    },
-    {
-      "id": 2,
-      "name": "Hair Ceratin",
-      "image": "lib/images/hair_ceratin.jpg",
-      "price": "IDR200.000,00",
-      "priceInt": "200000",
-      "time": "90"
-    },
-    {
-      "id": 3,
-      "name": "Hair Cut",
-      "image": "lib/images/hair_cut.jpg",
-      "price": "IDR150.000,00",
-      "priceInt": "150000",
-      "time": "60"
-    },
-    {
-      "id": 4,
-      "name": "Hair Extension",
-      "image": "lib/images/hair_extension.jpg",
-      "price": "IDR5.000.000,00",
-      "priceInt": "5000000",
-      "time": "120"
-    },
-    {
-      "id": 5,
-      "name": "Creambath",
-      "image": "lib/images/creambath.jpg",
-      "price": "IDR100.000,00",
-      "priceInt": "100000",
-      "time": "130"
-    },
-    {
-      "id": 6,
-      "name": "Hair Wash + Blow",
-      "image": "lib/images/hair_wash_blow.jpg",
-      "price": "IDR70.000,00",
-      "priceInt": "70000",
-      "time": "40"
-    },
-    {
-      "id": 7,
-      "name": "Hair Styling",
-      "image": "lib/images/hair_styling.jpg",
-      "price": "IDR100.000,00",
-      "priceInt": "100000",
-      "time": "30"
-    },
-  ];
-
+class ServicesPage extends StatefulWidget {
   final Map? data;
+  final List<Layanan> listLayanan;
+  final List<Barbers> listBarbers;
   final int? discount;
 
-  ServicesPage({Key? key, this.data, this.discount});
+  const ServicesPage(
+      {Key? key,
+      this.data,
+      required this.listLayanan,
+      required this.listBarbers,
+      this.discount})
+      : super(key: key);
+
+  @override
+  _ServicesPageState createState() => _ServicesPageState();
+}
+
+class _ServicesPageState extends State<ServicesPage> {
+  List<Layanan> layananList = []; //INI UNTUK SIMPAN DATA DARI DB
+
+  bool isLoading = true;
+
+  // Function to fetch layanan from API
+  Future<void> fetchLayanan() async {
+    try {
+      final response =
+          await http.get(Uri.parse('http://10.0.2.2:8000/api/layanan'));
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        setState(() {
+          layananList = data.map((item) => Layanan.fromJson(item)).toList();
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load layanan');
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print('Error fetching layanan: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchLayanan();
+  }
 
   @override
   Widget build(BuildContext context) {
+    List<Layanan> listLayanan =
+        widget.listLayanan; // Untuk simpan banyak layanan
+    List<Barbers> listBarbers =
+        widget.listBarbers; // Untuk simpan banyak Barbers
+
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: listLayanan.isNotEmpty,
         title: Text(
           'Services',
           style: GoogleFonts.lora(
@@ -118,85 +82,80 @@ class ServicesPage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 10.0,
-            mainAxisSpacing: 10.0,
-          ),
-          itemCount: services.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                // Get the service ID
-                int layananId = services[index]["id"];
-
-                // Send data to the API (only if needed)
-                // Example: sendDataToApi(formData); // Use this only if you need to store data in DB
-
-                // Pass the selected service ID to the next page (BarberPage)
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BarberPage(
-                      data: data,
-                      dataLayanan: {
-                        'layananId': layananId,
-                        'layananName': services[index]["name"]!,
-                        'layananPrice': services[index]["priceInt"]!,
-                        'layananTime': services[index]["time"]!,
-                      },
-                      discount: discount,
-                    ),
-                  ),
-                );
-              },
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+        child: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 10.0,
                 ),
-                elevation: 4,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ClipRRect(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(10)),
-                      child: Image.asset(
-                        services[index]["image"]!,
-                        fit: BoxFit.cover,
-                        height: 100,
-                        width: double.infinity,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Center(
-                      child: Text(
-                        services[index]["name"]!,
-                        style: GoogleFonts.lora(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFFC2185B),
+                itemCount: layananList.length,
+                itemBuilder: (context, index) {
+                  final layanan = layananList[index];
+                  return GestureDetector(
+                    onTap: () {
+                      // Navigate to BarberPage with selected layanan
+                      listLayanan.add(layanan);
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BarberPage(
+                            data: widget.data,
+                            dataLayanan: listLayanan,
+                            listBarbers: listBarbers,
+                            discount: widget.discount,
+                          ),
                         ),
+                      );
+                    },
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 4,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(10)),
+                            child: Image.asset(
+                              'lib/images/${layanan.foto}',
+                              fit: BoxFit.cover,
+                              height: 100,
+                              width: double.infinity,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Center(
+                            child: Text(
+                              layanan.nama_layanan,
+                              style: GoogleFonts.lora(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFFC2185B),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Center(
+                            child: Text(
+                              'IDR${layanan.harga}',
+                              style: GoogleFonts.lora(
+                                fontSize: 13,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(height: 6),
-                    Center(
-                      child: Text(
-                        services[index]["price"]!,
-                        style: GoogleFonts.lora(
-                          fontSize: 13,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
-            );
-          },
-        ),
       ),
     );
   }

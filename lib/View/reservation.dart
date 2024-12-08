@@ -1,3 +1,6 @@
+import 'package:a_3_salon/View/home.dart';
+import 'package:a_3_salon/models/Barbers.dart';
+import 'package:a_3_salon/models/Layanan.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:a_3_salon/View/detailReservation.dart';
@@ -6,8 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ReservationPage extends StatefulWidget {
   final Map? data;
-  final Map? dataBarber;
-  final Map? dataLayanan;
+  final List<Barbers>? dataBarber;
+  final List<Layanan>? dataLayanan;
   final int? discount;
 
   const ReservationPage(
@@ -41,7 +44,7 @@ class _ReservationPageState extends State<ReservationPage> {
     Map? dataForm = widget.data;
 
     // Memberikan nilai default '' jika null
-    nameController.text = dataForm?['fullName'] ?? '';
+    nameController.text = dataForm?['data']['nama_customer'] ?? '';
   }
 
   // Function to show the date picker
@@ -62,8 +65,8 @@ class _ReservationPageState extends State<ReservationPage> {
   @override
   Widget build(BuildContext context) {
     final Map? dataForm = widget.data;
-    final Map? dataFormBarber = widget.dataBarber;
-    final Map? dataFormLayanan = widget.dataLayanan;
+    final List<Barbers>? dataFormBarber = widget.dataBarber;
+    final List<Layanan>? dataFormLayanan = widget.dataLayanan;
     final int? discount = widget.discount;
 
     return Scaffold(
@@ -80,7 +83,7 @@ class _ReservationPageState extends State<ReservationPage> {
         backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => _showExitConfirmationDialog(context),
         ),
       ),
       body: Padding(
@@ -116,7 +119,8 @@ class _ReservationPageState extends State<ReservationPage> {
                     setState(() {
                       isNameEditable = value ?? false;
                       if (!isNameEditable) {
-                        nameController.text = widget.data?['fullName'] ?? '';
+                        nameController.text =
+                            widget.data?['data']['nama_customer'] ?? '';
                       } else {
                         nameController.text = '';
                       }
@@ -210,7 +214,8 @@ class _ReservationPageState extends State<ReservationPage> {
                   formData['time'] = selectedTime;
 
                   if (!isNameEditable) {
-                    formData['fullName'] = dataForm?['fullName'] ?? "N/A";
+                    formData['fullName'] =
+                        dataForm?['data']['nama_customer'] ?? "N/A";
                   } else {
                     formData['fullName'] = nameController.text;
                   }
@@ -249,5 +254,48 @@ class _ReservationPageState extends State<ReservationPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _showExitConfirmationDialog(BuildContext context) async {
+    bool? shouldExit = await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Confirm'),
+          content: Text(
+              'Do you want to quit this page? Your reservation will be canceled'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text('Yes'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldExit == true) {
+      Navigator.popUntil(
+        context,
+        (route) => route.isFirst,
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeView(
+            data: widget.data,
+            targetIndex: 2,
+          ),
+        ),
+      );
+    }
   }
 }

@@ -63,7 +63,10 @@ class _LoginViewState extends State<LoginView> {
           );
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomeView()),
+            MaterialPageRoute(
+                builder: (context) => HomeView(
+                      data: data,
+                    )),
           );
 
           return true;
