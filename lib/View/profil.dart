@@ -33,22 +33,10 @@ class _ProfileViewState extends State<ProfileView> {
         'email': prefs.getString('email') ?? 'Email Tidak Ditemukan',
         'nomor_telpon':
             prefs.getString('nomor_telpon') ?? 'No Telp Tidak Ditemukan',
-        'profileImagePath': prefs.getString('profileImagePath'),
+        'foto': prefs.getString('foto'),
       };
+      print('Data saat ini: $_data');
     });
-  }
-
-  Future<void> _updateUserData(Map updatedData) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _data?.addAll(updatedData);
-    });
-    prefs.setString('nama_customer', updatedData['fullName'] ?? '');
-    prefs.setString('email', updatedData['email'] ?? '');
-    prefs.setString('nomor_telpon', updatedData['nomor_telpon'] ?? '');
-    if (updatedData['profileImagePath'] != null) {
-      prefs.setString('profileImagePath', updatedData['profileImagePath']);
-    }
   }
 
   @override
@@ -68,9 +56,8 @@ class _ProfileViewState extends State<ProfileView> {
                     builder: (context) => EditProfilePage(data: _data),
                   ),
                 );
-
                 if (updatedData != null) {
-                  await _updateUserData(updatedData);
+                  _loadUserData();
                 }
               },
               child: Container(
@@ -85,11 +72,11 @@ class _ProfileViewState extends State<ProfileView> {
                       CircleAvatar(
                         radius: 40,
                         backgroundColor: Colors.white,
-                        backgroundImage: _data?['profileImagePath'] != null &&
-                                File(_data!['profileImagePath']).existsSync()
-                            ? FileImage(File(_data!['profileImagePath']))
+                        backgroundImage: _data?['foto'] != null &&
+                                File(_data!['foto']).existsSync()
+                            ? FileImage(File(_data!['foto']))
                             : null,
-                        child: _data?['profileImagePath'] == null
+                        child: _data?['foto'] == null
                             ? Icon(
                                 Icons.person,
                                 size: 40,
@@ -103,7 +90,7 @@ class _ProfileViewState extends State<ProfileView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              _data?['fullName'] ?? 'null',
+                              _data?['fullName'] ?? 'Nama Tidak Ditemukan',
                               style: GoogleFonts.lora(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -112,7 +99,7 @@ class _ProfileViewState extends State<ProfileView> {
                                   Shadow(
                                     offset: Offset(1, 1),
                                     blurRadius: 3,
-                                    color: Colors.black38,
+                                    color: Colors.black.withOpacity(0.5),
                                   ),
                                 ],
                               ),

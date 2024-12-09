@@ -33,14 +33,13 @@ class Ulasan {
 
   Map<String, dynamic> toJson() {
     return {
-      'id_ulasan': id,
+      'id': id,
       'id_customer': idCustomer,
       'id_pemesanan': idPemesanan,
       'rating': rating,
       'komentar': komentar,
       'tanggal_ulasan': tanggalUlasan,
-      'foto_ulasan':
-          fotoUlasan ?? '', // jika fotoUlasan null, kirimkan string kosong
+      'foto_ulasan': fotoUlasan ?? '',
     };
   }
 }

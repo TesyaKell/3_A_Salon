@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<List<dynamic>> fetchReviews() async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.6:8000/api/ulasans'),
+        Uri.parse('http://192.168.1.17:8000/api/ulasans'),
       );
 
       if (response.statusCode == 200) {
@@ -91,12 +91,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Hai, $_fullName !',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
+                    Expanded(
+                      child: Text(
+                        'Hai, $_fullName !',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     Container(
@@ -114,15 +117,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 if (!isDialogOpen) {
                                   return;
                                 }
-
                                 setState(() {
                                   isDialogOpen = false;
                                 });
-
                                 var discountArray = [5, 10, 15];
                                 var randomIndex = Random().nextInt(3); // 0 - 2
                                 var discount = discountArray[randomIndex];
-
                                 showDialog<String>(
                                   context: context,
                                   builder: (BuildContext context) => Dialog(
@@ -151,8 +151,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             targetIndex: 2,
                                                           )));
                                             },
-                                            child: const Text(
-                                                'Go to transaction'), //test dl
+                                            child:
+                                                const Text('Go to transaction'),
                                           ),
                                         ],
                                       ),
@@ -170,11 +170,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   "You already claimed the discount!")));
                                       return;
                                     }
-
                                     setState(() {
                                       isDialogOpen = true;
                                     });
-
                                     showDialog<String>(
                                       context: context,
                                       builder: (BuildContext context) => Dialog(
@@ -322,9 +320,7 @@ class TRoundedImage extends StatelessWidget {
         height: height,
         padding: padding,
         decoration: BoxDecoration(
-            border: border,
-            // color: backgroundColor,
-            borderRadius: BorderRadius.circular(8.0)),
+            border: border, borderRadius: BorderRadius.circular(8.0)),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(8.0),
           child: Image.asset(
