@@ -131,7 +131,7 @@ class DetailReservationPage extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () async {
-                  final String url = 'http://10.0.2.2:8000/api/pemesanan';
+                  final String url = 'http://192.168.1.17:8000/api/pemesanan';
 
                   final headers = {
                     'Content-Type': 'application/json',

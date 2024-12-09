@@ -43,11 +43,8 @@ class SalonBarberDetailPage extends StatelessWidget {
                       CircleAvatar(
                         radius: 70,
                         backgroundImage: barber['foto'] != null
-                            ? NetworkImage(
-                                'http://192.168.1.17:8000/storage/${barber['foto']}',
-                              )
-                            : AssetImage('assets/default_image.png')
-                                as ImageProvider,
+                            ? AssetImage('lib/images/${barber['foto']}')
+                            : AssetImage('lib/images/default.jpg'),
                       ),
                       SizedBox(height: 10),
                       Text(

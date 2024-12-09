@@ -80,8 +80,9 @@ class _ContactBarbersPageState extends State<ContactBarbersPage> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: barber['foto'] != null
-                              ? Image.network(
-                                  'http://192.168.1.17:8000/storage/${barber['foto']}',
+                              ? Image(
+                                  image: AssetImage(
+                                      'lib/images/${barber['foto']}'),
                                   height: 100,
                                   width: 100,
                                   fit: BoxFit.cover,

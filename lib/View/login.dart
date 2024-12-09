@@ -51,7 +51,13 @@ class _LoginViewState extends State<LoginView> {
           prefs.setString('nama_customer', data['data']['nama_customer']);
           prefs.setString('email', data['data']['email']);
           prefs.setString('nomor_telpon', data['data']['nomor_telpon']);
-
+          print('ID CEKKK : ${prefs.getInt('id_customer')}');
+          if (data.containsKey('token')) {
+            prefs.setString('token', data['token']);
+            print('CEKK TOKEN: ${prefs.getString('token')}');
+          } else {
+            print('NO TOKEN.');
+          }
           Fluttertoast.showToast(
             msg: "Login Successfully",
             toastLength: Toast.LENGTH_LONG,
@@ -71,7 +77,7 @@ class _LoginViewState extends State<LoginView> {
 
           return true;
         } else {
-          Fluttertoast.showToast(msg: "Kredensial tidak valid");
+          Fluttertoast.showToast(msg: "GAGAL");
           return false;
         }
       } else {

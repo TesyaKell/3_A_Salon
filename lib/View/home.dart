@@ -1,7 +1,7 @@
 import 'package:a_3_salon/View/homepage.dart';
 import 'package:a_3_salon/View/profil.dart';
 import 'package:a_3_salon/View/view_layanan.dart';
-import 'package:a_3_salon/View/contactBarber.dart';
+import 'package:a_3_salon/View/Barber.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
