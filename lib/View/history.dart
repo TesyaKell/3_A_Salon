@@ -1,26 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:a_3_salon/View/detailHistory.dart';
 
-void main() {
-  runApp(SalonHistoryApp());
-}
+class HistoryScreen extends StatefulWidget {
+  const HistoryScreen({Key? key}) : super(key: key);
 
-class SalonHistoryApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        textTheme: GoogleFonts.loraTextTheme(
-          Theme.of(context).textTheme,
-        ),
-      ),
-      home: HistoryScreen(),
-    );
-  }
+  _HistoryScreenState createState() => _HistoryScreenState();
 }
 
-class HistoryScreen extends StatelessWidget {
+class _HistoryScreenState extends State<HistoryScreen> {
+  bool isLoading = true;
+  List<Map<String, dynamic>> pemesanans = [];
+
+  Future<void> fetchPemesanans() async {
+    try {
+      final response =
+          await http.get(Uri.parse('http://192.168.1.6:8000/api/pemesanan'));
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseData = json.decode(response.body);
+
+        List<dynamic> pemesanansList = responseData['data'];
+
+        setState(() {
+          pemesanans = pemesanansList
+              .map((item) => item as Map<String, dynamic>)
+              .toList();
+          print(pemesanans); // Debug
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load pemesanans');
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print('Error fetching pemesanans: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPemesanans();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,119 +55,106 @@ class HistoryScreen extends StatelessWidget {
         backgroundColor: Color(0xFFFF4081),
         title: Text(
           'History',
-          style: GoogleFonts.lora(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                color: Colors.grey[200],
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Oct 11, 2024 - 17:45',
-                        style: GoogleFonts.lora(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.asset(
-                              'lib/images/hair_cut.jpg',
-                              width: 70,
-                              height: 70,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Hair cut',
-                                  style: GoogleFonts.lora(fontSize: 16),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  'Status : Completed',
-                                  style: GoogleFonts.lora(fontSize: 14),
-                                ),
-                                Text(
-                                  'Barbers: Abell',
-                                  style: GoogleFonts.lora(fontSize: 14),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailReservationPage(
-                                  dataReservasi: {
-                                    'date': 'Oct 11, 2024',
-                                    'time': '17:45',
-                                  },
-                                  dataBarber: {
-                                    'barberName': 'Abel',
-                                  },
-                                  dataLayanan: {
-                                    'layananName': 'Hair cut',
-                                    'layananPrice': '150000',
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.pink[300],
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                          ),
-                          child: Text(
-                            'View Detail',
-                            style: GoogleFonts.lora(fontSize: 16),
-                          ),
-                        ),
-                      ),
-                    ],
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: pemesanans.length,
+              itemBuilder: (context, index) {
+                final pemesanan = pemesanans[index];
+                return Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+                  color: Colors.grey[200],
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${pemesanan['tanggal_pemesanan']} - ${pemesanan['waktu_pemesanan']}',
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: pemesanan['layanan'] != null &&
+                                      pemesanan['layanan']['foto'] != null
+                                  ? Image.network(
+                                      'http://192.168.1.6:8000/${pemesanan['layanan']['foto']}',
+                                      width: 70,
+                                      height: 70,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.asset(
+                                      'lib/images/hair_cut.jpg', // Gambar default jika tidak ada foto
+                                      width: 70,
+                                      height: 70,
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Pemesanan ke-${index + 1}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    'Status: ${pemesanan['status_pemesanan']}',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  Text(
+                                    'Nama Pemesan: ${pemesanan['nama_pemesan']}',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 16),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetailHistoryPage(
+                                      idPemesanan: pemesanan['id_pemesanan'],
+                                      idCustomer: pemesanan['id_customer']),
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.pink[300],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                            ),
+                            child: Text('View Detail'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 }

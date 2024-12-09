@@ -9,18 +9,24 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:a_3_salon/models/Barbers.dart';
 
 class HomeScreen extends StatefulWidget {
   final Map? data;
   final int? discount;
-  const HomeScreen({super.key, this.data, this.discount});
+  const HomeScreen(
+      {super.key, this.data, this.discount, required this.listBarbers});
 
+  final List<Barbers> listBarbers;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   String _fullName = '';
+  Barbers? selectedBarber;
+  List<Barbers> barberList = [];
+  bool isLoading = true;
 
   List<dynamic> _reviews = [];
 
@@ -40,16 +46,34 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> fetchBarbers() async {
+    try {
+      final response =
+          await http.get(Uri.parse('http://192.168.1.17:8000/api/barbers'));
+
+      if (response.statusCode == 200) {
+        List<dynamic> temp = json.decode(response.body)['barbers'];
+        print(temp);
+        setState(() {
+          barberList = temp.map((data) => Barbers.fromJson(data)).toList();
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load barbers');
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print('Error fetching barbers: $e');
+    }
+  }
+
   final List<Map<String, String>> services = [
     {"name": "Discount", "image": "lib/images/gambar1.png"},
     {"name": "Shake", "image": "lib/images/gambar2.png"},
     {"name": "Color", "image": "lib/images/gambar4.png"},
     {"name": "Hair Color", "image": "lib/images/gambar5.png"},
-  ];
-
-  final List<Map<String, String>> barbers = [
-    {"name": "Razman", "image": "lib/images/razman.jpg"},
-    {"name": "Carol", "image": "lib/images/carol.jpg"},
   ];
 
   bool isDialogOpen = false;
@@ -58,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _loadUserData();
+    fetchBarbers();
   }
 
   _loadUserData() async {
@@ -275,11 +300,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 100,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: barbers.length,
+                  itemCount: barberList.length,
                   itemBuilder: (context, index) {
+                    final barber = barberList[index];
                     return BarberCard(
-                      name: barbers[index]['name']!,
-                      imageUrl: barbers[index]['image']!,
+                      name: barber.nama_barber,
+                      imageUrl: 'lib/images/${barber.foto}',
                     );
                   },
                 ),
@@ -574,7 +600,7 @@ class ReviewCard extends StatelessWidget {
               return Card(
                 margin: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Container(
-                  width: 250,
+                  width: 300,
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
