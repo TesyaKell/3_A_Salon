@@ -37,7 +37,12 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     Map? dataForm = widget.data;
     List<Widget> _widgetOptions = <Widget>[
-      Center(child: HomeScreen(data: dataForm, discount: widget.discount)),
+      Center(
+          child: HomeScreen(
+        data: dataForm,
+        discount: widget.discount,
+        listBarbers: [],
+      )),
       Center(child: ContactBarbersPage()),
       Center(
           child: ServicesPage(
