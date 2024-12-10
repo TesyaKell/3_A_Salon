@@ -23,7 +23,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
   Future<void> fetchPemesananDetail() async {
     try {
       final response = await http.get(Uri.parse(
-          'http://192.168.1.17:8000/api/pemesanan/${widget.idPemesanan}'));
+          'http://192.168.1.6:8000/api/pemesanan/${widget.idPemesanan}'));
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -35,18 +35,13 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
         // Ambil layanan berdasarkan idLayanan
         final idLayanan = pemesananDetail['id_layanan'];
         final layananResponse = await http
-            .get(Uri.parse('http://192.168.1.17:8000/api/layanan/$idLayanan'));
-        final headers = {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        };
+            .get(Uri.parse('http://192.168.1.6:8000/api/layanan/$idLayanan'));
 
         if (layananResponse.statusCode == 200) {
           final layananData = json.decode(layananResponse.body);
           setState(() {
             layananDetail = layananData['data'];
           });
-          print('Layanan Data: ${layananData}');
         }
       } else {
         setState(() {
@@ -164,12 +159,12 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                               builder: (context) => RatingReviewPage(
                                 serviceName: pemesananDetail['layanan']
                                         ?['nama'] ??
-                                    'Hair Cut',
+                                    'N/A',
                                 serviceImage: pemesananDetail['layanan']
                                         ?['foto'] ??
-                                    'lib/images/hair_cut.jpg',
-                                idPemesanan: widget.idPemesanan,
-                                idCustomer: widget.idCustomer,
+                                    'default_image.jpg',
+                                // idPemesanan: widget.idPemesanan,
+                                // idCustomer: widget.idCustomer,
                               ),
                             ),
                           );

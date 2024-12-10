@@ -7,15 +7,8 @@ import 'package:a_3_salon/View/historyReview.dart';
 class RatingReviewPage extends StatefulWidget {
   final String serviceName;
   final String serviceImage;
-  final int idPemesanan;
-  final int idCustomer;
 
-  RatingReviewPage({
-    required this.serviceName,
-    required this.serviceImage,
-    required this.idPemesanan,
-    required this.idCustomer,
-  });
+  RatingReviewPage({required this.serviceName, required this.serviceImage});
 
   @override
   _RatingReviewPageState createState() => _RatingReviewPageState();
@@ -24,35 +17,17 @@ class RatingReviewPage extends StatefulWidget {
 class _RatingReviewPageState extends State<RatingReviewPage> {
   double _rating = 0;
   TextEditingController _reviewController = TextEditingController();
-  bool isLoading = false;
 
   Future<void> postReview() async {
-    if (_rating == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please provide a rating')),
-      );
-      return;
-    }
-
-    if (_reviewController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please write a review')),
-      );
-      return;
-    }
-
-    setState(() {
-      isLoading = true;
-    });
-
     try {
       final ulasan = Ulasan(
-        idUlasan: 0,
-        idCustomer: widget.idCustomer,
-        idPemesanan: widget.idPemesanan,
+        id: 0, // ID biasanya dikendalikan oleh server, tidak perlu manual.
+        idCustomer: 1, // Ganti dengan ID customer yang sesuai
+        idPemesanan: 2002, // Ganti dengan ID pemesanan yang sesuai
         rating: _rating.toInt(),
         komentar: _reviewController.text,
         tanggalUlasan: DateTime.now().toIso8601String(),
+        fotoUlasan: null, // Bisa menambahkan foto jika perlu
       );
 
       await UlasanClient.store(ulasan);
@@ -64,17 +39,12 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
       _reviewController.clear();
       setState(() {
         _rating = 0;
-        isLoading = false;
       });
-
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HistoryReviewPage()),
       );
     } catch (error) {
-      setState(() {
-        isLoading = false;
-      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error posting review: $error')),
       );
@@ -150,6 +120,7 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
                 ),
               ),
               SizedBox(height: 8),
+              // Rating
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -193,7 +164,7 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: isLoading ? null : postReview,
+                  onPressed: postReview,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFFF4081),
                     shape: RoundedRectangleBorder(
@@ -201,12 +172,10 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
                     ),
                     padding: EdgeInsets.symmetric(vertical: 14),
                   ),
-                  child: isLoading
-                      ? CircularProgressIndicator(color: Colors.white)
-                      : Text(
-                          'Post',
-                          style: TextStyle(fontSize: 16),
-                        ),
+                  child: Text(
+                    'Post',
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
             ],

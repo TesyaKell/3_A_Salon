@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:a_3_salon/View/detailHistory.dart';
 
 class HistoryScreen extends StatefulWidget {
-  const HistoryScreen({Key? key}) : super(key: key);
+  final Map? data;
+
+  const HistoryScreen({Key? key, this.data}) : super(key: key);
 
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
@@ -16,8 +18,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Future<void> fetchPemesanans() async {
     try {
-      final response = await http
-          .get(Uri.parse('http://192.168.1.17:8000/api/detail_pemesanan'));
+      final idCustomer = widget.data?['id'];
+      final response = await http.get(Uri.parse(
+          'http://192.168.1.6:8000/api/pemesanan/customer/$idCustomer'));
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = json.decode(response.body);
@@ -83,13 +86,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         Row(
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: detail_pemesanan['foto'] != null &&
-                                      detail_pemesanan['foto'].isNotEmpty
-                                  ? Image.asset(
-                                      'lib/images/${detail_pemesanan['foto']}',
-                                      height: 100,
-                                      width: 100,
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: pemesanan['layanan'] != null &&
+                                      pemesanan['layanan']['foto'] != null
+                                  ? Image.network(
+                                      'http://192.168.1.6:8000/${pemesanan['layanan']['foto']}',
+                                      width: 70,
+                                      height: 70,
                                       fit: BoxFit.cover,
                                     )
                                   : Container(),
