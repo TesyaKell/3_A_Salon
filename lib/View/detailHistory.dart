@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:a_3_salon/View/ratingreview.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DetailHistoryPage extends StatefulWidget {
   final int idPemesanan;
@@ -78,7 +79,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
       appBar: AppBar(
         title: Text(
           'History Detail',
-          style: TextStyle(color: Colors.white),
+          style: GoogleFonts.lora(color: Colors.white),
         ),
         centerTitle: true,
         backgroundColor: Colors.pinkAccent,
@@ -126,7 +127,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                     Center(
                       child: Text(
                         "Service",
-                        style: TextStyle(
+                        style: GoogleFonts.lora(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -160,7 +161,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                           SizedBox(height: 10),
                           Text(
                             'Scan this QR code at the salon for\nquick check-in.',
-                            style: TextStyle(fontSize: 14),
+                            style: GoogleFonts.lora(fontSize: 14),
                             textAlign: TextAlign.center,
                           ),
                         ],
@@ -179,15 +180,15 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                                 serviceImage:
                                     'lib/images/${layananDetail['foto']}' ??
                                         'lib/images/hair_cut.jpg',
-                                // idPemesanan: widget.idPemesanan,
-                                // idCustomer: widget.idCustomer,
+                                idPemesanan: widget.idPemesanan,
+                                idCustomer: widget.idCustomer,
                               ),
                             ),
                           );
                         },
                         child: Text(
                           'Add Rating and Review',
-                          style: TextStyle(
+                          style: GoogleFonts.lora(
                             color: Colors.pinkAccent,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -206,10 +207,10 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontSize: 14, color: Colors.grey)),
+        Text(label, style: GoogleFonts.lora(fontSize: 14, color: Colors.grey)),
         Text(
           value,
-          style: TextStyle(
+          style: GoogleFonts.lora(
             fontSize: 14,
             color: Colors.pink,
             fontWeight: FontWeight.bold,
@@ -227,13 +228,13 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: GoogleFonts.lora(
                 fontSize: 14,
                 fontWeight: isBold ? FontWeight.bold : FontWeight.normal),
           ),
           Text(
             "IDR ${_parseToString(value)}",
-            style: TextStyle(
+            style: GoogleFonts.lora(
               fontSize: 14,
               color: Colors.pink,
               fontWeight: isBold ? FontWeight.bold : FontWeight.normal,

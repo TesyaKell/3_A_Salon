@@ -1,3 +1,4 @@
+import 'package:a_3_salon/View/editReview.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -14,8 +15,7 @@ class _HistoryReviewPageState extends State<HistoryReviewPage> {
   Future<void> fetchReviews() async {
     try {
       final response = await http.get(
-        Uri.parse(
-            'http://192.168.94.241:8000/api/ulasans'), // URL API untuk ulasan
+        Uri.parse('http://192.168.1.6:8000/api/ulasans'),
       );
 
       if (response.statusCode == 200) {
@@ -30,6 +30,38 @@ class _HistoryReviewPageState extends State<HistoryReviewPage> {
         SnackBar(content: Text('Error loading reviews: $error')),
       );
     }
+  }
+
+  Future<void> deleteReview(int reviewId) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('http://192.168.1.6:8000/api/ulasans/$reviewId'),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _reviews.removeWhere((review) => review['id_ulasan'] == reviewId);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Review deleted successfully')),
+        );
+      } else {
+        throw Exception('Failed to delete review');
+      }
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error deleting review: $error')),
+      );
+    }
+  }
+
+  Future<void> navigateToEditReview(int reviewId) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditReviewPage(reviewId: reviewId),
+      ),
+    );
   }
 
   @override
@@ -60,65 +92,95 @@ class _HistoryReviewPageState extends State<HistoryReviewPage> {
         itemCount: _reviews.length,
         itemBuilder: (context, index) {
           final review = _reviews[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
-            child: Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 4,
-                  ),
-                ],
+          return Dismissible(
+            key: Key(review['id'].toString()), // Unique key for each review
+            background: Container(
+              color: Colors.red,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Icon(Icons.delete, color: Colors.white),
+                ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        review['nama_layanan'] ?? 'Service Name',
-                        style: GoogleFonts.lora(
-                          color: Colors.grey,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'Rate: ${review['rating']} / 5',
-                        style: GoogleFonts.lora(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    review['komentar'] ?? 'No Comment',
-                    style: GoogleFonts.lora(
-                      color: Colors.black,
-                      fontSize: 14,
+            ),
+            secondaryBackground: Container(
+              color: Colors.blue,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Icon(Icons.edit, color: Colors.white),
+                ),
+              ),
+            ),
+            onDismissed: (direction) {
+              if (direction == DismissDirection.startToEnd) {
+                navigateToEditReview(review['id']);
+              } else {
+                deleteReview(review['id']);
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 4,
                     ),
-                  ),
-                  SizedBox(height: 16),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Text(
-                      review['tanggal_ulasan'] ?? '',
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          review['nama_layanan'] ?? 'Service Name',
+                          style: GoogleFonts.lora(
+                            color: Colors.grey,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Rate: ${review['rating']} / 5',
+                          style: GoogleFonts.lora(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      review['komentar'] ?? 'No Comment',
                       style: GoogleFonts.lora(
                         color: Colors.black,
-                        fontSize: 12,
+                        fontSize: 14,
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 16),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Text(
+                        review['tanggal_ulasan'] ?? '',
+                        style: GoogleFonts.lora(
+                          color: Colors.black,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
