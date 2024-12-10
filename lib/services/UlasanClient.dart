@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:a_3_salon/models/Ulasan.dart';
 
 class UlasanClient {
-  static const String baseUrl = 'http://192.168.1.6:8000/api/ulasans';
+  static const String baseUrl = 'http://192.168.94.241:8000/api/ulasans';
 
   // Menyimpan ulasan ke server
   static Future<void> store(Ulasan ulasan) async {

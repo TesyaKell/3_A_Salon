@@ -23,7 +23,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
   Future<void> fetchPemesananDetail() async {
     try {
       final response = await http.get(Uri.parse(
-          'http://192.168.110.82:8000/api/pemesanan/${widget.idPemesanan}'));
+          'http://192.168.94.241:8000/api/pemesanan/${widget.idPemesanan}'));
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -35,7 +35,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
         // Ambil layanan berdasarkan idLayanan
         final idLayanan = pemesananDetail['id_layanan'];
         final layananResponse = await http.get(
-            Uri.parse('http://192.168.110.82:8000/api/layanan/$idLayanan'));
+            Uri.parse('http://192.168.94.241:8000/api/layanan/$idLayanan'));
         final headers = {
           'Content-Type': 'application/json',
           'Accept': 'application/json',

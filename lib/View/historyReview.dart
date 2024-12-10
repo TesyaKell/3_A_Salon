@@ -16,7 +16,7 @@ class _HistoryReviewPageState extends State<HistoryReviewPage> {
     try {
       final response = await http.get(
         Uri.parse(
-            'http://192.168.110.82:8000/api/ulasans'), // URL API untuk ulasan
+            'http://192.168.94.241:8000/api/ulasans'), // URL API untuk ulasan
       );
 
       if (response.statusCode == 200) {
