@@ -17,7 +17,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Future<void> fetchPemesanans() async {
     try {
       final response =
-          await http.get(Uri.parse('http://192.168.1.6:8000/api/pemesanan'));
+          await http.get(Uri.parse('http://192.168.110.82:8000/api/pemesanan'));
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = json.decode(response.body);
@@ -87,7 +87,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               child: pemesanan['layanan'] != null &&
                                       pemesanan['layanan']['foto'] != null
                                   ? Image.network(
-                                      'http://192.168.1.6:8000/${pemesanan['layanan']['foto']}',
+                                      'http://192.168.110.82:8000/${pemesanan['layanan']['foto']}', // Ganti dengan URL yang sesuai
                                       width: 70,
                                       height: 70,
                                       fit: BoxFit.cover,
