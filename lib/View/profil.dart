@@ -151,7 +151,7 @@ class _ProfileViewState extends State<ProfileView> {
               customCard(Icons.history, 'Order History', onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => HistoryScreen(),
+                    builder: (context) => HistoryScreen(data: _data),
                   ),
                 );
               }),

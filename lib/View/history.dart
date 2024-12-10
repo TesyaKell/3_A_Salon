@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:a_3_salon/View/detailHistory.dart';
 
 class HistoryScreen extends StatefulWidget {
-  const HistoryScreen({Key? key}) : super(key: key);
+  final Map? data;
+
+  const HistoryScreen({Key? key, this.data}) : super(key: key);
 
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
@@ -16,8 +18,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Future<void> fetchPemesanans() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://192.168.1.6:8000/api/pemesanan'));
+      final idCustomer = widget.data?['id'];
+      final response = await http.get(Uri.parse(
+          'http://192.168.1.6:8000/api/pemesanan/customer/$idCustomer'));
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = json.decode(response.body);
