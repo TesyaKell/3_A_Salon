@@ -34,7 +34,7 @@ class _ServicesPageState extends State<ServicesPage> {
   Future<void> fetchLayanan() async {
     try {
       final response =
-          await http.get(Uri.parse('http://192.168.1.6:8000/api/layanan'));
+          await http.get(Uri.parse('http://192.168.1.17:8000/api/layanan'));
 
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);

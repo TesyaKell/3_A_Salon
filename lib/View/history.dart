@@ -16,8 +16,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Future<void> fetchPemesanans() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://192.168.110.82:8000/api/pemesanan'));
+      final response = await http
+          .get(Uri.parse('http://192.168.1.17:8000/api/detail_pemesanan'));
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = json.decode(response.body);
@@ -64,7 +64,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           : ListView.builder(
               itemCount: pemesanans.length,
               itemBuilder: (context, index) {
-                final pemesanan = pemesanans[index];
+                final detail_pemesanan = pemesanans[index];
                 return Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -76,28 +76,23 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${pemesanan['tanggal_pemesanan']} - ${pemesanan['waktu_pemesanan']}',
+                          '${detail_pemesanan['tanggal_pemesanan']} - ${detail_pemesanan['waktu_pemesanan']}',
                           style: TextStyle(color: Colors.grey, fontSize: 12),
                         ),
                         SizedBox(height: 8),
                         Row(
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: pemesanan['layanan'] != null &&
-                                      pemesanan['layanan']['foto'] != null
-                                  ? Image.network(
-                                      'http://192.168.110.82:8000/${pemesanan['layanan']['foto']}', // Ganti dengan URL yang sesuai
-                                      width: 70,
-                                      height: 70,
+                              borderRadius: BorderRadius.circular(12),
+                              child: detail_pemesanan['foto'] != null &&
+                                      detail_pemesanan['foto'].isNotEmpty
+                                  ? Image.asset(
+                                      'lib/images/${detail_pemesanan['foto']}',
+                                      height: 100,
+                                      width: 100,
                                       fit: BoxFit.cover,
                                     )
-                                  : Image.asset(
-                                      'lib/images/hair_cut.jpg', // Gambar default jika tidak ada foto
-                                      width: 70,
-                                      height: 70,
-                                      fit: BoxFit.cover,
-                                    ),
+                                  : Container(),
                             ),
                             SizedBox(width: 12),
                             Expanded(
@@ -113,11 +108,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    'Status: ${pemesanan['status_pemesanan']}',
+                                    'Status: ${detail_pemesanan['status_pemesanan']}',
                                     style: TextStyle(fontSize: 14),
                                   ),
                                   Text(
-                                    'Nama Pemesan: ${pemesanan['nama_pemesan']}',
+                                    'Nama Pemesan: ${detail_pemesanan['nama_pemesan']}',
                                     style: TextStyle(fontSize: 14),
                                   ),
                                 ],
@@ -134,8 +129,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => DetailHistoryPage(
-                                      idPemesanan: pemesanan['id_pemesanan'],
-                                      idCustomer: pemesanan['id_customer']),
+                                      idPemesanan:
+                                          detail_pemesanan['id_pemesanan'],
+                                      idCustomer:
+                                          detail_pemesanan['id_customer']),
                                 ),
                               );
                             },
