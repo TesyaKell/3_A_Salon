@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<List<dynamic>> fetchReviews() async {
     try {
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:8000/api/ulasans'),
+        Uri.parse('https://api-tubes-pbp.vercel.app/api/api/ulasans'),
       );
 
       if (response.statusCode == 200) {
@@ -47,8 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> fetchBarbers() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://10.0.2.2:8000/api/barbers'));
+      final response = await http
+          .get(Uri.parse('https://api-tubes-pbp.vercel.app/api/api/barbers'));
 
       if (response.statusCode == 200) {
         List<dynamic> temp = json.decode(response.body)['barbers'];
@@ -519,7 +519,9 @@ class ReviewCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            review['nama_layanan'] ?? 'Service Name',
+                            review['pemesanan']['detail_pemesanan'][0]
+                                    ['layanans']['nama_layanan'] ??
+                                'Service Name',
                             style: GoogleFonts.lora(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,

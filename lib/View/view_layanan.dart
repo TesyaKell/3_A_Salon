@@ -33,8 +33,8 @@ class _ServicesPageState extends State<ServicesPage> {
   // Function to fetch layanan from API
   Future<void> fetchLayanan() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://10.0.2.2:8000/api/layanan'));
+      final response = await http
+          .get(Uri.parse('https://api-tubes-pbp.vercel.app/api/api/layanan'));
 
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);

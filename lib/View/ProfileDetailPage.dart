@@ -95,7 +95,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _updateProfile() async {
-    final url = Uri.parse('http://10.0.2.2:8000/api/profile/update');
+    final url =
+        Uri.parse('https://api-tubes-pbp.vercel.app/api/api/profile/update');
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
 

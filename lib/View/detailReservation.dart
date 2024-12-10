@@ -130,7 +130,8 @@ class DetailReservationPage extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () async {
-                  final String url = 'http://10.0.2.2:8000/api/pemesanan';
+                  final String url =
+                      'https://api-tubes-pbp.vercel.app/api/api/pemesanan';
 
                   final headers = {
                     'Content-Type': 'application/json',
