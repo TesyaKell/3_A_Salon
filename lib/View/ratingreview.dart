@@ -7,8 +7,15 @@ import 'package:a_3_salon/View/historyReview.dart';
 class RatingReviewPage extends StatefulWidget {
   final String serviceName;
   final String serviceImage;
+  final int idPemesanan;
+  final int idCustomer;
 
-  RatingReviewPage({required this.serviceName, required this.serviceImage});
+  RatingReviewPage({
+    required this.serviceName,
+    required this.serviceImage,
+    required this.idPemesanan,
+    required this.idCustomer,
+  });
 
   @override
   _RatingReviewPageState createState() => _RatingReviewPageState();
@@ -17,17 +24,35 @@ class RatingReviewPage extends StatefulWidget {
 class _RatingReviewPageState extends State<RatingReviewPage> {
   double _rating = 0;
   TextEditingController _reviewController = TextEditingController();
+  bool isLoading = false;
 
   Future<void> postReview() async {
+    if (_rating == 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please provide a rating')),
+      );
+      return;
+    }
+
+    if (_reviewController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please write a review')),
+      );
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
     try {
       final ulasan = Ulasan(
-        id: 0, // ID biasanya dikendalikan oleh server, tidak perlu manual.
-        idCustomer: 1, // Ganti dengan ID customer yang sesuai
-        idPemesanan: 2002, // Ganti dengan ID pemesanan yang sesuai
+        idUlasan: 0,
+        idCustomer: widget.idCustomer,
+        idPemesanan: widget.idPemesanan,
         rating: _rating.toInt(),
         komentar: _reviewController.text,
         tanggalUlasan: DateTime.now().toIso8601String(),
-        fotoUlasan: null, // Bisa menambahkan foto jika perlu
       );
 
       await UlasanClient.store(ulasan);
@@ -39,12 +64,17 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
       _reviewController.clear();
       setState(() {
         _rating = 0;
+        isLoading = false;
       });
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HistoryReviewPage()),
       );
     } catch (error) {
+      setState(() {
+        isLoading = false;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error posting review: $error')),
       );
@@ -99,7 +129,7 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
                     Expanded(
                       child: Text(
                         widget.serviceName,
-                        style: TextStyle(
+                        style: GoogleFonts.lora(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
@@ -113,14 +143,13 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
               Center(
                 child: Text(
                   'How was your experience?',
-                  style: TextStyle(
+                  style: GoogleFonts.lora(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               SizedBox(height: 8),
-              // Rating
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -143,7 +172,7 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
               SizedBox(height: 16),
               Text(
                 'Add Review',
-                style: TextStyle(
+                style: GoogleFonts.lora(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
@@ -159,12 +188,13 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
                   contentPadding: EdgeInsets.all(12),
                 ),
                 maxLines: 5,
+                style: GoogleFonts.lora(),
               ),
               SizedBox(height: 40),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: postReview,
+                  onPressed: isLoading ? null : postReview,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFFF4081),
                     shape: RoundedRectangleBorder(
@@ -172,10 +202,12 @@ class _RatingReviewPageState extends State<RatingReviewPage> {
                     ),
                     padding: EdgeInsets.symmetric(vertical: 14),
                   ),
-                  child: Text(
-                    'Post',
-                    style: TextStyle(fontSize: 16),
-                  ),
+                  child: isLoading
+                      ? CircularProgressIndicator(color: Colors.white)
+                      : Text(
+                          'Post',
+                          style: GoogleFonts.lora(fontSize: 16),
+                        ),
                 ),
               ),
             ],
