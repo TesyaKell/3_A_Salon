@@ -1,10 +1,9 @@
 import 'dart:math';
-
 import 'package:a_3_salon/View/home.dart';
 import 'package:flutter/material.dart';
 import 'package:shake_gesture/shake_gesture.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart'; // Import Google Fonts
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -33,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<List<dynamic>> fetchReviews() async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.17:8000/api/ulasans'),
+        Uri.parse('http://192.168.1.6:8000/api/ulasans'),
       );
 
       if (response.statusCode == 200) {
@@ -49,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> fetchBarbers() async {
     try {
       final response =
-          await http.get(Uri.parse('http://192.168.1.17:8000/api/barbers'));
+          await http.get(Uri.parse('http://192.168.1.6:8000/api/barbers'));
 
       if (response.statusCode == 200) {
         List<dynamic> temp = json.decode(response.body)['barbers'];
@@ -120,7 +119,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Text(
                         'Hai, $_fullName !',
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: GoogleFonts.lora(
+                          // Apply Lora font
                           color: Colors.white,
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -158,7 +158,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: <Widget>[
-                                          Text('You got $discount% discount!'),
+                                          Text('You got $discount% discount!',
+                                              style: GoogleFonts
+                                                  .lora()), // Apply Lora font
                                           const SizedBox(height: 15),
                                           TextButton(
                                             onPressed: () {
@@ -208,8 +210,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: <Widget>[
-                                              const Text(
-                                                  'Shake now to get your discount!'),
+                                              Text(
+                                                  'Shake now to get your discount!',
+                                                  style: GoogleFonts
+                                                      .lora()), // Apply Lora font
                                               const SizedBox(height: 15),
                                               TextButton(
                                                 onPressed: () {
@@ -242,9 +246,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         size: 25,
                                       ),
                                       const SizedBox(width: 5),
-                                      const Text(
+                                      Text(
                                         "Shake",
-                                        style: TextStyle(
+                                        style: GoogleFonts.lora(
+                                          // Apply Lora font
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16,
@@ -266,7 +271,8 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 8),
               Text(
                 'Treatment apa hari ini?',
-                style: TextStyle(
+                style: GoogleFonts.lora(
+                  // Apply Lora font
                   color: Colors.white,
                   fontSize: 18,
                 ),
@@ -314,104 +320,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ReviewCard(reviewsFuture: fetchReviews()),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class TRoundedImage extends StatelessWidget {
-  const TRoundedImage({
-    super.key,
-    required this.services,
-    this.onPressed,
-    this.width,
-    this.height,
-    this.border,
-    this.padding,
-  });
-
-  final List<Map<String, String>> services;
-  final double? width, height;
-  final BoxBorder? border;
-  final EdgeInsetsGeometry? padding;
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        width: width,
-        height: height,
-        padding: padding,
-        decoration: BoxDecoration(
-            border: border, borderRadius: BorderRadius.circular(8.0)),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: Image.asset(
-            services[0]['image']!,
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ServiceCard extends StatelessWidget {
-  final String imageUrl;
-  final String title;
-
-  const ServiceCard({super.key, required this.imageUrl, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Container(
-        width: 50,
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                Container(
-                  height: 150,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    image: DecorationImage(
-                      image: AssetImage(imageUrl),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      color: Colors.black.withOpacity(0.5),
-                      child: Text(
-                        title,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 5),
-            Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ],
         ),
       ),
     );
@@ -496,7 +404,7 @@ class _StoryViewCarouselState extends State<StoryViewCarousel> {
                     const SizedBox(height: 8),
                     Text(
                       item['name']!,
-                      style: const TextStyle(
+                      style: GoogleFonts.lora(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
@@ -558,7 +466,9 @@ class BarberCard extends StatelessWidget {
           const SizedBox(width: 10),
           Text(
             name,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: GoogleFonts.lora(
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
@@ -610,7 +520,7 @@ class ReviewCard extends StatelessWidget {
                         children: [
                           Text(
                             review['nama_layanan'] ?? 'Service Name',
-                            style: const TextStyle(
+                            style: GoogleFonts.lora(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.grey,
@@ -618,7 +528,7 @@ class ReviewCard extends StatelessWidget {
                           ),
                           Text(
                             'Rate: ${review['rating']} / 5',
-                            style: const TextStyle(
+                            style: GoogleFonts.lora(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -628,15 +538,17 @@ class ReviewCard extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         review['komentar'] ?? 'No Comment',
-                        style: const TextStyle(fontSize: 14),
+                        style: GoogleFonts.lora(fontSize: 14),
                       ),
                       const SizedBox(height: 8),
                       Align(
                         alignment: Alignment.bottomRight,
                         child: Text(
                           review['tanggal_ulasan'] ?? '',
-                          style:
-                              const TextStyle(fontSize: 12, color: Colors.grey),
+                          style: GoogleFonts.lora(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
                     ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:a_3_salon/View/ratingreview.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DetailHistoryPage extends StatefulWidget {
   final int idPemesanan;
@@ -19,50 +20,57 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
   bool isLoading = true;
   Map<String, dynamic> pemesananDetail = {};
   Map<String, dynamic> layananDetail = {};
+  Map<String, dynamic> barberDetail = {};
+  List<Map<String, dynamic>> pemesanans = [];
 
-  Future<void> fetchPemesananDetail() async {
+  Future<void> fetchPemesanans() async {
     try {
-      final response = await http.get(Uri.parse(
-          'http://192.168.94.241:8000/api/pemesanan/${widget.idPemesanan}'));
+      final response = await http
+          .get(Uri.parse('http://192.168.1.6:8000/api/detail_pemesanan'));
+
+      print(response.body);
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        setState(() {
-          pemesananDetail = data['data'];
-          isLoading = false;
-        });
+        Map<String, dynamic> responseData = json.decode(response.body);
 
-        // Ambil layanan berdasarkan idLayanan
-        final idLayanan = pemesananDetail['id_layanan'];
-        final layananResponse = await http.get(
-            Uri.parse('http://192.168.94.241:8000/api/layanan/$idLayanan'));
-        final headers = {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        };
+        List<dynamic> pemesanansList = responseData['data'];
 
-        if (layananResponse.statusCode == 200) {
-          final layananData = json.decode(layananResponse.body);
+        // Filter data berdasarkan id_pemesanan
+        final detail = pemesanansList.firstWhere(
+          (item) => item['pemesanans']['id_pemesanan'] == widget.idPemesanan,
+          orElse: () => null,
+        );
+
+        if (detail != null) {
           setState(() {
-            layananDetail = layananData['data'];
+            pemesananDetail = detail['pemesanans'] ?? {};
+            layananDetail = detail['layanans'] ?? {};
+            barberDetail = detail['barbers'] ?? {};
+
+            isLoading = false;
           });
+        } else {
+          // Jika tidak ditemukan, tampilkan pesan error
+          setState(() {
+            isLoading = false;
+          });
+          print('Pemesanan dengan ID ${widget.idPemesanan} tidak ditemukan');
         }
       } else {
-        setState(() {
-          isLoading = false;
-        });
+        throw Exception('Failed to load pemesanans');
       }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
+      print('Error fetching pemesanans: $e');
     }
   }
 
   @override
   void initState() {
     super.initState();
-    fetchPemesananDetail();
+    fetchPemesanans();
   }
 
   @override
@@ -71,7 +79,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
       appBar: AppBar(
         title: Text(
           'History Detail',
-          style: TextStyle(color: Colors.white),
+          style: GoogleFonts.lora(color: Colors.white),
         ),
         centerTitle: true,
         backgroundColor: Colors.pinkAccent,
@@ -103,22 +111,28 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _buildDetailColumn("Barber",
-                            pemesananDetail['barber']?['nama'] ?? 'N/A'),
-                        _buildDetailColumn("Duration", "60 Mins"),
+                        _buildDetailColumn(
+                          " ",
+                          (layananDetail['nama_layanan'] ?? 'N/A') +
+                              " - " +
+                              (barberDetail['nama'] ?? 'N/A'),
+                        ),
+                        _buildDetailColumn(
+                          " ",
+                          "IDR ${layananDetail['harga'] ?? 'N/A'}",
+                        ),
                       ],
                     ),
                     Divider(height: 40, color: Colors.grey),
                     Center(
                       child: Text(
                         "Service",
-                        style: TextStyle(
+                        style: GoogleFonts.lora(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ),
                     SizedBox(height: 20),
                     _buildDashedLine(),
-                    // Menampilkan layanan berdasarkan data yang sudah diambil
                     _buildServiceRow(layananDetail['nama_layanan'] ?? 'N/A',
                         _parseToString(layananDetail['harga'])),
                     _buildDashedLine(),
@@ -147,7 +161,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                           SizedBox(height: 10),
                           Text(
                             'Scan this QR code at the salon for\nquick check-in.',
-                            style: TextStyle(fontSize: 14),
+                            style: GoogleFonts.lora(fontSize: 14),
                             textAlign: TextAlign.center,
                           ),
                         ],
@@ -161,21 +175,20 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => RatingReviewPage(
-                                serviceName: pemesananDetail['layanan']
-                                        ?['nama'] ??
-                                    'N/A',
-                                serviceImage: pemesananDetail['layanan']
-                                        ?['foto'] ??
-                                    'default_image.jpg',
-                                // idPemesanan: widget.idPemesanan,
-                                // idCustomer: widget.idCustomer,
+                                serviceName:
+                                    layananDetail['nama_layanan'] ?? 'N/A',
+                                serviceImage:
+                                    'lib/images/${layananDetail['foto']}' ??
+                                        'lib/images/hair_cut.jpg',
+                                idPemesanan: widget.idPemesanan,
+                                idCustomer: widget.idCustomer,
                               ),
                             ),
                           );
                         },
                         child: Text(
                           'Add Rating and Review',
-                          style: TextStyle(
+                          style: GoogleFonts.lora(
                             color: Colors.pinkAccent,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -194,10 +207,10 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontSize: 14, color: Colors.grey)),
+        Text(label, style: GoogleFonts.lora(fontSize: 14, color: Colors.grey)),
         Text(
           value,
-          style: TextStyle(
+          style: GoogleFonts.lora(
             fontSize: 14,
             color: Colors.pink,
             fontWeight: FontWeight.bold,
@@ -215,13 +228,13 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: GoogleFonts.lora(
                 fontSize: 14,
                 fontWeight: isBold ? FontWeight.bold : FontWeight.normal),
           ),
           Text(
             "IDR ${_parseToString(value)}",
-            style: TextStyle(
+            style: GoogleFonts.lora(
               fontSize: 14,
               color: Colors.pink,
               fontWeight: isBold ? FontWeight.bold : FontWeight.normal,

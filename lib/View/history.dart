@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:a_3_salon/View/detailHistory.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({Key? key}) : super(key: key);
@@ -14,19 +16,29 @@ class _HistoryScreenState extends State<HistoryScreen> {
   bool isLoading = true;
   List<Map<String, dynamic>> pemesanans = [];
 
+  Future<int?> getCurrentCustomerId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('id_customer');
+  }
+
   Future<void> fetchPemesanans() async {
     try {
-      final response = await http
-          .get(Uri.parse('http://192.168.1.17:8000/api/detail_pemesanan'));
+      final int? customerId = await getCurrentCustomerId();
 
-      print(response.body); // Cek apakah respons berisi data yang diinginkan
+      if (customerId == null) {
+        throw Exception('Customer ID not found');
+      }
+
+      final response = await http.get(
+        Uri.parse('http://192.168.1.6:8000/api/detail_pemesanan/$customerId'),
+      );
+
+      print(response.body);
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = json.decode(response.body);
 
         List<dynamic> pemesanansList = responseData['data'];
-
-        print(pemesanansList); // Cek data yang diterima
 
         setState(() {
           pemesanans = pemesanansList
@@ -58,7 +70,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         backgroundColor: Color(0xFFFF4081),
         title: Text(
           'History',
-          style: TextStyle(color: Colors.white),
+          style: GoogleFonts.lora(color: Colors.white),
         ),
         centerTitle: true,
       ),
@@ -78,10 +90,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Mengakses tanggal_pemesanan dan waktu_pemesanan di dalam pemesanans
                         Text(
                           '${detail_pemesanan['pemesanans']['tanggal_pemesanan']} - ${detail_pemesanan['pemesanans']['waktu_pemesanan']}',
-                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                          style: GoogleFonts.lora(
+                              color: Colors.grey, fontSize: 12),
                         ),
                         SizedBox(height: 8),
                         Row(
@@ -107,7 +119,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 children: [
                                   Text(
                                     'Pemesanan ke-${index + 1}',
-                                    style: TextStyle(
+                                    style: GoogleFonts.lora(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -115,15 +127,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   SizedBox(height: 4),
                                   Text(
                                     'Status: ${detail_pemesanan['pemesanans']['status_pemesanan']}',
-                                    style: TextStyle(fontSize: 14),
+                                    style: GoogleFonts.lora(fontSize: 14),
                                   ),
                                   Text(
                                     'Nama Pemesan: ${detail_pemesanan['pemesanans']['nama_pemesan']}',
-                                    style: TextStyle(fontSize: 14),
+                                    style: GoogleFonts.lora(fontSize: 14),
                                   ),
                                   Text(
                                     'Layanan: ${detail_pemesanan['layanans']['nama_layanan']}',
-                                    style: TextStyle(
+                                    style: GoogleFonts.lora(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -157,7 +169,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               padding: EdgeInsets.symmetric(vertical: 12),
                               foregroundColor: Colors.white,
                             ),
-                            child: Text('View Detail'),
+                            child:
+                                Text('View Detail', style: GoogleFonts.lora()),
                           ),
                         ),
                       ],

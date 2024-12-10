@@ -21,7 +21,7 @@ class _ContactBarbersPageState extends State<ContactBarbersPage> {
   Future<void> fetchBarbersWithDetails() async {
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.1.17:8000/api/detail_layanans'));
+          .get(Uri.parse('http://192.168.1.6:8000/api/detail_layanans'));
       if (response.statusCode == 200) {
         setState(() {
           barbersWithDetails = json.decode(response.body);
@@ -51,7 +51,12 @@ class _ContactBarbersPageState extends State<ContactBarbersPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFFF4081),
-        title: Text('Contact Barbers'),
+        title: Text(
+          'Contact Barbers',
+          style: TextStyle(
+            fontFamily: 'Lora',
+          ),
+        ),
         centerTitle: true,
       ),
       body: isLoading
@@ -101,6 +106,7 @@ class _ContactBarbersPageState extends State<ContactBarbersPage> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            fontFamily: 'Lora',
                           ),
                         ),
                       ],
