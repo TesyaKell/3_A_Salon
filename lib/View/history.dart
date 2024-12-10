@@ -17,16 +17,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Future<void> fetchPemesanans() async {
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.1.17:8000/api/detail_pemesanan'));
+          .get(Uri.parse('http://192.168.1.6:8000/api/detail_pemesanan'));
 
-      print(response.body); // Cek apakah respons berisi data yang diinginkan
+      print(response.body);
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = json.decode(response.body);
 
         List<dynamic> pemesanansList = responseData['data'];
 
-        print(pemesanansList); // Cek data yang diterima
+        print(pemesanansList);
 
         setState(() {
           pemesanans = pemesanansList
@@ -78,7 +78,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Mengakses tanggal_pemesanan dan waktu_pemesanan di dalam pemesanans
                         Text(
                           '${detail_pemesanan['pemesanans']['tanggal_pemesanan']} - ${detail_pemesanan['pemesanans']['waktu_pemesanan']}',
                           style: TextStyle(color: Colors.grey, fontSize: 12),
