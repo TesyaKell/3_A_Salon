@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:a_3_salon/View/SalonBarberDetailPage.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ContactBarbersPage extends StatefulWidget {
   @override
@@ -20,8 +21,8 @@ class _ContactBarbersPageState extends State<ContactBarbersPage> {
 
   Future<void> fetchBarbersWithDetails() async {
     try {
-      final response = await http
-          .get(Uri.parse('http://192.168.1.17:8000/api/detail_layanans'));
+      final response =
+          await http.get(Uri.parse('http://10.0.2.2:8000/api/detail_layanans'));
       if (response.statusCode == 200) {
         setState(() {
           barbersWithDetails = json.decode(response.body);
@@ -50,8 +51,15 @@ class _ContactBarbersPageState extends State<ContactBarbersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFFF4081),
-        title: Text('Contact Barbers'),
+        backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
+        title: Text(
+          'Contact Barbers',
+          style: GoogleFonts.lora(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 20,
+          ),
+        ),
         centerTitle: true,
       ),
       body: isLoading
@@ -98,7 +106,7 @@ class _ContactBarbersPageState extends State<ContactBarbersPage> {
                         Text(
                           barber['nama_barber'] ?? 'Nama tidak tersedia',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: GoogleFonts.lora(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),

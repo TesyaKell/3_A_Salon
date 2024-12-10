@@ -63,32 +63,36 @@ class _ProfileViewState extends State<ProfileView> {
               child: Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.grey[100],
+                    color: Color.fromRGBO(210, 0, 98, 1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.white,
-                        backgroundImage: _data?['foto'] != null &&
-                                File(_data!['foto']).existsSync()
-                            ? FileImage(File(_data!['foto']))
-                            : null,
-                        child: _data?['foto'] == null
-                            ? Icon(
-                                Icons.person,
-                                size: 40,
-                                color: Colors.black54,
-                              )
-                            : null,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 25.0),
+                        child: CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.white,
+                          backgroundImage: _data?['foto'] != null &&
+                                  File(_data!['foto']).existsSync()
+                              ? FileImage(File(_data!['foto']))
+                              : null,
+                          child: _data?['foto'] == null
+                              ? Icon(
+                                  Icons.person,
+                                  size: 40,
+                                  color: Colors.black54,
+                                )
+                              : null,
+                        ),
                       ),
                       const SizedBox(width: 16),
                       Flexible(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const SizedBox(height: 22),
                             Text(
                               _data?['fullName'] ?? 'Nama Tidak Ditemukan',
                               style: GoogleFonts.lora(
@@ -109,12 +113,16 @@ class _ProfileViewState extends State<ProfileView> {
                             const SizedBox(height: 4),
                             Text(
                               _data?['nomor_telpon'] ?? 'null',
-                              style: GoogleFonts.lora(color: Colors.black87),
+                              style: GoogleFonts.lora(
+                                color: Colors.white, // Change to white
+                              ),
                               overflow: TextOverflow.ellipsis,
                             ),
                             Text(
                               _data?['email'] ?? 'null',
-                              style: GoogleFonts.lora(color: Colors.black87),
+                              style: GoogleFonts.lora(
+                                color: Colors.white, // Change to white
+                              ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ],
@@ -157,12 +165,53 @@ class _ProfileViewState extends State<ProfileView> {
               }),
               sectionTitle('Info Lainnya'),
               customCard(Icons.logout, 'Logout', onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LoginView(
-                              data: _data,
-                            )));
+                // Show confirmation dialog
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(
+                        'Konfirmasi',
+                        style: GoogleFonts.lora(fontWeight: FontWeight.bold),
+                      ),
+                      content: Text(
+                        'Apakah anda akan keluar dari akun?',
+                        style: GoogleFonts.lora(),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Menutup dialog
+                          },
+                          child: Text(
+                            'Cancel',
+                            style: GoogleFonts.lora(color: Colors.grey),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            // Proses logout
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            await prefs.clear(); // Hapus semua data user
+
+                            Navigator.of(context).pop(); // Tutup dialog
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginView(data: null),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Yes',
+                            style: GoogleFonts.lora(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
               }),
             ],
           ),
