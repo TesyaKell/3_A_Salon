@@ -32,11 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<List<dynamic>> fetchReviews() async {
     try {
       final response = await http.get(
-<<<<<<< HEAD
         Uri.parse('http://10.0.2.2:8000/api/ulasans'),
-=======
-        Uri.parse('http://192.168.1.6:8000/api/ulasans'),
->>>>>>> 2b29ea41563863c515a6e2c5187b518b3b8d20ca
       );
 
       if (response.statusCode == 200) {
@@ -52,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> fetchBarbers() async {
     try {
       final response =
-          await http.get(Uri.parse('http://192.168.1.6:8000/api/barbers'));
+          await http.get(Uri.parse('http://10.0.2.2:8000/api/barbers'));
 
       if (response.statusCode == 200) {
         List<dynamic> temp = json.decode(response.body)['barbers'];

@@ -109,7 +109,6 @@ class _ContactBarbersPageState extends State<ContactBarbersPage> {
                           style: GoogleFonts.lora(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'Lora',
                           ),
                         ),
                       ],
