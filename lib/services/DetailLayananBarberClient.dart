@@ -7,7 +7,7 @@ class DetailLayananBarberClient {
   static Future<List<DetailLayananBarber>> fetchAll() async {
     try {
       final response =
-          await http.get(Uri.http('10.53.8.26:8000', '/api/detail_layanans'));
+          await http.get(Uri.http('10.0.2.2:8000', '/api/detail_layanans'));
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 
       Iterable data = json.decode(response.body);

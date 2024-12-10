@@ -17,7 +17,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Future<void> fetchPemesanans() async {
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.1.17:8000/api/detail_pemesanan'));
+          .get(Uri.parse('http://10.0.2.2:8000/api/detail_pemesanan'));
 
       print(response.body); // Cek apakah respons berisi data yang diinginkan
 

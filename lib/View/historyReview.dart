@@ -14,8 +14,7 @@ class _HistoryReviewPageState extends State<HistoryReviewPage> {
   Future<void> fetchReviews() async {
     try {
       final response = await http.get(
-        Uri.parse(
-            'http://192.168.94.241:8000/api/ulasans'), // URL API untuk ulasan
+        Uri.parse('http://10.0.2.2:8000/api/ulasans'), // URL API untuk ulasan
       );
 
       if (response.statusCode == 200) {

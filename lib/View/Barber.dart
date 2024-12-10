@@ -20,8 +20,8 @@ class _ContactBarbersPageState extends State<ContactBarbersPage> {
 
   Future<void> fetchBarbersWithDetails() async {
     try {
-      final response = await http
-          .get(Uri.parse('http://192.168.1.17:8000/api/detail_layanans'));
+      final response =
+          await http.get(Uri.parse('http://10.0.2.2:8000/api/detail_layanans'));
       if (response.statusCode == 200) {
         setState(() {
           barbersWithDetails = json.decode(response.body);

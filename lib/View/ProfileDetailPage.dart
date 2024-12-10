@@ -95,7 +95,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _updateProfile() async {
-    final url = Uri.parse('http://192.168.1.17:8000/api/profile/update');
+    final url = Uri.parse('http://10.0.2.2:8000/api/profile/update');
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
 
