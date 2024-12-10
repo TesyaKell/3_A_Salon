@@ -30,7 +30,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       }
 
       final response = await http.get(
-        Uri.parse('http://192.168.1.6:8000/api/detail_pemesanan/$customerId'),
+        Uri.parse('http://10.0.2.2:8000/api/detail_pemesanan/$customerId'),
       );
 
       print(response.body);

@@ -39,7 +39,7 @@ class DetailLayananBarber {
     if (foto.isEmpty) {
       return '';
     }
-    const String baseUrl = 'http://192.168.1.6:8000/storage/';
+    const String baseUrl = 'http://10.0.2.2:8000/storage/';
     return '$baseUrl$foto';
   }
 }

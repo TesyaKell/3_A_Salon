@@ -47,7 +47,7 @@ class _EditReviewPageState extends State<EditReviewPage> {
   Future<void> updateReview() async {
     try {
       final response = await http.put(
-        Uri.parse('http://192.168.1.6:8000/api/ulasans/${widget.reviewId}'),
+        Uri.parse('http://10.0.2.2:8000/api/ulasans/${widget.reviewId}'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'komentar': _komentarController.text,

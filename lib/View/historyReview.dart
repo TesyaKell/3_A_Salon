@@ -15,7 +15,7 @@ class _HistoryReviewPageState extends State<HistoryReviewPage> {
   Future<void> fetchReviews() async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.6:8000/api/ulasans'),
+        Uri.parse('http://10.0.2.2:8000/api/ulasans'),
       );
 
       if (response.statusCode == 200) {
@@ -35,7 +35,7 @@ class _HistoryReviewPageState extends State<HistoryReviewPage> {
   Future<void> deleteReview(int reviewId) async {
     try {
       final response = await http.delete(
-        Uri.parse('http://192.168.1.6:8000/api/ulasans/$reviewId'),
+        Uri.parse('http://10.0.2.2:8000/api/ulasans/$reviewId'),
       );
 
       if (response.statusCode == 200) {
