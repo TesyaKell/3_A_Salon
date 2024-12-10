@@ -4,9 +4,7 @@ import 'dart:convert';
 import 'package:a_3_salon/View/detailHistory.dart';
 
 class HistoryScreen extends StatefulWidget {
-  final Map? data;
-
-  const HistoryScreen({Key? key, this.data}) : super(key: key);
+  const HistoryScreen({Key? key}) : super(key: key);
 
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
@@ -18,20 +16,22 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Future<void> fetchPemesanans() async {
     try {
-      final idCustomer = widget.data?['id'];
-      final response = await http.get(Uri.parse(
-          'http://192.168.1.6:8000/api/pemesanan/customer/$idCustomer'));
+      final response = await http
+          .get(Uri.parse('http://192.168.1.17:8000/api/detail_pemesanan'));
+
+      print(response.body); // Cek apakah respons berisi data yang diinginkan
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = json.decode(response.body);
 
         List<dynamic> pemesanansList = responseData['data'];
 
+        print(pemesanansList); // Cek data yang diterima
+
         setState(() {
           pemesanans = pemesanansList
               .map((item) => item as Map<String, dynamic>)
               .toList();
-          print(pemesanans); // Debug
           isLoading = false;
         });
       } else {
@@ -78,21 +78,24 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Mengakses tanggal_pemesanan dan waktu_pemesanan di dalam pemesanans
                         Text(
-                          '${detail_pemesanan['tanggal_pemesanan']} - ${detail_pemesanan['waktu_pemesanan']}',
+                          '${detail_pemesanan['pemesanans']['tanggal_pemesanan']} - ${detail_pemesanan['pemesanans']['waktu_pemesanan']}',
                           style: TextStyle(color: Colors.grey, fontSize: 12),
                         ),
                         SizedBox(height: 8),
                         Row(
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: pemesanan['layanan'] != null &&
-                                      pemesanan['layanan']['foto'] != null
-                                  ? Image.network(
-                                      'http://192.168.1.6:8000/${pemesanan['layanan']['foto']}',
-                                      width: 70,
-                                      height: 70,
+                              borderRadius: BorderRadius.circular(12),
+                              child: detail_pemesanan['layanans']['foto'] !=
+                                          null &&
+                                      detail_pemesanan['layanans']['foto']
+                                          .isNotEmpty
+                                  ? Image.asset(
+                                      'lib/images/${detail_pemesanan['layanans']['foto']}',
+                                      height: 100,
+                                      width: 100,
                                       fit: BoxFit.cover,
                                     )
                                   : Container(),
@@ -111,12 +114,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    'Status: ${detail_pemesanan['status_pemesanan']}',
+                                    'Status: ${detail_pemesanan['pemesanans']['status_pemesanan']}',
                                     style: TextStyle(fontSize: 14),
                                   ),
                                   Text(
-                                    'Nama Pemesan: ${detail_pemesanan['nama_pemesan']}',
+                                    'Nama Pemesan: ${detail_pemesanan['pemesanans']['nama_pemesan']}',
                                     style: TextStyle(fontSize: 14),
+                                  ),
+                                  Text(
+                                    'Layanan: ${detail_pemesanan['layanans']['nama_layanan']}',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -133,9 +142,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => DetailHistoryPage(
                                       idPemesanan:
-                                          detail_pemesanan['id_pemesanan'],
-                                      idCustomer:
-                                          detail_pemesanan['id_customer']),
+                                          detail_pemesanan['pemesanans']
+                                              ['id_pemesanan'],
+                                      idCustomer: detail_pemesanan['pemesanans']
+                                          ['id_customer']),
                                 ),
                               );
                             },
@@ -145,6 +155,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               padding: EdgeInsets.symmetric(vertical: 12),
+                              foregroundColor: Colors.white,
                             ),
                             child: Text('View Detail'),
                           ),
