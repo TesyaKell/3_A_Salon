@@ -44,7 +44,7 @@ class _ProfileViewState extends State<ProfileView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(210, 0, 98, 1),
-        toolbarHeight: 120,
+        toolbarHeight: 150,
         automaticallyImplyLeading: false,
         flexibleSpace: Padding(
           padding: const EdgeInsets.all(16.0),

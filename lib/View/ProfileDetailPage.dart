@@ -100,25 +100,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
 
-    if (token == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text('Token tidak ditemukan. Silakan login kembali.')),
-      );
-      return;
-    }
-
     final request = http.MultipartRequest('POST', url);
     request.headers['Authorization'] = 'Bearer $token';
     request.fields['nama_customer'] = nameController.text;
     request.fields['email'] = emailController.text;
     request.fields['nomor_telpon'] = phoneController.text;
 
-    if (_profileImage != null) {
-      var file = await http.MultipartFile.fromPath('foto', _profileImage!.path,
-          contentType: MediaType('image', 'jpeg'));
-      request.files.add(file);
-    }
     final response = await request.send();
 
     if (response.statusCode == 200) {
