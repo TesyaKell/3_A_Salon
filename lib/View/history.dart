@@ -30,7 +30,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
       }
 
       final response = await http.get(
-        Uri.parse('http://192.168.1.6:8000/api/detail_pemesanan/$customerId'),
+        Uri.parse(
+            'https://api-tubes-pbp.vercel.app/api/api/detail_pemesanan/$customerId'),
       );
 
       print(response.body);
@@ -44,6 +45,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           pemesanans = pemesanansList
               .map((item) => item as Map<String, dynamic>)
               .toList();
+
           isLoading = false;
         });
       } else {
@@ -80,6 +82,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               itemCount: pemesanans.length,
               itemBuilder: (context, index) {
                 final detail_pemesanan = pemesanans[index];
+
                 return Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),

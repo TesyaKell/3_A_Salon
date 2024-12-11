@@ -32,8 +32,8 @@ class _BarberPageState extends State<BarberPage> {
 // Function to fetch barbers from the API
   Future<void> fetchBarbers() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://192.168.1.6:8000/api/barbers'));
+      final response = await http
+          .get(Uri.parse('https://api-tubes-pbp.vercel.app/api/api/barbers'));
 
       if (response.statusCode == 200) {
         List<dynamic> temp = json.decode(response.body)['barbers'];

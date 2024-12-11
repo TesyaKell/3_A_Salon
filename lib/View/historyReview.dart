@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class HistoryReviewPage extends StatefulWidget {
   @override
   _HistoryReviewPageState createState() => _HistoryReviewPageState();
@@ -12,10 +14,22 @@ class HistoryReviewPage extends StatefulWidget {
 class _HistoryReviewPageState extends State<HistoryReviewPage> {
   List<dynamic> _reviews = [];
 
+  Future<int?> getCurrentCustomerId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('id_customer');
+  }
+
   Future<void> fetchReviews() async {
     try {
+      final int? customerId = await getCurrentCustomerId();
+
+      if (customerId == null) {
+        throw Exception('Customer ID not found');
+      }
+
       final response = await http.get(
-        Uri.parse('http://192.168.1.6:8000/api/ulasans'),
+        Uri.parse(
+            'https://api-tubes-pbp.vercel.app/api/api/ulasans/${customerId}'),
       );
 
       if (response.statusCode == 200) {
@@ -35,7 +49,7 @@ class _HistoryReviewPageState extends State<HistoryReviewPage> {
   Future<void> deleteReview(int reviewId) async {
     try {
       final response = await http.delete(
-        Uri.parse('http://192.168.1.6:8000/api/ulasans/$reviewId'),
+        Uri.parse('https://api-tubes-pbp.vercel.app/api/api/ulasans/$reviewId'),
       );
 
       if (response.statusCode == 200) {
@@ -92,6 +106,7 @@ class _HistoryReviewPageState extends State<HistoryReviewPage> {
         itemCount: _reviews.length,
         itemBuilder: (context, index) {
           final review = _reviews[index];
+
           return Dismissible(
             key: Key(review['id'].toString()), // Unique key for each review
             background: Container(
@@ -115,10 +130,10 @@ class _HistoryReviewPageState extends State<HistoryReviewPage> {
               ),
             ),
             onDismissed: (direction) {
-              if (direction == DismissDirection.startToEnd) {
-                navigateToEditReview(review['id']);
+              if (direction == DismissDirection.endToStart) {
+                navigateToEditReview(review['id_ulasan']);
               } else {
-                deleteReview(review['id']);
+                deleteReview(review['id_ulasan']);
               }
             },
             child: Padding(
@@ -143,7 +158,9 @@ class _HistoryReviewPageState extends State<HistoryReviewPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          review['nama_layanan'] ?? 'Service Name',
+                          review['pemesanan']['detail_pemesanan'][0]['layanans']
+                                  ['nama_layanan'] ??
+                              'Service Name',
                           style: GoogleFonts.lora(
                             color: Colors.grey,
                             fontSize: 16,

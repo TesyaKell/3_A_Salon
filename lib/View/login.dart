@@ -22,7 +22,7 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController passwordController = TextEditingController();
 
   Future<bool> loginUser() async {
-    final String url = 'http://192.168.1.6:8000/api/login';
+    final String url = 'https://api-tubes-pbp.vercel.app/api/api/login';
 
     final headers = {
       'Content-Type': 'application/json',

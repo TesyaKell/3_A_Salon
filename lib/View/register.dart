@@ -25,7 +25,7 @@ class _RegisterViewState extends State<RegisterView> {
   Future<void> registerUser() async {
     print('Username: ${controllers['username']!.text}');
     print('Password: ${controllers['password']!.text}');
-    final String url = 'http://192.168.1.6:8000/api/customers';
+    final String url = 'https://api-tubes-pbp.vercel.app/api/api/customers';
 
     final headers = {
       'Content-Type': 'application/json',

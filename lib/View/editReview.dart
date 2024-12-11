@@ -13,6 +13,7 @@ class EditReviewPage extends StatefulWidget {
 
 class _EditReviewPageState extends State<EditReviewPage> {
   late Map<String, dynamic> _reviewData;
+  bool isLoading = true;
   final _komentarController = TextEditingController();
   int _rating = 1;
 
@@ -26,12 +27,14 @@ class _EditReviewPageState extends State<EditReviewPage> {
   Future<void> fetchReviewData() async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.1.6:8000/api/ulasans/${widget.reviewId}'),
+        Uri.parse(
+            'https://api-tubes-pbp.vercel.app/api/api/ulasans/get/${widget.reviewId}'),
       );
 
       if (response.statusCode == 200) {
         setState(() {
           _reviewData = jsonDecode(response.body);
+          isLoading = false;
         });
       } else {
         throw Exception('Failed to load review');
@@ -47,7 +50,8 @@ class _EditReviewPageState extends State<EditReviewPage> {
   Future<void> updateReview() async {
     try {
       final response = await http.put(
-        Uri.parse('http://192.168.1.6:8000/api/ulasans/${widget.reviewId}'),
+        Uri.parse(
+            'https://api-tubes-pbp.vercel.app/api/api/ulasans/${widget.reviewId}'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'komentar': _komentarController.text,
@@ -76,7 +80,7 @@ class _EditReviewPageState extends State<EditReviewPage> {
       appBar: AppBar(
         title: Text('Edit Review'),
       ),
-      body: _reviewData == null
+      body: isLoading
           ? Center(child: CircularProgressIndicator())
           : Padding(
               padding: const EdgeInsets.all(16.0),

@@ -36,7 +36,7 @@ class DetailReservationPage extends StatelessWidget {
     // Parsing date
     DateTime parsedDate;
     try {
-      parsedDate = DateFormat('dd/MM/yyyy').parse(rawDate); // Sesuaikan format
+      parsedDate = DateFormat('dd/MM/yyyy').parse(rawDate);
     } catch (e) {
       parsedDate = DateTime.now(); // Default jika parsing gagal
       print("Error parsing date: $e");
@@ -127,11 +127,11 @@ class DetailReservationPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            // Book Reservation Button
             Center(
               child: ElevatedButton(
                 onPressed: () async {
-                  final String url = 'http://192.168.1.6:8000/api/pemesanan';
+                  final String url =
+                      'https://api-tubes-pbp.vercel.app/api/api/pemesanan';
 
                   final headers = {
                     'Content-Type': 'application/json',
@@ -147,8 +147,7 @@ class DetailReservationPage extends StatelessWidget {
                   }
 
                   final body = json.encode({
-                    'tanggal_pemesanan':
-                        formattedDate, // Tanggal yang diparsing
+                    'tanggal_pemesanan': formattedDate,
                     'waktu_pemesanan': dataReservasi?['time'],
                     'total_harga': total,
                     'id_customer': data!['data']['id_customer'].toString(),

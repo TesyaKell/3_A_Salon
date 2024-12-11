@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SalonBarberDetailPage extends StatelessWidget {
   final dynamic barber;
@@ -20,57 +21,58 @@ class SalonBarberDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+        title: Text(
+          barber['nama_barber'] ?? 'Detail Barber',
+          style: GoogleFonts.lora(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 20,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                Container(
-                  height: 260,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFF4081),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
+            Center(
+              child: Column(
+                children: [
+                  SizedBox(height: 30),
+                  CircleAvatar(
+                    radius: 70,
+                    backgroundImage: barber['foto'] != null
+                        ? AssetImage('lib/images/${barber['foto']}')
+                        : AssetImage('lib/images/default.jpg'),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    barber['nama_barber'] ?? 'Nama tidak tersedia',
+                    style: GoogleFonts.lora(
+                      color: Colors.black87,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-                Center(
-                  child: Column(
-                    children: [
-                      SizedBox(height: 30),
-                      CircleAvatar(
-                        radius: 70,
-                        backgroundImage: barber['foto'] != null
-                            ? AssetImage('lib/images/${barber['foto']}')
-                            : AssetImage('lib/images/default.jpg'),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        barber['nama_barber'] ?? 'Nama tidak tersedia',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        'Kontak: ${barber['kontak'] ?? 'Tidak tersedia'}',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
+                  SizedBox(height: 5),
+                  Text(
+                    'Kontak: ${barber['kontak'] ?? 'Tidak tersedia'}',
+                    style: GoogleFonts.lora(color: Colors.black54),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 'Layanan yang tersedia:',
-                style: TextStyle(
+                style: GoogleFonts.lora(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,
@@ -92,11 +94,17 @@ class SalonBarberDetailPage extends StatelessWidget {
                     ),
                     child: ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: Color(0xFFFF4081),
+                        backgroundColor: const Color.fromRGBO(210, 0, 98, 1),
                         child: Icon(Icons.cut, color: Colors.white),
                       ),
-                      title: Text(layanan['nama_layanan']),
-                      subtitle: Text('Harga: ${layanan['harga']}'),
+                      title: Text(
+                        layanan['nama_layanan'],
+                        style: GoogleFonts.lora(),
+                      ),
+                      subtitle: Text(
+                        'Harga: ${layanan['harga']}',
+                        style: GoogleFonts.lora(),
+                      ),
                     ),
                   );
                 },
@@ -120,7 +128,7 @@ class SalonBarberDetailPage extends StatelessWidget {
                   : Center(
                       child: Text(
                         'Nomor WhatsApp tidak tersedia',
-                        style: TextStyle(color: Colors.grey),
+                        style: GoogleFonts.lora(color: Colors.grey),
                       ),
                     ),
             ),

@@ -25,8 +25,8 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
 
   Future<void> fetchPemesanans() async {
     try {
-      final response = await http
-          .get(Uri.parse('http://192.168.1.6:8000/api/detail_pemesanan'));
+      final response = await http.get(Uri.parse(
+          'https://api-tubes-pbp.vercel.app/api/api/detail_pemesanan'));
 
       print(response.body);
 
@@ -115,7 +115,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                           " ",
                           (layananDetail['nama_layanan'] ?? 'N/A') +
                               " - " +
-                              (barberDetail['nama'] ?? 'N/A'),
+                              (barberDetail['nama_barber'] ?? 'N/A'),
                         ),
                         _buildDetailColumn(
                           " ",
